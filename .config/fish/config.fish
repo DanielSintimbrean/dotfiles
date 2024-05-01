@@ -177,6 +177,8 @@ end
 
 fish_vi_key_bindings
 
+alias nv 'nvim'
+alias lg 'lazygit'
 # =============================================================================
 #
 # To initialize zoxide, add this to your configuration (usually
