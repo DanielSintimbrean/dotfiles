@@ -186,3 +186,11 @@ alias lg 'lazygit'
 #
 zoxide init fish | source
 
+
+# Add ~/.bun/bin to PATH
+if test -d ~/.bun/bin
+    if not contains -- ~/.bun/bin $PATH
+        set -p PATH ~/.bun/bin
+    end
+end
+
