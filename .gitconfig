@@ -1,0 +1,36 @@
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[user]
+	name = Daniel Sintimbrean
+	email = 102896754+DanielSintimbrean@users.noreply.github.com
+[push]
+	autoSetupRemote = true
+[core]
+	editor = nvim
+[rebase]
+	autoStash = true
+[pull]
+	rebase = true
+[alias]
+    ac = !git add -A && git commit -m
+    cd = !git checkout develop
+    cm = !git checkout main
+    pd = !git pull origin develop
+    pm = !git pull origin main
+    cn = !git checkout -b
+    uncommit = reset --soft HEAD~1
+    nah = "!f(){ git reset --hard; git clean -df; if [ -d ".git/rebase-apply" ] || [ -d ".git/rebase-merge" ]; then git rebase --abort; fi; }; f"
+    forget="!git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D"
+    forgetlist="!git fetch -p && git branch -vv | awk '/: gone]/{print $1}'"
+[diff]
+  tool = vscode
+[difftool "vscode"]
+  cmd = code --wait --diff $LOCAL $REMOTE
+[merge]
+  tool = vscode
+[mergetool "vscode"]
+  cmd = code --wait $MERGED
