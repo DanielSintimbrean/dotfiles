@@ -177,8 +177,12 @@ end
 
 fish_vi_key_bindings
 
+# Aliases
 alias nv 'nvim'
 alias lg 'lazygit'
+alias tmux-dev 'tmux -u new -A -s "dev"'
+
+
 # =============================================================================
 #
 # To initialize zoxide, add this to your configuration (usually
