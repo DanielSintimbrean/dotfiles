@@ -1,3 +1,4 @@
+quitOnTopLevelReturn: true
 customCommands:
   - key: "C"
     command: "git cz"
@@ -11,8 +12,10 @@ customCommands:
     command: 'git commit --allow-empty -m "**EMPTY** empty commit"'
     loadingText: "Committing empty commit..."
   - key: "F"
-    command: 'git fetch --prune'
-    context: 'localBranches'
+    command: "git fetch --prune"
+    context: "localBranches"
     stream: true
-os:
-    quitOnTopLevelReturn: true
+git:
+  paging:
+    colorArg: always
+    pager: diff-so-fancy
