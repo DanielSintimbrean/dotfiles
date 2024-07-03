@@ -80,3 +80,10 @@ docker run hello-world
 
 https://docs.portainer.io/start/install-ce/server/docker/linux#deployment
 
+### Install neovim config
+
+#### Prerequisites
+```
+sudo pacman -S --noconfirm --needed gcc make git ripgrep fd unzip neovim xclip
+```
+
