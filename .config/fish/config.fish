@@ -198,6 +198,12 @@ if test -d ~/.bun/bin
     end
 end
 
+# Add ~/.bun/bin to PATH
+if test -d ~/go/bin
+    if not contains -- ~/go/bin $PATH
+        set -p PATH ~/go/bin
+    end
+end
 
 # Add ~/.bun/bin to PATH
 if test -d ~/minio-binaries
