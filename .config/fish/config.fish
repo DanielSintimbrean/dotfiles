@@ -181,7 +181,9 @@ fish_vi_key_bindings
 alias nv 'nvim'
 alias lg 'lazygit'
 alias tmux-dev 'tmux -u new -A -s "dev"'
-
+alias td 'tmux -u new -A -s "dev"'
+alias clera 'clear'
+alias claer 'clear'
 
 # =============================================================================
 #
