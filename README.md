@@ -4,7 +4,6 @@
 
 - Install stow
 
-
 ```bash
 sudo pacman -S stow
 ```
@@ -13,7 +12,7 @@ sudo pacman -S stow
 
 Clone the repo:
 
-```
+```bash
 git clone https://github.com/DanielSintimbrean/dotfiles.git ~/dotfiles/
 ```
 
@@ -23,14 +22,13 @@ git clone https://github.com/DanielSintimbrean/dotfiles.git ~/dotfiles/
 cd ~/dotfiles/ && stow . --adopt
 ```
 
-```
+```bash
 git restore .
 ```
 
 ## Tmux
 
-
-```
+```bash
 tmux-dev
 ```
 
@@ -38,25 +36,25 @@ tmux-dev
 
 ## Install applications that i use
 
-```
+```bash
 sudo pacman -s zoxide fnm docker nerd-fonts syncthing diff-so-fancy
 ```
 
 ### From aur
 
-```
-bun
+```bash
+yay -S bun
 ```
 
-### Install with bun
+### Install npm dependencies with bun
 
-```
+```bash
 bun add -g npm-check-dependencies cz-git @antfu/ni commitizen
 ```
 
 ## Enable docker
 
-```
+```bash
 sudo systemctl enable docker.service
 sudo systemctl enable containerd.service
 
@@ -64,7 +62,7 @@ sudo systemctl start docker.service
 sudo systemctl start containerd.service
 ```
 
-```
+```bash
 sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
@@ -72,18 +70,18 @@ newgrp docker
 
 ### Verify
 
-```
+```bash
 docker run hello-world
 ```
 
 ### Install portainer
 
-https://docs.portainer.io/start/install-ce/server/docker/linux#deployment
+[Official Docs](https://docs.portainer.io/start/install-ce/server/docker/linux#deployment)
 
-### Install neovim config
+### Install neovim configuration
 
-#### Prerequisites
-```
+#### Install needed dependencies
+
+```bash
 sudo pacman -S --noconfirm --needed gcc make git ripgrep fd unzip neovim xclip
 ```
-
