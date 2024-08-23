@@ -184,6 +184,7 @@ alias tmux-dev 'tmux -u new -A -s "dev"'
 alias td 'tmux -u new -A -s "dev"'
 alias clera 'clear'
 alias claer 'clear'
+alias bun-update 'bun update -g --latest'
 
 # =============================================================================
 #
