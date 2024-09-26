@@ -1,4 +1,100 @@
 ## FIRST LINE/ROW: Info & Status
+
+command_timeout = 2000
+
+# Which is equivalent to
+format = """
+$username\
+$hostname\
+$localip\
+$shlvl\
+$singularity\
+$kubernetes\
+$directory\
+$vcsh\
+$fossil_branch\
+$fossil_metrics\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+$pijul_channel\
+$docker_context\
+$package\
+$c\
+$cmake\
+$cobol\
+$daml\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$fennel\
+$gleam\
+$golang\
+$guix_shell\
+$haskell\
+$haxe\
+$helm\
+$java\
+$julia\
+$kotlin\
+$gradle\
+$lua\
+$nim\
+$nodejs\
+$ocaml\
+$opa\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$quarto\
+$raku\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$solidity\
+$swift\
+$terraform\
+$typst\
+$vlang\
+$vagrant\
+$zig\
+$buf\
+$nix_shell\
+$conda\
+$meson\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$nats\
+$direnv\
+$env_var\
+$crystal\
+$custom\
+$sudo\
+$battery\
+$cmd_duration\
+$line_break\
+$jobs\
+$time\
+$status\
+$os\
+$container\
+$shell\
+$character"""
+
 # First param ─┌
 [username]
 format = " [╭─$user]($style)@"
@@ -43,25 +139,26 @@ min_time = 1
 ## SECOND LINE/ROW: Prompt
 # Somethere at the beginning
 [battery]
-charging_symbol = ""
-disabled = true
-discharging_symbol = ""
-full_symbol = ""
+disabled = false
+charging_symbol = "󰂄"
+discharging_symbol = "󰂂"
+full_symbol = '󱟢'
 
 [[battery.display]]  # "bold red" style when capacity is between 0% and 10%
-disabled = false
 style = "bold red"
 threshold = 15
 
 [[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
-disabled = true
 style = "bold yellow"
 threshold = 50
 
 [[battery.display]]  # "bold green" style when capacity is between 10% and 30%
-disabled = true
 style = "bold green"
 threshold = 80
+
+[[battery.display]]  # "bold green" style when capacity is between 10% and 30%
+style = "bold blue"
+threshold = 100
 
 # Prompt: optional param 1
 [time]
