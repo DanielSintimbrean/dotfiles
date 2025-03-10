@@ -74,13 +74,20 @@
   "ui_font_size": 18,
   "buffer_font_size": 14,
   "buffer_font_weight": 600,
-  "buffer_font_family": "GeistMono Nerd Font",
+  "buffer_font_family": "GeistMono Nerd Font Mono",
+  "buffer_font_fallbacks": ["Noto Color Emoji"],
   "buffer_font_features": {
     "calt": true
   },
 
   "cursor_blink": false,
   "terminal": {
+    "font_family": "Mononoki Nerd Font Mono",
+    "font_fallbacks": ["Hack Nerd Font", "Noto Color Emoji"],
+    "font_size": 12,
+    "font_features": {
+      "calt": true
+    },
     "shell": {
       "with_arguments": {
         "program": "/bin/fish",
