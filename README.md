@@ -28,6 +28,12 @@ git restore .
 
 ## Tmux
 
+### Install TPM 
+
+```bash
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+```
+
 ```bash
 tmux-dev
 ```
