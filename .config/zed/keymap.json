@@ -7,6 +7,11 @@
 // from the command palette.
 [
   {
+    "bindings": {
+      "ctrl-space t": "workspace::NewCenterTerminal"
+    }
+  },
+  {
     "context": "Workspace",
     "bindings": {
       "alt-g": ["task::Spawn", { "task_name": "start lazygit" }]
@@ -16,7 +21,8 @@
     "context": "EmptyPane",
     "bindings": {
       "space s p": "projects::OpenRecent",
-      "space s f": "file_finder::Toggle"
+      "space s f": "file_finder::Toggle",
+      "space e": "pane::RevealInProjectPanel"
     }
   },
   {
@@ -79,6 +85,8 @@
       "space c a": "editor::ToggleCodeActions",
       "space .": "editor::ToggleCodeActions",
       "space r": "editor::Rename",
+      "space x": "pane::CloseActiveItem",
+      "space X": "pane::ReopenClosedItem",
 
       "g d": "editor::GoToDefinition",
       "g D": "editor::GoToDefinitionSplit",
@@ -96,6 +104,12 @@
       "[ h": "editor::GoToPreviousHunk",
 
       "space e": "pane::RevealInProjectPanel"
+    }
+  },
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "shift-s": ["vim::PushAddSurrounds", {}]
     }
   },
   {
@@ -216,6 +230,21 @@
     "bindings": {
       "c": "vim::CurrentLine",
       "a": "editor::ToggleCodeActions" // zed specific
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "ctrl-1": ["pane::ActivateItem", 0],
+      "ctrl-2": ["pane::ActivateItem", 1],
+      "ctrl-3": ["pane::ActivateItem", 2],
+      "ctrl-4": ["pane::ActivateItem", 3],
+      "ctrl-5": ["pane::ActivateItem", 4],
+      "ctrl-6": ["pane::ActivateItem", 5],
+      "ctrl-7": ["pane::ActivateItem", 6],
+      "ctrl-8": ["pane::ActivateItem", 7],
+      "ctrl-9": ["pane::ActivateItem", 8],
+      "ctrl-0": "pane::ActivateLastItem"
     }
   }
 ]

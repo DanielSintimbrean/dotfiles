@@ -186,14 +186,6 @@ alias clera 'clear'
 alias claer 'clear'
 alias bun-update 'bun update -g --latest'
 
-# =============================================================================
-#
-# To initialize zoxide, add this to your configuration (usually
-# ~/.config/fish/config.fish):
-#
-zoxide init fish | source
-
-
 # Add ~/.bun/bin to PATH
 if test -d ~/.bun/bin
     if not contains -- ~/.bun/bin $PATH
@@ -214,3 +206,5 @@ if test -d ~/minio-binaries
         set -p PATH ~/minio-binaries
     end
 end
+
+fzf --fish | source
