@@ -85,3 +85,12 @@ docker run hello-world
 ```bash
 sudo pacman -S --noconfirm --needed gcc make git ripgrep fd unzip neovim xclip
 ```
+
+## caps2esc 
+
+[link](https://gitlab.com/interception/linux/plugins/caps2esc)
+
+```bash
+sudo pacman -S interception-tools interception-caps2esc
+```
+
