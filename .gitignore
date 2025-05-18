@@ -1,2 +1,3 @@
 .tmp*
 fish_variables
+tmux/plugins

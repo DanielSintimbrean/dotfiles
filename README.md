@@ -19,7 +19,7 @@ git clone https://github.com/DanielSintimbrean/dotfiles.git ~/dotfiles/
 ## Configure stow
 
 ```bash
-cd ~/dotfiles/ && stow . --adopt
+cd ~/dotfiles/ && stow * --adopt --dotfiles
 ```
 
 ```bash
