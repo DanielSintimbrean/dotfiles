@@ -19,7 +19,7 @@ git clone https://github.com/DanielSintimbrean/dotfiles.git ~/dotfiles/
 ## Configure stow
 
 ```bash
-cd ~/dotfiles/ && stow * --adopt --dotfiles
+cd ~/dotfiles/ && stow editor fish git hyprland startship system terminal tmux --adopt --dotfiles
 ```
 
 ```bash
