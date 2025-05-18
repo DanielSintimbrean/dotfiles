@@ -190,6 +190,8 @@ alias clera 'clear'
 alias claer 'clear'
 alias bun-update 'bun update -g --latest'
 
+set -gx BUN_INSTALL ~/.bun
+
 # Add ~/.bun/bin to PATH
 if test -d ~/.bun/bin
     if not contains -- ~/.bun/bin $PATH
