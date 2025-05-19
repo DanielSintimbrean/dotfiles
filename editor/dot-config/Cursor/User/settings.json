@@ -1,0 +1,7 @@
+{
+    "window.commandCenter": true,
+    "workbench.sideBar.location": "right",
+    "workbench.colorTheme": "Tokyo Night Storm",
+    "workbench.iconTheme": "file-icons",
+    "editor.fontFamily": "JetBrainsMono NF"
+}
