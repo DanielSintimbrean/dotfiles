@@ -3,5 +3,18 @@
     {
         "key": "ctrl+i",
         "command": "composerMode.agent"
+    },
+    {
+        "key": "ctrl+y",
+        "command": "acceptSelectedSuggestion"
+    },
+    {
+        "key": "alt+l",
+        "command": "editor.action.acceptCursorTabSuggestion"
+    },
+    {
+        "command": "editor.action.showHover",
+        "key": "shift+k",
+        "when": "editorTextFocus && editorHoverVisible && neovim.mode == normal"
     }
 ]
