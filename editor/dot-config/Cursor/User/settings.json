@@ -64,7 +64,8 @@
   "update.releaseTrack": "prerelease",
   "git.autofetch": true,
   "editor.formatOnSave": true,
-
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
   "fileNestingUpdater.autoUpdate": true,
   "fileNestingUpdater.autoUpdateInterval": 3600,
   "fileNestingUpdater.promptOnAutoUpdate": false,
