@@ -5,6 +5,10 @@
   "vim.useSystemClipboard": true,
   "vim.useCtrlKeys": true,
   "vim.hlsearch": true,
+  "vim.highlightedyank.color": "#bb9af7",
+  "vim.highlightedyank.duration": 200,
+  "vim.highlightedyank.enable": true,
+  "vim.highlightedyank.textColor": "white",
   "vim.insertModeKeyBindings": [
     {
       "before": ["j", "j"],
@@ -15,10 +19,12 @@
     {
       "before": ["<leader>", "d"],
       "after": ["d", "d"]
-    },
+    }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
     {
-      "before": ["<Esc>"],
-      "commands": [":nohl"]
+      "before": ["g", "l"],
+      "command": "editor.action.insertCursorAbove"
     }
   ],
   "vim.leader": "<space>",
@@ -28,7 +34,7 @@
     "<C-y>": false,
     "<C-b>": false,
     "<C-g>": false,
-    "<C-i>": false,
+    "<C-p>": false,
     "<C-k>": false,
     "<C-m>": false
   },
@@ -52,11 +58,12 @@
   "window.commandCenter": true,
   "workbench.sideBar.location": "right",
   "workbench.colorTheme": "Tokyo Night Storm",
-  "workbench.iconTheme": "file-icons",
+  "workbench.iconTheme": "catppuccin-mocha",
   "editor.fontFamily": "JetBrainsMono NF",
   "cursor.general.disableHttp2": true,
   "update.releaseTrack": "prerelease",
   "git.autofetch": true,
+  "editor.formatOnSave": true,
 
   "fileNestingUpdater.autoUpdate": true,
   "fileNestingUpdater.autoUpdateInterval": 3600,
@@ -161,6 +168,13 @@
     "*.xaml": "$(capture).xaml.cs"
   },
   "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "git.confirmSync": false,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

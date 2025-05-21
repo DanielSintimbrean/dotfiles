@@ -1,20 +1,57 @@
 // Place your key bindings in this file to override the defaults
 [
-    {
-        "key": "ctrl+i",
-        "command": "composerMode.agent"
-    },
-    {
-        "key": "ctrl+y",
-        "command": "acceptSelectedSuggestion"
-    },
-    {
-        "key": "alt+l",
-        "command": "editor.action.acceptCursorTabSuggestion"
-    },
-    {
-        "command": "editor.action.showHover",
-        "key": "shift+k",
-        "when": "editorTextFocus && editorHoverVisible && neovim.mode == normal"
-    }
+  {
+    "key": "ctrl+y",
+    "command": "acceptSelectedSuggestion"
+  },
+  {
+    "key": "alt+l",
+    "command": "editor.action.acceptCursorTabSuggestion"
+  },
+  {
+    "command": "editor.action.showHover",
+    "key": "shift+k",
+    "when": "editorTextFocus && editorHoverVisible && neovim.mode == normal"
+  },
+
+  // FILE TREE
+  {
+    "command": "workbench.files.action.focusFilesExplorer",
+    "key": "ctrl+b",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "n",
+    "command": "explorer.newFile",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "command": "renameFile",
+    "key": "r",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "command": "deleteFile",
+    "key": "d",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "ctrl+i",
+    "command": "-composer.startComposerPrompt"
+  },
+  {
+    "key": "ctrl+i",
+    "command": "-workbench.action.chat.startVoiceChat",
+    "when": "chatIsEnabled && hasSpeechProvider && inChatInput && !chatSessionRequestInProgress && !editorFocus && !notebookEditorFocused && !scopedVoiceChatGettingReady && !speechToTextInProgress || chatIsEnabled && hasSpeechProvider && inlineChatFocused && !chatSessionRequestInProgress && !editorFocus && !notebookEditorFocused && !scopedVoiceChatGettingReady && !speechToTextInProgress"
+  },
+  {
+    "key": "ctrl+i",
+    "command": "-workbench.action.chat.stopListeningAndSubmit",
+    "when": "inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'editor' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'inline' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'quick' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'view' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'editor' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'inline' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'quick' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'view'"
+  },
+  {
+    "key": "ctrl+i",
+    "command": "-composer.toggleAllVsSingleChatContext",
+    "when": "composerFocused && !editorTextFocus"
+  }
 ]
