@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Check if a port number is provided as an argument
+if [ -z "$1" ]; then
+  echo "Usage: $0 <port_number>"
+  exit 1
+fi
+
+port="$1"
+
+echo "Checking which process is using port $port..."
+
+# Use lsof to find the process listening on the specified port
+# -i : List files by network connections
+# -P : Don't convert port numbers to names
+# -n : Don't convert network numbers and addresses to names
+# -t : Output process IDs only
+process_id=$(lsof -i :"$port" -P -n -t)
+
+if [ -z "$process_id" ]; then
+  echo "No process found listening on port $port."
+else
+  echo "Process ID (PID) using port $port: $process_id"
+
+  # Use ps to get more information about the process
+  # -p : Select processes by process ID
+  # -o : Specify output format (command with arguments)
+  process_info=$(ps -p "$process_id" -o command=)
+
+  echo "Process details:"
+  echo "$process_info"
+fi
