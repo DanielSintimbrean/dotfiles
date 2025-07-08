@@ -6,8 +6,7 @@ cd ~
 export XCURSOR_SIZE=24
 
 # text editor
-export MICRO_TRUECOLOR=1
-export EDITOR=/usr/bin/micro
+export EDITOR=/usr/bin/nvim
 
 #browser
 export BROWSER=zen-browser
@@ -20,5 +19,6 @@ export GDK_BACKEND=wayland,x11
 export QT_QPA_PLATFORM=wayland 
 export QT_QPA_PLATFORMTHEME=qt5ct
 export GTK_THEME=Colloid-Purple-Dark-Catppuccin
+export ELECTRON_OZONE_PLATFORM_HINT=auto
 
 # check /usr/local/bin/hyprstart 

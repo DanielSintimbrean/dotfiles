@@ -5,7 +5,7 @@ customCommands:
     description: "commit with commitizen"
     context: "files"
     loadingText: "opening commitizen commit tool"
-    subprocess: true
+    output: terminal
   - key: "E"
     description: "Add empty commit"
     context: "commits"
@@ -14,7 +14,7 @@ customCommands:
   - key: "F"
     command: "git fetch --prune"
     context: "localBranches"
-    stream: true
+    output: log
 git:
   paging:
     colorArg: always

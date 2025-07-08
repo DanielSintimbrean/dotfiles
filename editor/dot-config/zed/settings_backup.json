@@ -16,7 +16,7 @@
   "features": {
     "edit_prediction_provider": "zed"
   },
-  "agent": {
+  "assistant": {
     "default_model": {
       "provider": "zed.dev",
       "model": "claude-3-5-sonnet-latest"
@@ -34,12 +34,6 @@
 
   "tab_bar": {
     "show": true
-  },
-
-  "languages": {
-    "TypeScript": {
-      "format_on_save": "prettier"
-    }
   },
   "scrollbar": {
     "show": "never"
@@ -75,6 +69,7 @@
   },
 
   "relative_line_numbers": true,
+  "format_on_save": "prettier",
 
   // Font UI
   "ui_font_size": 18,

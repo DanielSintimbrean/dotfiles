@@ -246,5 +246,11 @@
       "ctrl-9": ["pane::ActivateItem", 8],
       "ctrl-0": "pane::ActivateLastItem"
     }
+  },
+  {
+    "context": "BufferSearchBar",
+    "bindings": {
+      "ctrl-r": "search::ToggleReplace"
+    }
   }
 ]

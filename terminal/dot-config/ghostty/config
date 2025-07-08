@@ -18,6 +18,7 @@
 theme = catppuccin-mocha.conf
 shell-integration=fish
 initial-command=fish
+confirm-close-surface=false
 
 # Config syntax crash course
 # ==========================
