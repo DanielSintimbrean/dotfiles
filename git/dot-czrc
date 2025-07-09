@@ -80,7 +80,7 @@
   "useAI": false,
   "aiNumber": 1,
   "themeColorCode": "",
-  "scopes": [],
+  "scopes": ["ui", "back", "ci"],
   "allowCustomScopes": true,
   "allowEmptyScopes": true,
   "customScopesAlign": "bottom",
@@ -94,7 +94,7 @@
   ],
   "breaklineNumber": 100,
   "breaklineChar": "|",
-  "skipQuestions": [],
+  "skipQuestions": ["body", "footer", "footerPrefix", "breaking"],
   "issuePrefixes": [
     {
       "value": "closed",

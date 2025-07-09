@@ -1,6 +1,9 @@
 ## FIRST LINE/ROW: Info & Status
 
-command_timeout = 2000
+command_timeout = 3000
+
+
+palette = "catppuccin_mocha"
 
 # Which is equivalent to
 format = """
@@ -84,14 +87,15 @@ $env_var\
 $crystal\
 $custom\
 $sudo\
-$battery\
-$cmd_duration\
-$line_break\
-$jobs\
-$time\
 $status\
+$jobs\
 $os\
 $container\
+$fill\
+$cmd_duration\
+$time\
+$battery\
+$line_break\
 $shell\
 $character"""
 
@@ -132,8 +136,8 @@ style = "white"
 # Last param in the first line/row
 [cmd_duration]
 disabled = false
-format = "took [$duration]($style)"
-min_time = 1
+format = " [$duration]($style) "
+min_time = 4_000 
 
 
 ## SECOND LINE/ROW: Prompt
@@ -163,14 +167,14 @@ threshold = 100
 # Prompt: optional param 1
 [time]
 disabled = true
-format = " 🕙 $time($style)\n"
+format = "   $time($style)\n"
 style = "bright-white"
 time_format = "%T"
 
 # Prompt: param 2
 [character]
-error_symbol = " [×](bold red)"
-success_symbol = " [╰─λ](bold red)"
+error_symbol = " [╰─×](bold red)"
+success_symbol = " [╰─](bold red)"
 vimcmd_symbol = " [╰─N](bold green)"
 vimcmd_visual_symbol = " [╰─V](bold yellow)"
 vimcmd_replace_symbol = " [╰─R](bold purple)"
@@ -182,7 +186,10 @@ disabled = false
 format = '[\[$symbol$status_common_meaning$status_signal_name$status_maybe_int\]]($style)'
 map_symbol = true
 pipestatus = true
-symbol = "🔴"
+symbol = "󰅙"
+
+[fill]
+symbol = '-'
 
 [aws]
 symbol = " "
@@ -246,3 +253,34 @@ symbol = " "
 
 [swift]
 symbol = "ﯣ "
+
+[jobs]
+symbol = ' 󰜋 '
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"

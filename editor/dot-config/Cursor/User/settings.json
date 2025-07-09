@@ -190,5 +190,6 @@
   },
   "color-highlight.markerType": "dot-before",
   "color-highlight.matchHslWithNoFunction": true,
-  "color-highlight.matchRgbWithNoFunction": true
+  "color-highlight.matchRgbWithNoFunction": true,
+  "biome.suggestInstallingGlobally": false
 }

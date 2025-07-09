@@ -23,7 +23,7 @@
     },
     "version": "2"
   },
-  "theme": "Catppuccin Macchiato",
+  "theme": "Catppuccin Mocha - No Italics",
 
   // Vim
   "vim_mode": true,
