@@ -7,7 +7,16 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  "show_edit_predictions": false,
+  "edit_predictions": {
+    "mode": "subtle",
+    "copilot": {
+      "proxy": null,
+      "proxy_no_verify": null,
+      "enterprise_uri": null
+    },
+    "enabled_in_text_threads": false
+  },
+  "show_edit_predictions": true,
   "git_panel": {
     "dock": "right"
   },
@@ -17,11 +26,14 @@
     "edit_prediction_provider": "zed"
   },
   "agent": {
+    "inline_assistant_model": {
+      "provider": "zed.dev",
+      "model": "claude-3-5-sonnet"
+    },
     "default_model": {
       "provider": "zed.dev",
       "model": "claude-3-5-sonnet-latest"
-    },
-    "version": "2"
+    }
   },
   "theme": "Catppuccin Mocha - No Italics",
 
@@ -75,6 +87,14 @@
   },
 
   "relative_line_numbers": true,
+
+  "lsp": {
+    "biome": {
+      "settings": {
+        "require_config_file": true
+      }
+    }
+  },
 
   // Font UI
   "ui_font_size": 18,

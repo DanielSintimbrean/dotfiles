@@ -6,6 +6,10 @@
     "label": "start lazygit",
     "command": "lazygit -p $ZED_WORKTREE_ROOT",
     "reveal_target": "center",
+    "shell": {
+      "program": "/bin/fish"
+    },
+    "use_new_terminal": true,
     "hide": "on_success"
   }
 ]

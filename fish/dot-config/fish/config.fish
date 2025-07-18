@@ -189,6 +189,8 @@ alias td 'tmux -u new -A -s "dev"'
 alias clera 'clear'
 alias claer 'clear'
 alias bun-update 'bun update -g --latest'
+alias waybar-reload 'pkill waybar && hyprctl dispatch exec waybar'
+alias ze 'zeditor .'
 
 set -gx BUN_INSTALL ~/.bun
 

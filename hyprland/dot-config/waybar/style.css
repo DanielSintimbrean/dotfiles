@@ -54,11 +54,11 @@ nord15 #b48ead
 
 window#waybar {
     background: rgba (0, 0, 0, 0.65);
-    border-radius: 20px 20px 20px 20px;
+    border-radius: 12px 12px 12px 12px;
 }
 
 window#waybar.fullscreen {
-    background: rgba (100, 40, 40, 0.55);
+    box-shadow: inset 0 0 0px 2px #f38ba8;
 }
 
 #workspaces button {
