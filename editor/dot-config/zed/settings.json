@@ -7,6 +7,7 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "show_completions_on_input": false,
   "edit_predictions": {
     "mode": "subtle",
     "copilot": {
@@ -32,7 +33,7 @@
     },
     "default_model": {
       "provider": "zed.dev",
-      "model": "claude-3-5-sonnet-latest"
+      "model": "claude-sonnet-4"
     }
   },
   "theme": "Catppuccin Mocha - No Italics",

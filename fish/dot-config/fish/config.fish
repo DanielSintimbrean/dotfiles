@@ -215,4 +215,10 @@ if test -d ~/minio-binaries
     end
 end
 
+if test -d ~/.local/share/bob/nvim-bin
+    if not contains -- ~/.local/share/bob/nvim-bin $PATH
+        set -p PATH ~/.local/share/bob/nvim-bin
+    end
+end
+
 fzf --fish | source
