@@ -83,7 +83,7 @@
   "scopes": ["ui", "back", "ci"],
   "allowCustomScopes": true,
   "allowEmptyScopes": true,
-  "customScopesAlign": "bottom",
+  "customScopesAlign": "top-bottom",
   "customScopesAlias": "custom",
   "emptyScopesAlias": "empty",
   "upperCaseSubject": false,

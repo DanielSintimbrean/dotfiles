@@ -15,10 +15,10 @@ export TERM=ghostty
 #mail
 export MAIL=thunderbird
 
-export GDK_BACKEND=wayland,x11 
-export QT_QPA_PLATFORM=wayland 
+export GDK_BACKEND=wayland,x11
+export QT_QPA_PLATFORM=wayland
 export QT_QPA_PLATFORMTHEME=qt5ct
 export GTK_THEME=Colloid-Purple-Dark-Catppuccin
 export ELECTRON_OZONE_PLATFORM_HINT=auto
 
-# check /usr/local/bin/hyprstart 
+# check /usr/local/bin/hyprstart

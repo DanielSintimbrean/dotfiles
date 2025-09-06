@@ -62,14 +62,10 @@ window#waybar.fullscreen {
 #workspaces button {
     padding: 2px 0px;
     border-bottom: 2px;
-    color: #eceff4;
+    color: gray;
     border-style: solid;
     margin-top: 2px;
     border-color: #eceff4;
-}
-
-#workspaces button:not(.hosting-monitor) {
-    color: gray;
 }
 
 #workspaces button.visible {
@@ -80,6 +76,10 @@ window#waybar.fullscreen {
 #workspaces button.active {
     color: gray;
     border-color: yellow;
+}
+
+#workspaces button.urgent {
+    color: red;
 }
 
 #workspaces button.hosting-monitor.visible {

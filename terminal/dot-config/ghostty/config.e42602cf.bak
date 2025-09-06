@@ -46,4 +46,3 @@ confirm-close-surface=false
 # # which is explained in the docs for that config option.
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
-keybind = shift+enter=text:\x1b\r

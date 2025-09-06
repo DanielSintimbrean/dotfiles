@@ -191,6 +191,7 @@ alias claer 'clear'
 alias bun-update 'bun update -g --latest'
 alias waybar-reload 'pkill waybar && hyprctl dispatch exec waybar'
 alias ze 'zeditor .'
+alias clipboard 'xclip -selection clipboard -o'
 
 set -gx BUN_INSTALL ~/.bun
 
