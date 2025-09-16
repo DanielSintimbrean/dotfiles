@@ -152,6 +152,7 @@
 
   // Move all panel to the right
   "project_panel": {
+    "hide_gitignore": false,
     "button": true,
     "dock": "right",
     "git_status": true

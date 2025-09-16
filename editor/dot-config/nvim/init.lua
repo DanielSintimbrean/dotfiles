@@ -24,6 +24,7 @@ vim.o.termguicolors = true
 vim.o.undofile = true
 vim.o.winborder = "rounded"
 vim.o.wrap = false
+vim.opt_local.conceallevel = 2
 
 vim.g.mapleader = " "
 
@@ -31,7 +32,6 @@ vim.cmd([[set mouse=nv]]) -- Mouse only on normal and visual mode
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
 	vim.o.clipboard = 'unnamedplus'
@@ -53,7 +53,7 @@ vim.pack.add({
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/echasnovski/mini.nvim" },
 	{ src = "https://github.com/chomosuke/typst-preview.nvim" },
-	{ src = 'https://github.com/NvChad/showkeys',                 opt = true },
+	{ src = 'https://github.com/NvChad/showkeys',             opt = true },
 	{ src = "https://github.com/L3MON4D3/LuaSnip" },
 	{ src = "https://github.com/catppuccin/nvim" },
 })
@@ -83,3 +83,4 @@ map("n", "<C-u>", "<C-u>zz")
 require('plugins.autopairs')
 require('plugins.lsp')
 require('plugins.neo-tree')
+require('plugins.obsidian')
