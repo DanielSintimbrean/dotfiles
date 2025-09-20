@@ -53,9 +53,5 @@
     "key": "ctrl+i",
     "command": "-composer.toggleAllVsSingleChatContext",
     "when": "composerFocused && !editorTextFocus"
-  },
-  {
-    "key": "ctrl+e",
-    "command": "composerMode.background"
   }
 ]

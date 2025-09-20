@@ -38,11 +38,6 @@
     "<C-k>": false,
     "<C-m>": false
   },
-
-  // To improve performance
-  "extensions.experimental.affinity": {
-    "vscodevim.vim": 1
-  },
   "vim.visualModeKeyBindings": [
     // Stay in visual mode while indenting
     { "before": ["<"], "commands": ["editor.action.outdentLines"] },
@@ -57,8 +52,8 @@
 
   "window.commandCenter": true,
   "workbench.sideBar.location": "right",
-  "workbench.colorTheme": "Tokyo Night Storm",
-  "workbench.iconTheme": "catppuccin-mocha",
+  "workbench.colorTheme": "Catppuccin Frappé",
+  "workbench.iconTheme": "catppuccin-frappe",
   "editor.fontFamily": "Mononoki Nerd Font",
   "cursor.general.disableHttp2": true,
   "update.releaseTrack": "prerelease",
@@ -197,5 +192,6 @@
   "biome.suggestInstallingGlobally": false,
   "workbench.editor.enablePreview": false,
   "diffEditor.renderSideBySide": false,
-  "extensions.ignoreRecommendations": true
+  "extensions.ignoreRecommendations": true,
+  "editor.smoothScrolling": true
 }
