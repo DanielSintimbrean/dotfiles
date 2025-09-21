@@ -55,7 +55,7 @@ yay -S bun
 ### Install npm dependencies with bun
 
 ```bash
-bun add -g npm-check-dependencies cz-git @antfu/ni commitizen
+bun add -g npm-check-updates cz-git @antfu/ni commitizen
 ```
 
 ## Enable docker
@@ -96,7 +96,24 @@ sudo pacman -S --noconfirm --needed gcc make git ripgrep fd unzip neovim xclip
 
 [link](https://gitlab.com/interception/linux/plugins/caps2esc)
 
+### Install packages
 ```bash
 sudo pacman -S interception-tools interception-caps2esc
 ```
+
+### Enable the `udevmon` service
+
+```
+sudo systemctl enable --now udevmon
+```
+
+### configure `udevmon`
+Edit (or create) `/etc/interceptor/udevmon.yaml:`
+```yaml
+- JOB: "intercept -g $DEVNODE | caps2esc -m 1 | uinput -d $DEVNODE"
+  DEVICE:
+    EVENTS:
+      EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
+```
+
 
