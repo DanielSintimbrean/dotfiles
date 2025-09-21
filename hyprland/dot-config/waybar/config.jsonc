@@ -1,185 +1,141 @@
 {
-  "layer": "top", // Waybar at top layer
-  "position": "top", // Waybar position (top|bottom|left|right)
-  "height": 36,
-  // "width":1900,
-  "margin": "10 10 0 10",
+  "reload_style_on_change": true,
+  "layer": "top",
+  "position": "top",
   "spacing": 0,
-
-  // Choose the order of the modules
-  // Add according to your wishes: "custom/weather"
-
-  "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["hyprland/window"],
-  "modules-right": [
-    "custom/updates",
-    "backlight",
-    "battery",
-    "pulseaudio",
-    "network",
-    "tray",
-    "idle_inhibitor",
+  "height": 26,
+  "modules-left": ["custom/omarchy", "hyprland/workspaces"],
+  "modules-center": [
     "clock",
-    "custom/power",
+    "custom/update",
+    "custom/screenrecording-indicator",
   ],
-
-  // Modules configuration
-
+  "modules-right": [
+    "group/tray-expander",
+    "bluetooth",
+    "network",
+    "pulseaudio",
+    "cpu",
+    "battery",
+  ],
   "hyprland/workspaces": {
-    "active-only": "false",
-    "format": "{icon}",
     "on-click": "activate",
-    "all-outputs": true,
-    "sort-by-number": true,
-    "separate-outputs": true,
-    "persistent-workspaces": {
-      "*": [1, 2, 3, 4, 5, 6],
-    },
-    "format-icons": {
-      "1": "󰈹",
-      "2": "",
-      "3": "",
-      "4": "󰝰",
-      "5": "5",
-      "6": "󰊻",
-    },
-    "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1",
-  },
-  "hyprland/window": {
-    "format": "{}",
-    "icon": true,
-    "icon-size": 20,
-  },
-  "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
-      "activated": "",
-      "deactivated": "",
+      "default": "",
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
     },
-    "on-click": "exec ~/.config/hypr/scripts/idle_inhibitor.sh",
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+    },
   },
-  "tray": {
-    "icon-size": 20,
-    "spacing": 5,
+  "custom/omarchy": {
+    "format": "<span font='omarchy'>\ue900</span>",
+    "on-click": "omarchy-menu",
+    "tooltip-format": "Omarchy Menu\n\nSuper + Alt + Space",
+  },
+  "custom/update": {
+    "format": "",
+    "exec": "omarchy-update-available",
+    "on-click": "omarchy-launch-floating-terminal-with-presentation omarchy-update",
+    "tooltip-format": "Omarchy update available",
+    "signal": 7,
+    "interval": 3600,
+  },
+
+  "cpu": {
+    "interval": 5,
+    "format": "󰍛",
+    "on-click": "$TERMINAL -e btop",
   },
   "clock": {
-    "tooltip-format": "<big>{:%A, %d.%B %Y }</big>\n<tt><small>{calendar}</small></tt>",
-    "format": " {:%a %d %b  %I:%M %p}", //12 hour format
-    //"format": " {:%a %d %b  %H:%M}",	//24 hour format
-    "format-alt": " {:%d/%m/%Y  %H:%M:%S}",
-    //"max-length": 200
-    "interval": 1,
-    "on-click": "~/.config/waybar/scripts/OCV",
-  },
-  "cpu": {
-    "format": "🖳{usage}%",
-    "on-click": "foot -e htop",
-  },
-  "memory": {
-    "format": "🖴 {: >3}%",
-    "on-click": "foot -e htop",
-  },
-  "temperature": {
-    "thermal-zone": 7, // Check with: # cat /sys/class/hwmon/hwmon*/temp1_input
-    "hwmon-path": "/sys/class/hwmon/hwmon7/temp1_input",
-    "critical-threshold": 80,
-    "format-critical": "{temperatureC}°C ",
-    "format": "{temperatureC}°C ",
-  },
-  "backlight": {
-    // "device": "acpi_video1",
-    "format": "{icon} {percent: >3}%",
-    "format-icons": ["", ""],
-    "on-scroll-down": "brightnessctl -c backlight set 1%-",
-    "on-scroll-up": "brightnessctl -c backlight set +1%",
-    "on-click": "~/.config/waybar/scripts/backlight-hint.sh",
-  },
-  "battery": {
-    "states": {
-      // "good": 95,
-      "warning": 30,
-      "critical": 15,
-    },
-    "format": "{icon} {capacity: >3}%",
-    "format-icons": ["", "", "", "", ""],
-    // "format-good": "", // An empty format will hide the module
-    // "format-full": "",
-    //"format-icons": ["", "", "", "", "", "", "", "", "", ""]
-    //"format": "&#x202b;{icon}&#x202c; {capacity}%",
-    //"format-icons": ["ﱉ","ﱊ","ﱌ","ﱍ","ﱋ"]
+    "format": "{:L%A %H:%M}",
+    "format-alt": "{:L%d %B W%V %Y}",
+    "tooltip": false,
+    "on-click-right": "omarchy-cmd-tzupdate",
   },
   "network": {
-    //"interface": "wlp0s20f3", // (Optional) To force the use of this interface  "format-wifi": "  {essid}",
-    "format": "⚠Disabled",
-    "format-wifi": "",
-    "format-ethernet": "",
-    "format-linked": "{ifname} (No IP)",
-    "format-disconnected": "⚠Disabled",
-    "format-alt": "{ifname}: {ipaddr}/{cidr}",
-    "family": "ipv4",
-    "tooltip-format-wifi": "  {ifname} @ {essid}\nIP: {ipaddr}\nStrength: {signalStrength}%\nFreq: {frequency}MHz\nUp: {bandwidthUpBits} Down: {bandwidthDownBits}",
-    "tooltip-format-ethernet": " {ifname}\nIP: {ipaddr}\n up: {bandwidthUpBits} down: {bandwidthDownBits}",
-    //"min-length": 2,
-    //"max-length": 2,
-    "on-click": "nm-connection-editor",
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "format": "{icon}",
+    "format-wifi": "{icon}",
+    "format-ethernet": "󰀂",
+    "format-disconnected": "󰤮",
+    "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-disconnected": "Disconnected",
+    "interval": 3,
+    "spacing": 1,
+    "on-click": "omarchy-launch-wifi",
   },
-  "custom/updates": {
-    "format": "{} {icon}",
-    "return-type": "json",
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-discharging": "{icon}",
+    "format-charging": "{icon}",
+    "format-plugged": "",
     "format-icons": {
-      "has-updates": "󱍷",
-      "updated": "󰂪",
+      "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
+      "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
     },
-    "exec-if": "which waybar-module-pacman-updates",
-    "exec": "waybar-module-pacman-updates --interval-seconds 5 --network-interval-seconds 7200 --network-interval-seconds",
-    "on-click": "foot -e update",
+    "format-full": "󰂅",
+    "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
+    "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
+    "interval": 5,
+    "on-click": "omarchy-menu power",
+    "states": {
+      "warning": 20,
+      "critical": 10,
+    },
   },
-  "custom/power": {
-    "format": "⏻",
-    "on-click": "nwgbar",
-    "tooltip": false,
-  },
-  "custom/keyboard-layout": {
-    "format": " Cheat", // Icon: keyboard
-    "on-click": "~/.config/waybar/scripts/keyhint.sh",
-  },
-  "custom/launcher": {
-    "format": "    ",
-    "on-click": "exec nwg-drawer -c 7 -is 70 -spacing 23",
-    "tooltip": false,
-  },
-  "custom/network_traffic": {
-    "exec": "~/.config/waybar/scripts/network_traffic.sh",
-    "return-type": "json",
-    "format-ethernet": "{icon} {ifname} ⇣{bandwidthDownBytes} ⇡{bandwidthUpBytes}", // optional
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "󰂲",
+    "format-connected": "",
+    "tooltip-format": "Devices connected: {num_connections}",
+    "on-click": "blueberry",
   },
   "pulseaudio": {
-    "scroll-step": 3, // %, can be a float
-    "format": "{icon} {volume}% {format_source}",
-    "format-bluetooth": "{volume}% {icon} {format_source}",
-    "format-bluetooth-muted": " {icon} {format_source}",
-    "format-muted": " {format_source}",
-    //"format-source": "{volume}% ",
-    //"format-source-muted": "",
-    "format-source": "",
-    "format-source-muted": "",
+    "format": "{icon}",
+    "on-click": "$TERMINAL --class=Wiremix -e wiremix",
+    "on-click-right": "pamixer -t",
+    "tooltip-format": "Playing at {volume}%",
+    "scroll-step": 5,
+    "format-muted": "",
     "format-icons": {
-      "headphone": "",
-      "hands-free": "",
-      "headset": "",
-      "phone": "",
-      "portable": "",
-      "car": "",
       "default": ["", "", ""],
     },
-    "on-click": "footclient -T waybar_alsamixer -e alsamixer -M",
-    "on-click-right": "pavucontrol",
   },
-  // https://github.com/chubin/wttr.in
-  "custom/weather": {
-    "exec": "curl 'https://wttr.in/Essen?format=2'",
-    "interval": 900,
-    "on-click": "yad --html --uri='https://wttr.in/Essen' --center --fixed --width=1000 --height=680 --timeout=60 --timeout-indicator=right",
+  "group/tray-expander": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 600,
+      "children-class": "tray-group-item",
+    },
+    "modules": ["custom/expand-icon", "tray"],
+  },
+  "custom/expand-icon": {
+    "format": " ",
+    "tooltip": false,
+  },
+  "custom/screenrecording-indicator": {
+    "on-click": "omarchy-cmd-screenrecord",
+    "exec": "$OMARCHY_PATH/default/waybar/indicators/screen-recording.sh",
+    "signal": 8,
+    "return-type": "json",
+  },
+  "tray": {
+    "icon-size": 12,
+    "spacing": 12,
   },
 }
