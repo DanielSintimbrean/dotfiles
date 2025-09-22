@@ -1,5 +1,10 @@
-vim.pack.add({
-    "https://github.com/windwp/nvim-autopairs"
-})
+-- autopairs
+-- https://github.com/windwp/nvim-autopairs
 
-require"nvim-autopairs".setup({})
+---@module 'lazy'
+---@type LazySpec
+return {
+  'windwp/nvim-autopairs',
+  event = 'InsertEnter',
+  opts = {},
+}
