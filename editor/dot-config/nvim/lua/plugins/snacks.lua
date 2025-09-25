@@ -33,7 +33,6 @@ return { -- Fuzzy Finder (files, lsp, etc)
   ---@type snacks.Config
   opts = {
     scroll = { enabled = true },
-    notifier = { enabled = true },
     lazygit = { enabled = true },
     picker = {},
   },

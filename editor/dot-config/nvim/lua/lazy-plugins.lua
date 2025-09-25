@@ -31,6 +31,8 @@ require('lazy').setup({
 
   require 'plugins.snacks',
 
+  require 'plugins.better-ui',
+
   require 'plugins.lspconfig',
 
   require 'plugins.conform',

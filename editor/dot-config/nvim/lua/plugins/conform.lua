@@ -21,23 +21,47 @@ return {
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = {}
+
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
           return {
-            timeout_ms = 500,
             lsp_format = 'fallback',
           }
         end
       end,
+      default_format_opts = {
+        timeout_ms = 10000,
+        async = true, -- not recommended to change
+        quiet = false, -- not recommended to change
+        lsp_format = 'never', -- not recommended to change
+        require_cwd = true,
+      },
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        javascript = { 'prettierd', 'prettier', 'biome', stop_after_first = true },
+        javascript = { 'prettier', 'biome', 'biome-check', 'biome-organize-imports' },
+        javascriptreact = { 'prettier', 'biome', 'biome-check', 'biome-organize-imports' },
+        typescript = { 'prettier', 'biome', 'biome-check', 'biome-organize-imports' },
+        typescriptreact = { 'prettier', 'biome', 'biome-check', 'biome-organize-imports' },
+      },
+      formatters = {
+        prettier = {
+          require_cwd = true,
+        },
+        biome = {
+          require_cwd = true,
+        },
+        ['biome-check'] = {
+          require_cwd = true,
+        },
+        ['biome-organize-imports'] = {
+          require_cwd = true,
+        },
       },
     },
   },
