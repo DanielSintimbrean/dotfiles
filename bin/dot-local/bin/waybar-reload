@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Check if Waybar is running
+if pgrep -x "waybar" > /dev/null; then
+    echo "Waybar is running. Killing it..."
+    pkill -x "waybar"
+    # Wait a moment to ensure it's fully killed
+    sleep 1
+else
+    echo "Waybar is not running."
+fi
+
+echo "Starting Waybar..."
+# You might want to run Waybar in the background, especially if this script is
+# part of a startup sequence. The '&' achieves this.
+waybar &
+
+echo "Waybar started."
+
+
