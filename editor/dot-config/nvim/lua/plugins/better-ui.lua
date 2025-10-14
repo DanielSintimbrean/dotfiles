@@ -29,5 +29,14 @@ return {
       --   If not available, we use `mini` as the fallback
       'rcarriga/nvim-notify',
     },
+    keys = {
+      {
+        '<leader>nd',
+        function()
+          require('notify').dismiss { pending = true, silent = true }
+        end,
+        desc = 'Debug: Start/Continue',
+      },
+    },
   },
 }
