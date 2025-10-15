@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Sincroniza una playlist de YouTube con una carpeta local (la del archivo .yt-config.yaml)
+# Requiere: yt-dlp y yq instalados
+
+CONFIG_FILE=".yt-config.yaml"
+
+# Verificar dependencias
+for cmd in yt-dlp yq; do
+  if ! command -v $cmd &>/dev/null; then
+    echo "❌ Error: $cmd no está instalado. Instálalo antes de continuar."
+    exit 1
+  fi
+done
+
+# Verificar archivo de configuración
+if [[ ! -f "$CONFIG_FILE" ]]; then
+  echo "❌ No se encontró el archivo de configuración $CONFIG_FILE"
+  exit 1
+fi
+
+# Leer el ID de la playlist
+PLAYLIST_ID=$(yq -r '.playlist_id' "$CONFIG_FILE")
+
+if [[ -z "$PLAYLIST_ID" || "$PLAYLIST_ID" == "null" ]]; then
+  echo "❌ Faltan datos en el archivo de configuración (playlist_id)."
+  exit 1
+fi
+
+# Carpeta del archivo de configuración (donde se descargará la playlist)
+CONFIG_DIR=$(dirname "$(realpath "$CONFIG_FILE")")
+
+# Construir URL de la playlist
+PLAYLIST_URL="https://www.youtube.com/playlist?list=$PLAYLIST_ID"
+
+echo "🎵 Sincronizando playlist: $PLAYLIST_URL"
+echo "📁 Carpeta destino: $CONFIG_DIR"
+
+# Ejecutar yt-dlp para sincronizar
+yt-dlp \
+  --yes-playlist \
+  --ignore-errors \
+  --no-overwrites \
+  --continue \
+  --download-archive "$CONFIG_DIR/.downloaded.txt" \
+  -o "$CONFIG_DIR/%(upload_date)s - %(title)s.%(ext)s" \
+  "$PLAYLIST_URL"
+
+echo "✅ Sincronización completada en $CONFIG_DIR"
