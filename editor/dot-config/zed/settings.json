@@ -7,6 +7,8 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "agent_buffer_font_size": 12.0,
+  "agent_ui_font_size": 14.0,
   "show_completions_on_input": false,
   "edit_predictions": {
     "mode": "subtle",
@@ -27,14 +29,9 @@
     "edit_prediction_provider": "zed"
   },
   "agent": {
-    "inline_assistant_model": {
-      "provider": "zed.dev",
-      "model": "claude-3-5-sonnet"
-    },
-    "default_model": {
-      "provider": "zed.dev",
-      "model": "claude-sonnet-4"
-    }
+    "dock": "left",
+    "model_parameters": [],
+    "expand_terminal_card": false
   },
   "theme": "Catppuccin Mocha - No Italics",
 
@@ -51,7 +48,8 @@
 
   "languages": {
     "TypeScript": {
-      "format_on_save": "prettier"
+      "formatter": "prettier",
+      "format_on_save": "on"
     }
   },
   "scrollbar": {
@@ -165,9 +163,6 @@
   },
   // Move some unnecessary panels to the left
   "notification_panel": {
-    "dock": "left"
-  },
-  "chat_panel": {
     "dock": "left"
   }
 }

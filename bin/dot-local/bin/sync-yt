@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Sincroniza una playlist de YouTube con una carpeta local (la del archivo .yt-config.yaml)
+# Descarga los audios en formato MP3
 # Requiere: yt-dlp y yq instalados
 
 CONFIG_FILE=".yt-config.yaml"
@@ -26,7 +27,7 @@ if [[ -z "$PLAYLIST_ID" || "$PLAYLIST_ID" == "null" ]]; then
   exit 1
 fi
 
-# Carpeta del archivo de configuración (donde se descargará la playlist)
+# Carpeta donde está el archivo de configuración
 CONFIG_DIR=$(dirname "$(realpath "$CONFIG_FILE")")
 
 # Construir URL de la playlist
@@ -34,15 +35,20 @@ PLAYLIST_URL="https://www.youtube.com/playlist?list=$PLAYLIST_ID"
 
 echo "🎵 Sincronizando playlist: $PLAYLIST_URL"
 echo "📁 Carpeta destino: $CONFIG_DIR"
+echo "🎧 Formato de salida: MP3"
 
-# Ejecutar yt-dlp para sincronizar
+# Ejecutar yt-dlp para sincronizar y extraer audio en MP3
 yt-dlp \
   --yes-playlist \
   --ignore-errors \
   --no-overwrites \
   --continue \
   --download-archive "$CONFIG_DIR/.downloaded.txt" \
-  -o "$CONFIG_DIR/%(upload_date)s - %(title)s.%(ext)s" \
+  -o "$CONFIG_DIR/%(n_entries+1-playlist_index)03d - %(upload_date)s - %(title)s.%(ext)s" \
+  -f "bestaudio/best" \
+  --extract-audio \
+  --audio-format mp3 \
+  --audio-quality 0 \
   "$PLAYLIST_URL"
 
 echo "✅ Sincronización completada en $CONFIG_DIR"
