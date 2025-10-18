@@ -35,6 +35,11 @@ return { -- Fuzzy Finder (files, lsp, etc)
     scroll = { enabled = true },
     lazygit = { enabled = true },
     picker = {},
+    image = {
+      -- your image configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
   },
 
   -- See `:help snacks-pickers-sources`
