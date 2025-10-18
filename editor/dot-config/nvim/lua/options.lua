@@ -78,5 +78,6 @@ vim.o.wrap = false
 vim.o.colorcolumn = '120'
 
 vim.o.winborder = 'rounded'
+vim.o.swapfile = false
 
 -- vim: ts=2 sts=2 sw=2 et
