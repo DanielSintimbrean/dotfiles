@@ -35,7 +35,9 @@ return { -- Fuzzy Finder (files, lsp, etc)
     scroll = { enabled = true },
     lazygit = { enabled = true },
     picker = {},
+    terminal = {},
     image = {
+      doc = { inline = false, float = false },
       -- your image configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
