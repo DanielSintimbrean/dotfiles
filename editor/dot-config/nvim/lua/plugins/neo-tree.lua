@@ -20,7 +20,11 @@ return {
   opts = {
     log_level = 'warn',
     close_if_last_window = true,
+    window = {
+      position = 'right',
+    },
     filesystem = {
+      hijack_netrw_behavior = 'open_current',
       window = {
         mappings = {
           ['\\'] = 'close_window',
