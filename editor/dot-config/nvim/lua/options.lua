@@ -80,4 +80,8 @@ vim.o.colorcolumn = '120'
 vim.o.winborder = 'rounded'
 vim.o.swapfile = false
 
+vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.tabstop = 2 -- Number of spaces a tab is equal to
+vim.opt.shiftwidth = 2 -- Number of spaces for each step of indentation
+
 -- vim: ts=2 sts=2 sw=2 et
