@@ -47,10 +47,30 @@ yt-dlp \
   --download-archive "$CONFIG_DIR/.downloaded.txt" \
   -o "$CONFIG_DIR/%(n_entries+1-playlist_index)03d - %(upload_date)s - %(title)s.%(ext)s" \
   -f "bestaudio/best" \
-  --extractor-args "youtube:player_js_version=actual" \
   --extract-audio \
   --audio-format mp3 \
   --audio-quality 0 \
   "$PLAYLIST_URL"
+
+yt-dlp \
+  --yes-playlist \
+  --ignore-errors \
+  --no-overwrites \
+  -t sleep \
+  --continue \
+  --download-archive "$CONFIG_DIR/.downloaded.txt" \
+  -o "$CONFIG_DIR/%(n_entries+1-playlist_index)03d - %(upload_date)s - %(title)s.%(ext)s" \
+  -f "bestaudio/best" \
+  --extract-audio \
+  --audio-format mp3 \
+  --audio-quality 0 \
+  "$PLAYLIST_URL"
+
+yt-dlp \
+  --flat-playlist \
+  --force-write-archive \
+  --download-archive "$CONFIG_DIR/.downloaded.txt" \
+  "$PLAYLIST_URL"
+
 
 echo "✅ Sincronización completada en $CONFIG_DIR"

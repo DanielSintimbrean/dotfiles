@@ -15,6 +15,7 @@
     "bluetooth",
     "network",
     "pulseaudio",
+    "custom/notifications",
     "cpu",
     "battery",
   ],
@@ -58,6 +59,14 @@
     "tooltip-format": "Omarchy update available",
     "signal": 7,
     "interval": 3600,
+  },
+  "custom/notifications": {
+    "format": "{}",
+    "exec": "$HOME/.config/waybar/scripts/notification.sh",
+    "on-click": "$HOME/.config/waybar/scripts/notification.sh toggle",
+    "tooltip-format": "Toggle notifications",
+    "signal": 9,
+    "interval": 5,
   },
 
   "cpu": {
