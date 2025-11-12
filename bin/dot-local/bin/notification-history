@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+command -v busctl >/dev/null 2>&1 || {
+  echo "busctl is required but not available." >&2
+  exit 1
+}
+
+command -v python3 >/dev/null 2>&1 || {
+  echo "python3 is required but not available." >&2
+  exit 1
+}
+
+JSON_PAYLOAD="$(
+  if ! busctl -j --user call org.freedesktop.Notifications /fr/emersion/Mako fr.emersion.Mako ListHistory; then
+    echo "Failed to query Mako notification history." >&2
+    exit 1
+  fi
+)"
+
+python3 - "$JSON_PAYLOAD" <<'PY'
+import json
+import shutil
+import signal
+import sys
+import textwrap
+from itertools import zip_longest
+
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+
+raw = sys.argv[1]
+try:
+    payload = json.loads(raw)
+except json.JSONDecodeError as exc:
+    print(f"Unable to parse notification history JSON: {exc}", file=sys.stderr)
+    sys.exit(1)
+
+entries = payload.get("data") or []
+if not entries:
+    print("No notifications found.")
+    sys.exit(0)
+
+notifications = entries[0] if isinstance(entries[0], list) else entries
+if not notifications:
+    print("No notifications found.")
+    sys.exit(0)
+
+term_width = shutil.get_terminal_size(fallback=(120, 20)).columns
+SEPARATORS_WIDTH = 3 * 2  # two separators, " │ "
+BASE_WIDTH = max((term_width - SEPARATORS_WIDTH) // 5, 10)
+APP_WIDTH = BASE_WIDTH
+SUMMARY_WIDTH = BASE_WIDTH
+BODY_WIDTH = BASE_WIDTH * 3
+COL_WIDTHS = (APP_WIDTH, SUMMARY_WIDTH, BODY_WIDTH)
+ROW_WIDTH = sum(COL_WIDTHS) + 3 * (len(COL_WIDTHS) - 1)
+
+
+def extract(entry, key):
+    node = entry.get(key, {})
+    if isinstance(node, dict):
+        return str(node.get("data") or "")
+    return ""
+
+
+def normalize(text):
+    if not text:
+        return ""
+    return " ".join(text.replace("\n", " ").split())
+
+
+def wrap_cell(text, width):
+    text = normalize(text)
+    wrapped = textwrap.wrap(
+        text,
+        width=width,
+        replace_whitespace=False,
+        drop_whitespace=True,
+    )
+    return wrapped or [""]
+
+
+rows = []
+for entry in notifications:
+    app = extract(entry, "app-name") or extract(entry, "desktop-entry") or "-"
+    summary = extract(entry, "summary") or "-"
+    body = extract(entry, "body") or "-"
+    rows.append((app, summary, body))
+
+if not rows:
+    print("No notifications found.")
+    sys.exit(0)
+
+
+def fmt_line(segments):
+    return " │ ".join(segment.ljust(width) for segment, width in zip(segments, COL_WIDTHS))
+
+
+def divider(char="-"):
+    return char * ROW_WIDTH
+
+
+print(divider("="))
+print(fmt_line(("APP", "SUMMARY", "BODY")))
+print(divider("="))
+
+for app, summary, body in rows:
+    wrapped_columns = [
+        wrap_cell(app, APP_WIDTH),
+        wrap_cell(summary, SUMMARY_WIDTH),
+        wrap_cell(body, BODY_WIDTH),
+    ]
+    for parts in zip_longest(*wrapped_columns, fillvalue=""):
+        print(fmt_line(parts))
+    print(divider())
+PY

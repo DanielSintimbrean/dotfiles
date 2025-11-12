@@ -13,8 +13,9 @@ fi
 echo "Starting Waybar..."
 # You might want to run Waybar in the background, especially if this script is
 # part of a startup sequence. The '&' achieves this.
-waybar &
+waybar >/dev/null 2>&1 &
 
 echo "Waybar started."
 
-
+read -n 1 -s -r -p "Press any key to exit..."
+echo

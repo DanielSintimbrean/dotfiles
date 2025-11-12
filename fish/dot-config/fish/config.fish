@@ -181,7 +181,7 @@ alias rip 'expac --timefmt="%Y-%m-%d %T" "%l\t%n %v" | sort | tail -200 | nl'
 fish_vi_key_bindings
 
 # Aliases
-alias nv 'nvim . -c "lua Snacks.picker.smart()"'
+alias nv 'nvim -c "lua Snacks.picker.smart()"'
 alias lg 'lazygit'
 alias tmux-dev 'tmux -u new -A -s "dev"'
 alias td 'tmux -u new -A -s "dev"'

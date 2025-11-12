@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ICON_ENABLED="󰂜"
-ICON_DISABLED="󰂠"
+ICON_ENABLED=" 󰂜 "
+ICON_DISABLED=" 󰂠 "
 DISABLED_MODE="do-not-disturb"
 DEFAULT_MODE="default"
 SIGNAL_NUMBER=9
@@ -20,11 +20,7 @@ print_icon() {
 }
 
 toggle_mode() {
-  if is_disabled; then
-    makoctl mode -s "$DEFAULT_MODE"
-  else
-    makoctl mode -s "$DISABLED_MODE"
-  fi
+  makoctl mode -t do-not-disturb && makoctl mode | grep -q 'do-not-disturb' && notify-send "Silenced notifications" || notify-send "Enabled notifications"
   pkill -RTMIN+"$SIGNAL_NUMBER" waybar >/dev/null 2>&1 || true
 }
 
