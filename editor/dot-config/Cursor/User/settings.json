@@ -56,7 +56,6 @@
   "workbench.iconTheme": "catppuccin-frappe",
   "editor.fontFamily": "Mononoki Nerd Font",
   "cursor.general.disableHttp2": true,
-  "update.releaseTrack": "prerelease",
   "git.autofetch": true,
   "editor.formatOnSave": true,
   "editor.bracketPairColorization.enabled": true,
@@ -194,5 +193,15 @@
   "diffEditor.renderSideBySide": false,
   "extensions.ignoreRecommendations": true,
   "editor.smoothScrolling": true,
-  "cursor.cpp.disabledLanguages": ["plaintext"]
+  "cursor.cpp.disabledLanguages": ["plaintext"],
+  "[mdx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.editorAssociations": {
+    "*.svg": "default"
+  },
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "git.openRepositoryInParentFolders": "always"
 }
