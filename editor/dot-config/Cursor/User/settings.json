@@ -55,7 +55,6 @@
   "workbench.colorTheme": "Catppuccin Frappé",
   "workbench.iconTheme": "catppuccin-frappe",
   "editor.fontFamily": "Mononoki Nerd Font",
-  "cursor.general.disableHttp2": true,
   "git.autofetch": true,
   "editor.formatOnSave": true,
   "editor.bracketPairColorization.enabled": true,
