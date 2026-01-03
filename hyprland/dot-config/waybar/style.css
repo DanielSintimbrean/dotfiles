@@ -86,7 +86,7 @@
 }
 
 #custom-expand-icon {
-  margin-right: 20px;
+  margin-right: 18px;
 }
 
 tooltip {
@@ -113,4 +113,22 @@ tooltip {
 
 #custom-screenrecording-indicator.active {
   color: #a55555;
+}
+
+/* VPN Module Styling */
+#custom-vpn {
+    color: #ffffff;
+    margin: 0 5px;
+    padding: 0 10px;
+    border-radius: 5px;
+}
+
+#custom-vpn.active {
+    background-color: #4CAF50;
+    color: #000000;
+}
+
+#custom-vpn.inactive {
+    background-color: #f44336;
+    color: #ffffff;
 }
