@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Pomodoro
+Exec=mpv --force-window /home/danields/Music/pomodoro.m4b
+Icon=mpv
+Terminal=false
+Categories=AudioVideo;Audio;Player;
