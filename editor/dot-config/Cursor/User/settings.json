@@ -52,7 +52,7 @@
 
   "window.commandCenter": true,
   "workbench.sideBar.location": "right",
-  "workbench.colorTheme": "Catppuccin Frappé",
+  "workbench.colorTheme": "Tokyo Night",
   "workbench.iconTheme": "catppuccin-frappe",
   "editor.fontFamily": "Mononoki Nerd Font",
   "git.autofetch": true,
