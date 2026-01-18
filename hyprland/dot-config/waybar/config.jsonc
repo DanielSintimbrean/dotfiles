@@ -18,6 +18,7 @@
     "custom/notifications",
     "custom/caffeine",
     "custom/vpn",
+    "custom/hyprwhspr",
     "cpu",
     "battery",
   ],
@@ -78,6 +79,16 @@
       "on-click-right": "alacritty -e $HOME/.config/waybar/select.sh",
       "signal": 8
   },
+  "custom/hyprwhspr": {
+    "format": "{}",
+    "exec": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh status",
+    "interval": 1,
+    "return-type": "json",
+    "exec-on-event": true,
+    "on-click": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh record",
+    "on-click-right": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh restart",
+    "tooltip": true
+  },
   "cpu": {
     "interval": 5,
     "format": "󰍛",
@@ -124,6 +135,7 @@
   "bluetooth": {
     "format": "",
     "format-disabled": "󰂲",
+    "format-off": "󰂲",
     "format-connected": "󰂱",
     "format-no-controller": "",
     "tooltip-format": "Devices connected: {num_connections}",
@@ -137,6 +149,7 @@
     "scroll-step": 5,
     "format-muted": "",
     "format-icons": {
+      "headphone": "",
       "default": ["", "", ""],
     },
   },
@@ -157,6 +170,19 @@
     "exec": "$OMARCHY_PATH/default/waybar/indicators/screen-recording.sh",
     "signal": 8,
     "return-type": "json",
+  },
+  "custom/voxtype": {
+    "exec": "omarchy-voxtype-status",
+    "return-type": "json",
+    "format": "{icon}",
+    "format-icons": {
+      "idle": "",
+      "recording": "󰍬",
+      "transcribing": "󰔟"
+    },
+    "tooltip": true,
+    "on-click-right": "omarchy-voxtype-config",
+    "on-click": "omarchy-voxtype-model"
   },
   "tray": {
     "icon-size": 12,
