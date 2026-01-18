@@ -16,6 +16,7 @@
     "network",
     "pulseaudio",
     "custom/notifications",
+    "custom/caffeine",
     "custom/vpn",
     "cpu",
     "battery",
@@ -58,6 +59,14 @@
     "on-click": "$HOME/.config/waybar/scripts/notification.sh toggle",
     "tooltip-format": "Toggle notifications",
     "signal": 9,
+    "interval": 5,
+  },
+  "custom/caffeine": {
+    "format": "{}",
+    "exec": "$HOME/.config/waybar/scripts/caffeine.sh",
+    "on-click": "$HOME/.config/waybar/scripts/caffeine.sh toggle",
+    "tooltip-format": "Toggle screen lock",
+    "signal": 10,
     "interval": 5,
   },
   "custom/vpn": {
