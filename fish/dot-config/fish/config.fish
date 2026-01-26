@@ -192,6 +192,21 @@ alias ze 'zeditor .'
 alias c 'cursor .'
 alias clipboard 'wl-copy'
 
+
+
+# Añadir estas líneas a ~/.config/fish/config.fish para emular bash
+function last_history_item
+    echo $history[1]
+end
+
+abbr -a !! --position anywhere --function last_history_item
+
+function last_history_token
+    echo $history[1] | read -t -a tokens
+    echo $tokens[-1]
+end
+abbr -a !\$ --position anywhere --function last_history_token
+
 set -gx BUN_INSTALL ~/.bun
 
 # Add ~/.bun/bin to PATH
