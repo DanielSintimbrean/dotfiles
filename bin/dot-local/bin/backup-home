@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DEST="/run/media/danields/Lexar/backup/home"
+EXCLUDE="$HOME/.backup-exclude"
+
+if [ ! -d "$(dirname "$DEST")" ]; then
+    echo "ERROR: disco Lexar no montado en /run/media/danields/Lexar"
+    exit 1
+fi
+
+mkdir -p "$DEST"
+
+rsync -rltDW \
+  --modify-window=1 \
+  --no-links \
+  --no-perms --no-owner --no-group \
+  --info=progress2 --human-readable \
+  --delete \
+  --exclude-from="$EXCLUDE" \
+  "$@" \
+  "$HOME/" \
+  "$DEST/"
+
+echo "Backup completado."
