@@ -108,7 +108,7 @@ sudo systemctl enable --now udevmon
 ```
 
 ### configure `udevmon`
-Edit (or create) `/etc/interceptor/udevmon.yaml:`
+Edit (or create) `sudo nvim /etc/interception/udevmon.yaml`
 ```yaml
 - JOB: "intercept -g $DEVNODE | caps2esc -m 1 | uinput -d $DEVNODE"
   DEVICE:
