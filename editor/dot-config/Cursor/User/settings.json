@@ -12,20 +12,20 @@
   "vim.insertModeKeyBindings": [
     {
       "before": ["j", "j"],
-      "after": ["<Esc>"]
-    }
+      "after": ["<Esc>"],
+    },
   ],
   "vim.normalModeKeyBindingsNonRecursive": [
     {
       "before": ["<leader>", "d"],
-      "after": ["d", "d"]
-    }
+      "after": ["d", "d"],
+    },
   ],
   "vim.visualModeKeyBindingsNonRecursive": [
     {
       "before": ["g", "l"],
-      "command": "editor.action.insertCursorAbove"
-    }
+      "command": "editor.action.insertCursorAbove",
+    },
   ],
   "vim.leader": "<space>",
   "vim.handleKeys": {
@@ -36,7 +36,7 @@
     "<C-g>": false,
     "<C-p>": false,
     "<C-k>": false,
-    "<C-m>": false
+    "<C-m>": false,
   },
   "vim.visualModeKeyBindings": [
     // Stay in visual mode while indenting
@@ -46,7 +46,7 @@
     { "before": ["J"], "commands": ["editor.action.moveLinesDownAction"] },
     { "before": ["K"], "commands": ["editor.action.moveLinesUpAction"] },
     // toggle comment selection
-    { "before": ["leader", "c"], "commands": ["editor.action.commentLine"] }
+    { "before": ["leader", "c"], "commands": ["editor.action.commentLine"] },
   ],
   // END VIM CONFiG
 
@@ -162,27 +162,27 @@
     "*.vue": "$(capture).*.ts, $(capture).*.js, $(capture).story.vue",
     "*.w": "$(capture).*.w, I$(capture).w",
     "*.wat": "$(capture).wasm",
-    "*.xaml": "$(capture).xaml.cs"
+    "*.xaml": "$(capture).xaml.cs",
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "git.confirmSync": false,
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "explorer.confirmDragAndDrop": false,
   "typescript.updateImportsOnFileMove.enabled": "always",
   "terminal.integrated.defaultProfile.linux": "fish",
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "git.enableSmartCommit": true,
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "color-highlight.markerType": "dot-before",
   "color-highlight.matchHslWithNoFunction": true,
@@ -194,14 +194,14 @@
   "editor.smoothScrolling": true,
   "cursor.cpp.disabledLanguages": ["plaintext"],
   "[mdx]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "workbench.editorAssociations": {
-    "*.svg": "default"
+    "*.svg": "default",
   },
   "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "git.openRepositoryInParentFolders": "always",
-  "cursor.composer.shouldChimeAfterChatFinishes": true
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
 }

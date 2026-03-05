@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+diff=$(git diff --cached)
+
+if [ -z "$diff" ]; then
+  echo "Nothing staged. Stage changes first with git add."
+  exit 1
+fi
+
+branch=$(git branch --show-current)
+
+prompt="Write a commit message for this diff using Conventional Commits with an emoji after the colon.
+
+Format: <type>(<optional scope>): <emoji> <description>
+One line, under 72 chars. Imperative tense. Only responde with the commit message
+
+Types and their emojis:
+- feat: :sparkles:
+- fix: :bug:
+- docs: :memo:
+- style: :lipstick:
+- refactor: :recycle:
+- perf: :zap:
+- test: :white_check_mark:
+- build: :package:
+- ci: :ferris_wheel:
+- chore: :hammer:
+- revert: :rewind:
+
+Examples:
+- feat: :sparkles: add dark mode toggle
+- fix(ui): :bug: resolve button overlap on mobile
+- refactor: :recycle: extract auth logic into hook
+
+Branch: ${branch}
+Diff:
+${diff}"
+
+msg=$(CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p --model=haiku --tools='' --disable-slash-commands --setting-sources='' --system-prompt='' "$prompt")
+
+echo "Commit message: $msg"
+read -rp "Commit? [Y/n] " confirm
+if [[ "${confirm:-Y}" =~ ^[Yy]$ ]]; then
+  git commit -m "$msg"
+else
+  echo "Aborted."
+fi
