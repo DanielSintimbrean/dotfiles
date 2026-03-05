@@ -11,27 +11,25 @@
   "agent_ui_font_size": 14.0,
   "show_completions_on_input": false,
   "edit_predictions": {
+    "provider": "zed",
     "mode": "subtle",
     "copilot": {
       "proxy": null,
       "proxy_no_verify": null,
-      "enterprise_uri": null
+      "enterprise_uri": null,
     },
-    "enabled_in_text_threads": false
+    "enabled_in_text_threads": false,
   },
   "show_edit_predictions": true,
   "git_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "base_keymap": "VSCode",
-  "icon_theme": "Catppuccin Mocha",
-  "features": {
-    "edit_prediction_provider": "zed"
-  },
+  "icon_theme": "Catppuccin Macchiato",
   "agent": {
     "dock": "left",
     "model_parameters": [],
-    "expand_terminal_card": false
+    "expand_terminal_card": false,
   },
   "theme": "Catppuccin Mocha - No Italics",
 
@@ -39,39 +37,39 @@
   "vim_mode": true,
   "vim": {
     "use_system_clipboard": "always",
-    "highlight_on_yank_duration": 300
+    "highlight_on_yank_duration": 300,
   },
 
   "tab_bar": {
-    "show": true
+    "show": true,
   },
 
   "languages": {
     "TypeScript": {
       "formatter": "prettier",
-      "format_on_save": "on"
-    }
+      "format_on_save": "on",
+    },
   },
   "scrollbar": {
-    "show": "never"
+    "show": "never",
   },
   // Only show error on tab
   "tabs": {
-    "show_diagnostics": "errors"
+    "show_diagnostics": "errors",
   },
 
   "vertical_scroll_margin": 6,
 
   "indent_guides": {
     "enabled": true,
-    "coloring": "indent_aware"
+    "coloring": "indent_aware",
   },
 
   // Inlay hints preconfigured by Zed: Go, Rust, Typescript and Svelte
   "inlay_hints": {
     "enabled": true,
     "show_type_hints": false,
-    "show_parameter_hints": false
+    "show_parameter_hints": false,
   },
 
   "diagnostics": {
@@ -81,18 +79,18 @@
       "update_debounce_ms": 150,
       "padding": 4,
       "min_column": 0,
-      "max_severity": null
-    }
+      "max_severity": null,
+    },
   },
 
-  "relative_line_numbers": true,
+  "relative_line_numbers": "enabled",
 
   "lsp": {
     "biome": {
       "settings": {
-        "require_config_file": true
-      }
-    }
+        "require_config_file": true,
+      },
+    },
   },
 
   // Font UI
@@ -112,9 +110,9 @@
     "shell": {
       "with_arguments": {
         "program": "/bin/fish",
-        "args": []
-      }
-    }
+        "args": [],
+      },
+    },
   },
   // File scan exclusions, hide on the file explorer and search
   "file_scan_exclusions": [
@@ -139,13 +137,13 @@
     "**/.nyc_output",
     "**/report",
     "**/node_modules",
-    "**/.wrangler"
+    "**/.wrangler",
   ],
 
   // Turn off telemetry
   "telemetry": {
     "diagnostics": false,
-    "metrics": false
+    "metrics": false,
   },
 
   // Move all panel to the right
@@ -153,16 +151,16 @@
     "hide_gitignore": false,
     "button": true,
     "dock": "right",
-    "git_status": true
+    "git_status": true,
   },
   "outline_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "collaboration_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   // Move some unnecessary panels to the left
   "notification_panel": {
-    "dock": "left"
-  }
+    "dock": "left",
+  },
 }

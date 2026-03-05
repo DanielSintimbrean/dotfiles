@@ -13,7 +13,7 @@ branch=$(git branch --show-current)
 prompt="Write a commit message for this diff using Conventional Commits with an emoji after the colon.
 
 Format: <type>(<optional scope>): <emoji> <description>
-One line, under 72 chars. Imperative tense. Only responde with the commit message
+One line, under 72 chars. Imperative tense. Only responde with the raw commit message, without any type of quote, or any explination 
 
 Types and their emojis:
 - feat: :sparkles:
