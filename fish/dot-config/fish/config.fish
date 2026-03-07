@@ -190,6 +190,7 @@ alias claer 'clear'
 alias bun-update 'bun update -g --latest'
 alias ze 'zeditor .'
 alias c 'cursor .'
+alias cc 'claude --dangerously-skip-permissions'
 alias clipboard 'wl-copy'
 
 

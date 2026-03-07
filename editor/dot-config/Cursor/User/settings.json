@@ -52,8 +52,8 @@
 
   "window.commandCenter": true,
   "workbench.sideBar.location": "right",
-  "workbench.colorTheme": "Tokyo Night",
-  "workbench.iconTheme": "catppuccin-frappe",
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.iconTheme": "catppuccin-mocha",
   "editor.fontFamily": "Mononoki Nerd Font",
   "git.autofetch": true,
   "editor.formatOnSave": true,
