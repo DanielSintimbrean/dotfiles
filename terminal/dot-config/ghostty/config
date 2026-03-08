@@ -5,7 +5,7 @@ command = /usr/bin/fish --login --interactive
 # Font
 font-family = "terminal-font"
 font-style = Regular
-font-size = 14
+font-size = 12
 
 # Window
 window-theme = ghostty
@@ -16,7 +16,7 @@ resize-overlay = never
 gtk-toolbar-style = flat
 
 # Cursor styling
-cursor-style = "block"
+cursor-style = "bar"
 cursor-style-blink = false
 
 # Cursor styling + SSH session terminfo
