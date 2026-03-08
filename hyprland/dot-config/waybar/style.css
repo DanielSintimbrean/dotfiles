@@ -67,7 +67,7 @@
 #battery,
 #pulseaudio,
 #custom-omarchy,
-#custom-screenrecording-indicator,
+
 #custom-update {
   min-width: 12px;
   margin: 0 7.5px;
@@ -105,9 +105,13 @@ tooltip {
   opacity: 0;
 }
 
-#custom-screenrecording-indicator {
+
+#custom-screenrecording-indicator,
+#custom-idle-indicator,
+#custom-notification-silencing-indicator {
   min-width: 12px;
   margin-left: 5px;
+  margin-right: 0;
   font-size: 10px;
   padding-bottom: 1px;
 }
@@ -180,4 +184,9 @@ tooltip {
 /* Hover effects - Waybar doesn't support filter, so we use opacity instead */
 #custom-hyprwhspr:hover {
   opacity: 0.8;
+}
+
+#custom-idle-indicator.active,
+#custom-notification-silencing-indicator.active {
+  color: #a55555;
 }
