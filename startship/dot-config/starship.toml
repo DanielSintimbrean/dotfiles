@@ -189,6 +189,9 @@ format = '[\[$symbol$status_common_meaning$status_signal_name$status_maybe_int\]
 map_symbol = true
 pipestatus = true
 symbol = "󰅙"
+not_executable_symbol = "󰅙"
+not_found_symbol = ""
+sigint_symbol = "󰟾"
 
 [fill]
 symbol = '-'
