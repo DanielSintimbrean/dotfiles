@@ -85,14 +85,6 @@
 
   "relative_line_numbers": "enabled",
 
-  "lsp": {
-    "biome": {
-      "settings": {
-        "require_config_file": true,
-      },
-    },
-  },
-
   // Font UI
   "ui_font_size": 18,
   "buffer_font_size": 14,
@@ -162,5 +154,35 @@
   // Move some unnecessary panels to the left
   "notification_panel": {
     "dock": "left",
+  },
+
+  "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        }
+      },
+      "enable_lsp_tasks": true
+    },
+    "biome": {
+      "settings": {
+        "require_config_file": true,
+        "inline_config": {
+          "css": {
+            "parser": {
+              "tailwindDirectives": true,
+            },
+          },
+        },
+      },
+    },
   },
 }

@@ -17,7 +17,6 @@ customCommands:
     output: log
 git:
   pagers:
-    - colorArg: always
-      pager: diff-so-fancy
+    - pager: diff-so-fancy
 gui:
   nerdFontsVersion: "3"
