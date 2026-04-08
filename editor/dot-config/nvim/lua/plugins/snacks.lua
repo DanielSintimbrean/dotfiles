@@ -42,6 +42,32 @@ return { -- Fuzzy Finder (files, lsp, etc)
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
     },
+    dashboard = {
+      preset = {
+        pick = function(cmd, opts)
+          return LazyVim.pick(cmd, opts)()
+        end,
+        header = [[
+██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗
+██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║
+██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║
+██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║
+███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║
+╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝
+   ]],
+        -- stylua: ignore
+        ---@type snacks.dashboard.Item[]
+        keys = {
+          { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+          { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+          { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+          { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+          { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+          { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
+          { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+        },
+      },
+    },
   },
 
   -- See `:help snacks-pickers-sources`
@@ -159,13 +185,19 @@ return { -- Fuzzy Finder (files, lsp, etc)
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('snacks-lsp-attach', { clear = true }),
       callback = function(event)
-        vim.keymap.set('n', 'grr', require('snacks').picker.lsp_references, { buffer = event.buf, desc = '[G]oto [R]eferences' })
-        vim.keymap.set('n', 'gri', require('snacks').picker.lsp_implementations, { buffer = event.buf, desc = '[G]oto [I]mplementation' })
-        vim.keymap.set('n', 'grd', require('snacks').picker.lsp_definitions, { buffer = event.buf, desc = '[G]oto [D]efinition' })
+        vim.keymap.set('n', 'grr', require('snacks').picker.lsp_references,
+          { buffer = event.buf, desc = '[G]oto [R]eferences' })
+        vim.keymap.set('n', 'gri', require('snacks').picker.lsp_implementations,
+          { buffer = event.buf, desc = '[G]oto [I]mplementation' })
+        vim.keymap.set('n', 'grd', require('snacks').picker.lsp_definitions,
+          { buffer = event.buf, desc = '[G]oto [D]efinition' })
         vim.keymap.set('n', 'grD', vim.lsp.buf.declaration, { buffer = event.buf, desc = '[G]oto [D]eclaration' })
-        vim.keymap.set('n', 'gO', require('snacks').picker.lsp_symbols, { buffer = event.buf, desc = 'Open Document Symbols' })
-        vim.keymap.set('n', 'gW', require('snacks').picker.lsp_workspace_symbols, { buffer = event.buf, desc = 'Open Workspace Symbols' })
-        vim.keymap.set('n', 'grt', require('snacks').picker.lsp_type_definitions, { buffer = event.buf, desc = '[G]oto [T]ype Definition' })
+        vim.keymap.set('n', 'gO', require('snacks').picker.lsp_symbols,
+          { buffer = event.buf, desc = 'Open Document Symbols' })
+        vim.keymap.set('n', 'gW', require('snacks').picker.lsp_workspace_symbols,
+          { buffer = event.buf, desc = 'Open Workspace Symbols' })
+        vim.keymap.set('n', 'grt', require('snacks').picker.lsp_type_definitions,
+          { buffer = event.buf, desc = '[G]oto [T]ype Definition' })
       end,
     })
   end,
