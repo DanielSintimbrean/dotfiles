@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ -z "${TMUX:-}" ]]; then
+  echo "sesh-dev-layout must run inside tmux" >&2
+  exit 1
+fi
+
+path="$(tmux display-message -p '#{pane_current_path}')"
+window_id="$(tmux display-message -p '#{window_id}')"
+left_top_pane="$(tmux display-message -p '#{pane_id}')"
+pane_count="$(tmux list-panes -t "$window_id" | wc -l | tr -d ' ')"
+
+# sesh only runs the startup command on first creation, but keep this idempotent.
+if [[ "$pane_count" != "1" ]]; then
+  exit 0
+fi
+
+right_pane="$(tmux split-window -h -d -P -F '#{pane_id}' -c "$path")"
+tmux split-window -v -d -P -F '#{pane_id}' -t "$left_top_pane" -c "$path" >/dev/null
+
+if command -v lazygit >/dev/null 2>&1; then
+  tmux send-keys -t "$right_pane" "lazygit" C-m
+fi
+
+tmux select-pane -t "$left_top_pane"

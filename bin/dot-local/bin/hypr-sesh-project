@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+list_projects() {
+  sesh list -z -d -j |
+    jq -r '.[].Path' |
+    while IFS= read -r path; do
+      [[ -n "$path" ]] || continue
+      git -C "$path" rev-parse --is-inside-work-tree >/dev/null 2>&1 || continue
+      git -C "$path" rev-parse --show-toplevel 2>/dev/null || true
+    done |
+    awk 'NF && !seen[$0]++' |
+    sed "s#^$HOME#~#"
+}
+
+require_command() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    printf 'Missing required command: %s\n' "$1" >&2
+    exit 1
+  fi
+}
+
+require_command ghostty
+require_command git
+require_command jq
+require_command sesh
+require_command walker
+
+if [[ "${1:-}" == "--list" ]]; then
+  list_projects
+  exit 0
+fi
+
+selection="${1:-}"
+
+if [[ -z "$selection" ]]; then
+  selection="$(
+    list_projects | walker -d -p 'Open git project in sesh'
+  )"
+fi
+
+if [[ -z "$selection" ]]; then
+  exit 0
+fi
+
+project_path="${selection/#\~/$HOME}"
+
+exec env SESH_TARGET="$project_path" uwsm-app -- ghostty --working-directory="$project_path" -e fish -lc 's "$SESH_TARGET"'

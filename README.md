@@ -19,7 +19,7 @@ git clone https://github.com/DanielSintimbrean/dotfiles.git ~/dotfiles/
 ## Configure stow
 
 ```bash
-cd ~/dotfiles/ && stow editor fish git hyprland startship system terminal tmux --adopt --dotfiles
+cd ~/dotfiles/ && stow apps bin editor fish git hyprland startship system terminal tmux --adopt --dotfiles
 ```
 
 ```bash
@@ -49,8 +49,34 @@ sudo pacman -s zoxide fnm docker nerd-fonts syncthing diff-so-fancy
 ### From aur
 
 ```bash
-yay -S bun
+yay -S bun sesh-bin
 ```
+
+## Sesh
+
+Install fish completions after `sesh-bin` is available:
+
+```bash
+mkdir -p ~/.config/fish/completions
+sesh completion fish > ~/.config/fish/completions/sesh.fish
+```
+
+Re-stow after pulling the latest dotfiles:
+
+```bash
+./stow-all
+```
+
+Use either:
+
+- `s` from fish
+- `Ctrl + Space` then `T` inside tmux
+- `Super + Shift + Enter` in Hyprland for a Walker picker that opens the selected git project in `ghostty` via `sesh`
+
+Projects under `~/Dev`, `~/Projects`, `~/Work`, and `~/dotfiles` open with this layout:
+
+- left column: two terminal panes stacked top and bottom
+- right column: `lazygit`
 
 ### Install npm dependencies with bun
 
@@ -115,5 +141,3 @@ Edit (or create) `sudo nvim /etc/interception/udevmon.yaml`
     EVENTS:
       EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
 ```
-
-

@@ -1,0 +1,21 @@
+#:schema https://github.com/joshmedeski/sesh/raw/main/sesh.schema.json
+
+[default_session]
+preview_command = "eza --all --git --icons --color=always {}"
+
+[[session]]
+name = "dotfiles"
+path = "~/dotfiles"
+startup_command = "~/.config/tmux/scripts/sesh-dev-layout"
+
+[[wildcard]]
+pattern = "~/Dev/**"
+startup_command = "~/.config/tmux/scripts/sesh-dev-layout"
+
+[[wildcard]]
+pattern = "~/Projects/**"
+startup_command = "~/.config/tmux/scripts/sesh-dev-layout"
+
+[[wildcard]]
+pattern = "~/Work/**"
+startup_command = "~/.config/tmux/scripts/sesh-dev-layout"
