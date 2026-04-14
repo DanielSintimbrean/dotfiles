@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Generate a base64 string with no / or + characters
+
+while true; do
+  result=$(openssl rand -base64 33)
+  if [[ "$result" != *[/+]* ]]; then
+    echo "$result"
+    break
+  fi
+done

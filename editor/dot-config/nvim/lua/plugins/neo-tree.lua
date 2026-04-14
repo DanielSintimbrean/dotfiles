@@ -25,6 +25,11 @@ return {
     },
     filesystem = {
       hijack_netrw_behavior = 'open_current',
+      filtered_items = {
+        visible = true, -- Show dotfiles by default
+        hide_dotfiles = false, -- Don't hide dotfiles
+        hide_gitignored = true, -- Still hide git-ignored files
+      },
       window = {
         mappings = {
           ['\\'] = 'close_window',
