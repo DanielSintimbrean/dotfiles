@@ -34,7 +34,13 @@ return { -- Fuzzy Finder (files, lsp, etc)
   opts = {
     scroll = { enabled = true },
     lazygit = { enabled = true },
-    picker = {},
+    picker = {
+      sources = {
+        files = {
+          hidden = true, -- show dotfiles (e.g. .eslintrc, .prettierrc)
+        },
+      },
+    },
     terminal = {},
     image = {
       doc = { inline = false, float = false },
@@ -92,6 +98,17 @@ return { -- Fuzzy Finder (files, lsp, etc)
         Snacks.picker.smart()
       end,
       desc = '[S]earch [F]iles',
+    },
+    {
+      '<leader>sF',
+      function()
+        Snacks.picker.files {
+          hidden = true,
+          ignored = true, -- include gitignored files (.env, etc.)
+          args = { '--exclude', '.git', '--exclude', 'node_modules', '--exclude', '.next', '--exclude', '.turbo', '--exclude', 'dist' },
+        }
+      end,
+      desc = '[S]earch all [F]iles (incl. gitignored)',
     },
     {
       '<leader>ss',

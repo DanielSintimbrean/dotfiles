@@ -9,6 +9,7 @@ fi
 
 path="$(tmux display-message -p '#{pane_current_path}')"
 window_id="$(tmux display-message -p '#{window_id}')"
+session_name="$(tmux display-message -p '#S')"
 left_top_pane="$(tmux display-message -p '#{pane_id}')"
 pane_count="$(tmux list-panes -t "$window_id" | wc -l | tr -d ' ')"
 
@@ -16,6 +17,8 @@ pane_count="$(tmux list-panes -t "$window_id" | wc -l | tr -d ' ')"
 if [[ "$pane_count" != "1" ]]; then
   exit 0
 fi
+
+tmux rename-window -t "$window_id" "$session_name"
 
 right_pane="$(tmux split-window -h -d -P -F '#{pane_id}' -c "$path")"
 tmux split-window -v -d -P -F '#{pane_id}' -t "$left_top_pane" -c "$path" >/dev/null

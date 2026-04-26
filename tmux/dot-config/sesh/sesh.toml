@@ -11,11 +11,3 @@ startup_command = "~/.config/tmux/scripts/sesh-dev-layout"
 [[wildcard]]
 pattern = "~/Dev/**"
 startup_command = "~/.config/tmux/scripts/sesh-dev-layout"
-
-[[wildcard]]
-pattern = "~/Projects/**"
-startup_command = "~/.config/tmux/scripts/sesh-dev-layout"
-
-[[wildcard]]
-pattern = "~/Work/**"
-startup_command = "~/.config/tmux/scripts/sesh-dev-layout"

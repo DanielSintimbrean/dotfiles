@@ -237,4 +237,5 @@ if test -d ~/.local/share/bob/nvim-bin
     end
 end
 
+set -gx FZF_DEFAULT_OPTS '--cycle --layout=reverse --border --height=90% --preview-window=wrap --marker="*"'
 fzf --fish | source

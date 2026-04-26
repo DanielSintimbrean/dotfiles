@@ -23,6 +23,7 @@ require_command() {
 
 require_command ghostty
 require_command git
+require_command hyprctl
 require_command jq
 require_command sesh
 require_command walker
@@ -45,5 +46,18 @@ if [[ -z "$selection" ]]; then
 fi
 
 project_path="${selection/#\~/$HOME}"
+window_title="sesh-tmux-terminal"
 
-exec env SESH_TARGET="$project_path" uwsm-app -- ghostty --working-directory="$project_path" -e fish -lc 's "$SESH_TARGET"'
+window_address="$(
+  hyprctl clients -j |
+    jq -r --arg class 'com.mitchellh.ghostty' --arg title "$window_title" '
+      .[] | select(.class == $class and .title == $title) | .address
+    ' |
+    head -n 1
+)"
+
+if [[ -n "$window_address" ]]; then
+  exec hyprctl dispatch focuswindow "address:$window_address"
+fi
+
+exec env SESH_TARGET="$project_path" uwsm-app -- ghostty --title="$window_title" --working-directory="$project_path" -e fish -lc 's "$SESH_TARGET"'
