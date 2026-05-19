@@ -1,39 +1,33 @@
--- Neo-tree is a Neovim plugin to browse the file system
--- https://github.com/nvim-neo-tree/neo-tree.nvim
+local plugins = {
+  { src = 'https://github.com/nvim-neo-tree/neo-tree.nvim', version = vim.version.range '*' },
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/MunifTanjim/nui.nvim',
+}
 
----@module 'lazy'
----@type LazySpec
-return {
-  'nvim-neo-tree/neo-tree.nvim',
-  version = '*',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-    'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-    'MunifTanjim/nui.nvim',
+if vim.g.have_nerd_font then table.insert(plugins, 'https://github.com/nvim-tree/nvim-web-devicons') end
+
+vim.pack.add(plugins)
+
+vim.keymap.set('n', '\\', ':Neotree reveal right<CR>', { desc = 'NeoTree reveal', silent = true })
+
+---@module 'neo-tree'
+---@type neotree.Config
+require('neo-tree').setup {
+  log_level = 'warn',
+  close_if_last_window = true,
+  window = {
+    position = 'right',
   },
-  lazy = false,
-  keys = {
-    { '\\', ':Neotree reveal right<CR>', desc = 'NeoTree reveal', silent = true },
-  },
-  ---@module 'neo-tree'
-  ---@type neotree.Config
-  opts = {
-    log_level = 'warn',
-    close_if_last_window = true,
-    window = {
-      position = 'right',
+  filesystem = {
+    hijack_netrw_behavior = 'open_current',
+    filtered_items = {
+      visible = true,
+      hide_dotfiles = false,
+      hide_gitignored = true,
     },
-    filesystem = {
-      hijack_netrw_behavior = 'open_current',
-      filtered_items = {
-        visible = true, -- Show dotfiles by default
-        hide_dotfiles = false, -- Don't hide dotfiles
-        hide_gitignored = true, -- Still hide git-ignored files
-      },
-      window = {
-        mappings = {
-          ['\\'] = 'close_window',
-        },
+    window = {
+      mappings = {
+        ['\\'] = 'close_window',
       },
     },
   },

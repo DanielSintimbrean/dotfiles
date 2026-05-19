@@ -1,59 +1,25 @@
--- NOTE: Plugins can specify dependencies.
---
--- The dependencies are proper plugin specifications as well - anything
--- you do for a plugin at the top level, you can do for a dependency.
---
--- Use the `dependencies` key to specify the dependencies of a particular plugin
+local plugins = { 'https://github.com/folke/snacks.nvim' }
+if vim.g.have_nerd_font then table.insert(plugins, 'https://github.com/nvim-tree/nvim-web-devicons') end
+vim.pack.add(plugins)
 
-return { -- Fuzzy Finder (files, lsp, etc)
-  'folke/snacks.nvim',
-  priority = 1000,
-  lazy = false,
-  dependencies = {
-    -- Useful for getting pretty icons, but requires a Nerd Font.
-    { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
-  },
-
-  -- snacks.nvim is a plugin that contains a collection of QoL improvements.
-  -- One of those plugins is called snacks-picker
-  -- It is a fuzzy finder, inspired by Telescope, that comes with a lot of different
-  -- things that it can fuzzy find! It's more than just a "file finder", it can search
-  -- many different aspects of Neovim, your workspace, LSP, and more!
-  --
-  -- Two important keymaps to use while in a picker are:
-  --  - Insert mode: <c-/>
-  --  - Normal mode: ?
-  --
-  -- This opens a window that shows you all of the keymaps for the current
-  -- Snacks picker. This is really useful to discover what nacks-picker can
-  -- do as well as how to actually do it!
-
-  -- [[ Configure Snacks Pickers ]]
-  -- See `:help snacks-picker` and `:help snacks-picker-setup`
-  ---@type snacks.Config
-  opts = {
-    scroll = { enabled = true },
-    lazygit = { enabled = true },
-    picker = {
-      sources = {
-        files = {
-          hidden = true, -- show dotfiles (e.g. .eslintrc, .prettierrc)
-        },
+---@type snacks.Config
+require('snacks').setup {
+  scroll = { enabled = true },
+  lazygit = { enabled = true },
+  picker = {
+    sources = {
+      files = {
+        hidden = true,
       },
     },
-    terminal = {},
-    image = {
-      doc = { inline = false, float = false },
-      -- your image configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    },
-    dashboard = {
-      preset = {
-        pick = function(cmd, opts)
-          return LazyVim.pick(cmd, opts)()
-        end,
-        header = [[
+  },
+  terminal = {},
+  image = {
+    doc = { inline = false, float = false },
+  },
+  dashboard = {
+    preset = {
+      header = [[
 ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗
 ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║
 ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║
@@ -61,161 +27,57 @@ return { -- Fuzzy Finder (files, lsp, etc)
 ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║
 ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝
    ]],
-        -- stylua: ignore
-        ---@type snacks.dashboard.Item[]
-        keys = {
-          { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
-          { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-          { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-          { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-          { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
-          { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
-          { icon = " ", key = "q", desc = "Quit", action = ":qa" },
-        },
+      -- stylua: ignore
+      ---@type snacks.dashboard.Item[]
+      keys = {
+        { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+        { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+        { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+        { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+        { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+        { icon = "󰒲 ", key = "p", desc = "Plugins", action = ":lua vim.pack.update()" },
+        { icon = " ", key = "q", desc = "Quit", action = ":qa" },
       },
     },
-  },
-
-  -- See `:help snacks-pickers-sources`
-  keys = {
-    {
-      '<leader>sh',
-      function()
-        Snacks.picker.help()
-      end,
-      desc = '[S]earch [H]elp',
-    },
-    {
-      '<leader>sk',
-      function()
-        Snacks.picker.keymaps()
-      end,
-      desc = '[S]earch [K]eymaps',
-    },
-    {
-      '<leader>sf',
-      function()
-        Snacks.picker.smart()
-      end,
-      desc = '[S]earch [F]iles',
-    },
-    {
-      '<leader>sF',
-      function()
-        Snacks.picker.files {
-          hidden = true,
-          ignored = true, -- include gitignored files (.env, etc.)
-          args = { '--exclude', '.git', '--exclude', 'node_modules', '--exclude', '.next', '--exclude', '.turbo', '--exclude', 'dist' },
-        }
-      end,
-      desc = '[S]earch all [F]iles (incl. gitignored)',
-    },
-    {
-      '<leader>ss',
-      function()
-        Snacks.picker.pickers()
-      end,
-      desc = '[S]earch [S]elect Snacks',
-    },
-    {
-      '<leader>sw',
-      function()
-        Snacks.picker.grep_word()
-      end,
-      desc = '[S]earch current [W]ord',
-      mode = { 'n', 'x' },
-    },
-    {
-      '<leader>sg',
-      function()
-        Snacks.picker.grep()
-      end,
-      desc = '[S]earch by [G]rep',
-    },
-    {
-      '<leader>sd',
-      function()
-        Snacks.picker.diagnostics()
-      end,
-      desc = '[S]earch [D]iagnostics',
-    },
-    {
-      '<leader>sr',
-      function()
-        Snacks.picker.resume()
-      end,
-      desc = '[S]earch [R]esume',
-    },
-    {
-      '<leader>s.',
-      function()
-        Snacks.picker.recent()
-      end,
-      desc = '[S]earch Recent Files ("." for repeat)',
-    },
-    {
-      '<leader><leader>',
-      function()
-        Snacks.picker.buffers()
-      end,
-      desc = '[ ] Find existing buffers',
-    },
-    {
-      '<leader>/',
-      function()
-        Snacks.picker.lines {}
-      end,
-      desc = '[/] Fuzzily search in current buffer',
-    },
-    {
-      '<leader>s/',
-      function()
-        Snacks.picker.grep_buffers()
-      end,
-      desc = '[S]earch [/] in Open Files',
-    },
-    -- Shortcut for searching your Neovim configuration files
-    {
-      '<leader>sn',
-      function()
-        Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
-      end,
-      desc = '[S]earch [N]eovim files',
-    },
-    {
-      '<leader>lg',
-      function()
-        Snacks.lazygit.open()
-      end,
-      desc = '[L]azy [G]it',
+    sections = {
+      { section = 'header' },
+      { section = 'keys', gap = 1, padding = 1 },
+      { section = 'recent_files', padding = 1 },
     },
   },
-
-  -- This runs on LSP attach per buffer (see main LSP attach function in 'neovim/nvim-lspconfig' config for more info,
-  -- it is better explained there). This is a little bit redundant, but we can switch off pickers for an optional
-  -- picker like this one here more easily when the keymaps are defined in the plugin itself.
-  -- It sets up buffer-local keymaps, autocommands, and other LSP-related settings
-  -- whenever an LSP client attaches to a buffer.
-  config = function(_, opts)
-    require('snacks').setup(opts)
-
-    vim.api.nvim_create_autocmd('LspAttach', {
-      group = vim.api.nvim_create_augroup('snacks-lsp-attach', { clear = true }),
-      callback = function(event)
-        vim.keymap.set('n', 'grr', require('snacks').picker.lsp_references,
-          { buffer = event.buf, desc = '[G]oto [R]eferences' })
-        vim.keymap.set('n', 'gri', require('snacks').picker.lsp_implementations,
-          { buffer = event.buf, desc = '[G]oto [I]mplementation' })
-        vim.keymap.set('n', 'grd', require('snacks').picker.lsp_definitions,
-          { buffer = event.buf, desc = '[G]oto [D]efinition' })
-        vim.keymap.set('n', 'grD', vim.lsp.buf.declaration, { buffer = event.buf, desc = '[G]oto [D]eclaration' })
-        vim.keymap.set('n', 'gO', require('snacks').picker.lsp_symbols,
-          { buffer = event.buf, desc = 'Open Document Symbols' })
-        vim.keymap.set('n', 'gW', require('snacks').picker.lsp_workspace_symbols,
-          { buffer = event.buf, desc = 'Open Workspace Symbols' })
-        vim.keymap.set('n', 'grt', require('snacks').picker.lsp_type_definitions,
-          { buffer = event.buf, desc = '[G]oto [T]ype Definition' })
-      end,
-    })
-  end,
 }
+
+vim.keymap.set('n', '<leader>sh', function() Snacks.picker.help() end, { desc = '[S]earch [H]elp' })
+vim.keymap.set('n', '<leader>sk', function() Snacks.picker.keymaps() end, { desc = '[S]earch [K]eymaps' })
+vim.keymap.set('n', '<leader>sf', function() Snacks.picker.smart() end, { desc = '[S]earch [F]iles' })
+vim.keymap.set('n', '<leader>sF', function()
+  Snacks.picker.files {
+    hidden = true,
+    ignored = true,
+    args = { '--exclude', '.git', '--exclude', 'node_modules', '--exclude', '.next', '--exclude', '.turbo', '--exclude', 'dist' },
+  }
+end, { desc = '[S]earch all [F]iles (incl. gitignored)' })
+vim.keymap.set('n', '<leader>ss', function() Snacks.picker.pickers() end, { desc = '[S]earch [S]elect Snacks' })
+vim.keymap.set({ 'n', 'x' }, '<leader>sw', function() Snacks.picker.grep_word() end, { desc = '[S]earch current [W]ord' })
+vim.keymap.set('n', '<leader>sg', function() Snacks.picker.grep() end, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', '<leader>sd', function() Snacks.picker.diagnostics() end, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>sr', function() Snacks.picker.resume() end, { desc = '[S]earch [R]esume' })
+vim.keymap.set('n', '<leader>s.', function() Snacks.picker.recent() end, { desc = '[S]earch Recent Files ("." for repeat)' })
+vim.keymap.set('n', '<leader><leader>', function() Snacks.picker.buffers() end, { desc = '[ ] Find existing buffers' })
+vim.keymap.set('n', '<leader>/', function() Snacks.picker.lines {} end, { desc = '[/] Fuzzily search in current buffer' })
+vim.keymap.set('n', '<leader>s/', function() Snacks.picker.grep_buffers() end, { desc = '[S]earch [/] in Open Files' })
+vim.keymap.set('n', '<leader>sn', function() Snacks.picker.files { cwd = vim.fn.stdpath 'config' } end, { desc = '[S]earch [N]eovim files' })
+vim.keymap.set('n', '<leader>lg', function() Snacks.lazygit.open() end, { desc = '[L]azy [G]it' })
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('snacks-lsp-attach', { clear = true }),
+  callback = function(event)
+    vim.keymap.set('n', 'grr', require('snacks').picker.lsp_references, { buffer = event.buf, desc = '[G]oto [R]eferences' })
+    vim.keymap.set('n', 'gri', require('snacks').picker.lsp_implementations, { buffer = event.buf, desc = '[G]oto [I]mplementation' })
+    vim.keymap.set('n', 'grd', require('snacks').picker.lsp_definitions, { buffer = event.buf, desc = '[G]oto [D]efinition' })
+    vim.keymap.set('n', 'grD', vim.lsp.buf.declaration, { buffer = event.buf, desc = '[G]oto [D]eclaration' })
+    vim.keymap.set('n', 'gO', require('snacks').picker.lsp_symbols, { buffer = event.buf, desc = 'Open Document Symbols' })
+    vim.keymap.set('n', 'gW', require('snacks').picker.lsp_workspace_symbols, { buffer = event.buf, desc = 'Open Workspace Symbols' })
+    vim.keymap.set('n', 'grt', require('snacks').picker.lsp_type_definitions, { buffer = event.buf, desc = '[G]oto [T]ype Definition' })
+  end,
+})

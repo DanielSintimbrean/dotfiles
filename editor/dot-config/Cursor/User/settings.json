@@ -204,4 +204,5 @@
   },
   "git.openRepositoryInParentFolders": "always",
   "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "window.autoDetectColorScheme": false,
 }
