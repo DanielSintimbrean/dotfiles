@@ -83,6 +83,7 @@ local servers = {
         },
       },
     },
+    ts_ls = {},
   },
   others = {
     -- dartls = {},

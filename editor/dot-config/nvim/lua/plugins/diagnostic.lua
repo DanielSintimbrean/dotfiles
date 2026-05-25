@@ -20,3 +20,7 @@ require('tiny-code-action').setup {}
 vim.keymap.set({ 'n', 'x' }, 'gra', function()
   require('tiny-code-action').code_action()
 end, { noremap = true, silent = true, desc = '[G]oto Code [A]ction' })
+
+vim.keymap.set({ 'n', 'x' }, '<C-.>', function()
+  require('tiny-code-action').code_action()
+end, { noremap = true, silent = true, desc = 'Code action' })
