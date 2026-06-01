@@ -83,7 +83,9 @@ local servers = {
         },
       },
     },
-    ts_ls = {},
+    ts_ls = {
+      settings = {},
+    },
   },
   others = {
     -- dartls = {},
@@ -97,12 +99,21 @@ vim.list_extend(ensure_installed, {
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
 for server, config in pairs(vim.tbl_extend('keep', servers.mason, servers.others)) do
-  if not vim.tbl_isempty(config) then vim.lsp.config(server, config) end
+  if not vim.tbl_isempty(config) then
+    vim.lsp.config(server, config)
+  end
 end
 
 require('mason-lspconfig').setup {
   ensure_installed = {},
-  automatic_enable = true,
+  automatic_enable = {
+    exclude = {
+      'rust_analyzer',
+      'ts_ls',
+    },
+  },
 }
 
-if not vim.tbl_isempty(servers.others) then vim.lsp.enable(vim.tbl_keys(servers.others)) end
+if not vim.tbl_isempty(servers.others) then
+  vim.lsp.enable(vim.tbl_keys(servers.others))
+end
