@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 <port_number>"
+  exit 1
+fi
+
+port="$1"
+
+pid=$(lsof -i :"$port" -P -n -t 2>/dev/null)
+
+if [ -z "$pid" ]; then
+  pid=$(ss -lptn "sport = :$port" 2>/dev/null | grep -oP 'pid=\K[0-9]+' | head -1)
+fi
+
+if [ -z "$pid" ]; then
+  echo "No process found listening on port $port."
+  exit 1
+fi
+
+echo "Found process on port $port:"
+ps -p "$pid" -o pid=,user=,command=
+
+echo ""
+read -rp "Kill PID $pid? [y/N] " confirm
+if [[ "$confirm" =~ ^[Yy]$ ]]; then
+  kill "$pid" 2>/dev/null || { echo "Permission denied — try: sudo killport $port"; exit 1; }
+  echo "Sent SIGTERM to PID $pid."
+else
+  echo "Aborted."
+fi
