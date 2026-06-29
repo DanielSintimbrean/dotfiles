@@ -1,4 +1,5 @@
 @import "../omarchy/current/theme/waybar.css";
+@import "waybar-focus-opacity.css";
 
 * {
   background-color: @background;

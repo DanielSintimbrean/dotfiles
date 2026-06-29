@@ -5,6 +5,15 @@
 SCRIPT_DEBUG=true
 #SCRIPT_DEBUG=false
 
+# Pass -r/--refold to force directory folding: unstow then restow each package
+# so dirs that aren't already single symlinks get collapsed into one.
+# NOTE: a dir only folds if it contains nothing but repo files, and a running
+# app (e.g. Hyprland) can regenerate files mid-refold and block the fold.
+REFOLD=false
+case "$1" in
+  -r|--refold) REFOLD=true ;;
+esac
+
 clrstandout=$(tput smso) # Inverse - marks beginning end of this script
 clrcommand=$(tput bold) # bold - marks calling other functions or scripts
 clrunder=$(tput smul) # underline - marks comments
@@ -17,8 +26,13 @@ if $SCRIPT_DEBUG; then echo "${clrstandout}Stowing files in ${PWD}.${clrreset}";
 cd ~/dotfiles
 for files in ~/dotfiles/*; do
   if [ -d ${files} ]; then
-    stow $(basename $files) --dotfiles --adopt
-    if $SCRIPT_DEBUG; then echo "$(basename $files) stowed."; fi
+    pkg=$(basename "$files")
+    if $REFOLD; then
+      # drop existing (possibly per-file) links so absent dirs refold on restow
+      stow -D "$pkg" --dotfiles
+    fi
+    stow "$pkg" --dotfiles --adopt
+    if $SCRIPT_DEBUG; then echo "$pkg stowed."; fi
   fi
 done
 cd - > /dev/null
