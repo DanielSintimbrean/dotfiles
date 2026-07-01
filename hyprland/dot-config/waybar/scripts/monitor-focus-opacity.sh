@@ -17,15 +17,27 @@ CSS="${HOME}/.config/waybar/waybar-focus-opacity.css"
 
 write_css() {
   local focused="$1" out="" mon
+  local -a mons=()
   while read -r mon; do
     [ -z "$mon" ] && continue
-    if [ "$mon" = "$focused" ]; then
+    mons+=("$mon")
+  done < <(hyprctl monitors -j | jq -r '.[].name')
+
+  for mon in "${mons[@]}"; do
+    # With only one active monitor there is no unfocused bar to dim, so keep it
+    # fully opaque regardless of what focus detection reports (avoids the bar
+    # being stuck dimmed when no focusedmon event ever fires).
+    if [ "${#mons[@]}" -eq 1 ] || [ "$mon" = "$focused" ]; then
       out+="window#waybar.$mon { opacity: 1; }"$'\n'
     else
       out+="window#waybar.$mon { opacity: $DIM; }"$'\n'
     fi
-  done < <(hyprctl monitors -j | jq -r '.[].name')
+  done
   printf '%s' "$out" > "$CSS"
+
+  # reload_style_on_change only watches style.css, not the @import'd files, so
+  # bump style.css's mtime to force waybar to re-read the imported opacity CSS.
+  touch "${HOME}/.config/waybar/style.css"
 }
 
 # Initial state.

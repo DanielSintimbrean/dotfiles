@@ -158,6 +158,13 @@
   },
 
   "lsp": {
+    "eslint": {
+      "settings": {
+        // Suppress "File ignored because of a matching ignore pattern" warning
+        // (equivalent to ESLint's --no-warn-ignored)
+        "onIgnoredFiles": "off",
+      },
+    },
     "vtsls": {
       "settings": {
         "typescript": {
