@@ -17,6 +17,7 @@
     "pulseaudio",
     "custom/notifications",
     "custom/caffeine",
+    "custom/touchpad",
     "custom/vpn",
     "custom/hyprwhspr",
     "cpu",
@@ -79,6 +80,14 @@
     "tooltip-format": "Toggle screen lock",
     "signal": 10,
     "interval": 5,
+  },
+  "custom/touchpad": {
+      "format": "{}",
+      "interval": 5,
+      "return-type": "json",
+      "exec": "$HOME/.config/waybar/toggle-touchpad.sh status",
+      "on-click": "$HOME/.config/waybar/toggle-touchpad.sh toggle",
+      "signal": 11,
   },
   "custom/vpn": {
       "format": "{}",

@@ -120,6 +120,16 @@ tooltip {
   color: #a55555;
 }
 
+/* Touchpad Module Styling */
+#custom-touchpad {
+  min-width: 12px;
+  margin: 0 7.5px;
+}
+
+#custom-touchpad.inactive {
+  color: #6c7086;
+}
+
 /* VPN Module Styling */
 #custom-vpn {
     color: #ffffff;

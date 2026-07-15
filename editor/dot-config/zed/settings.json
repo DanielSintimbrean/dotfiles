@@ -7,4 +7,88 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "agent": {
+    "sidebar_side": "right",
+    "dock": "right",
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "diff_view_style": "unified",
+  "icon_theme": "Catppuccin Mocha",
+  "theme": "Catppuccin Macchiato - No Italics",
+  // Hide variable values in private files (e.g., .env, .pem)
+  // https://zed.dev/docs/reference/all-settings#redact-private-values
+  "redact_private_values": true,
+
+  "vim_mode": true,
+  "vim": {},
+  "which_key": {
+    "delay_ms": 500,
+    "enabled": true,
+  },
+  "relative_line_numbers": "enabled",
+  "vertical_scroll_margin": 8,
+  "horizontal_scroll_margin": 8,
+  // Tab bar settings
+  // https://zed.dev/docs/reference/all-settings#editor-tab-bar
+  "tab_bar": {
+    "show": true,
+  },
+
+  // Scrollbar settings
+  // https://zed.dev/docs/reference/all-settings#editor-scrollbar
+  "scrollbar": {
+    "show": "never",
+  },
+
+  // Only show error on tab
+  // https://zed.dev/docs/reference/all-settings#editor-tabs
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+    "show_diagnostics": "errors",
+  },
+
+  // Indentation guides (rainbow indentation)
+  // https://zed.dev/docs/reference/all-settings#indent-guides
+  "indent_guides": {
+    "enabled": true,
+    "coloring": "indent_aware",
+  },
+
+  // Show whitespace characters: all, selection, none, boundary
+  // https://zed.dev/docs/reference/all-settings#show-whitespaces
+  "show_whitespaces": "all",
+
+  // Show AI edit predictions in the editor
+  // https://zed.dev/docs/reference/all-settings#show-edit-predictions
+  "show_edit_predictions": true,
+  "edit_predictions": {
+    "provider": "zed",
+  },
+
+  // Project panel settings
+  // https://zed.dev/docs/reference/all-settings#project-panel
+  "project_panel": {
+    "hide_root": true,
+    "git_status_indicator": true,
+    "diagnostic_badges": true,
+    "show_diagnostics": "errors",
+    "auto_fold_dirs": false,
+    "button": true,
+    "dock": "right",
+    "git_status": true,
+  },
+
+  // Outline panel settings
+  // https://zed.dev/docs/reference/all-settings#outline-panel
+  "outline_panel": {
+    "dock": "right",
+  },
+
+  // Collaboration panel settings
+  // https://zed.dev/docs/reference/all-settings#collaboration-panel
+  "collaboration_panel": {
+    "dock": "right",
+  },
 }
