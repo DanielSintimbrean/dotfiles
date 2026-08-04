@@ -12,6 +12,7 @@
       "ctrl-l": "workspace::ActivatePaneRight",
       "ctrl-k": "workspace::ActivatePaneUp",
       "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-y": "editor::ConfirmCompletion"
     },
   },
   {
@@ -40,4 +41,20 @@
       "\\": "workspace::ToggleRightDock"
     },
   },
+ 	// File panel (netrw)
+	{
+		"context": "ProjectPanel && not_editing",
+		"bindings": {
+			"a": "project_panel::NewFile",
+			"A": "project_panel::NewDirectory",
+			"r": "project_panel::Rename",
+			"d": "project_panel::Delete",
+			"x": "project_panel::Cut",
+			"c": "project_panel::Copy",
+			"p": "project_panel::Paste",
+			// Close project panel as project file panel on the right
+			"q": "workspace::ToggleRightDock",
+			"space e": "workspace::ToggleRightDock",
+		},
+	},
 ]

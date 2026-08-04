@@ -31,11 +31,12 @@ state="enabled"
 case "$1" in
     toggle)
         if [ "$state" = "enabled" ]; then
-            hyprctl keyword "device[$TP]:enabled" false >/dev/null
+            # Lua config (0.55+): `hyprctl keyword` is legacy-only; use eval + hl.device
+            hyprctl eval "hl.device({ name = \"$TP\", enabled = false })" >/dev/null
             echo "disabled" > "$STATE_FILE"
             notify-send -u low "Touchpad" "Disabled"
         else
-            hyprctl keyword "device[$TP]:enabled" true >/dev/null
+            hyprctl eval "hl.device({ name = \"$TP\", enabled = true })" >/dev/null
             echo "enabled" > "$STATE_FILE"
             notify-send -u low "Touchpad" "Enabled"
         fi

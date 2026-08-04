@@ -7,11 +7,15 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "git_panel": {
+    "tree_view": true
+  },
+  "cli_default_open_behavior": "existing_window",
   "agent": {
     "sidebar_side": "right",
     "dock": "right",
     "favorite_models": [],
-    "model_parameters": []
+    "model_parameters": [],
   },
   "diff_view_style": "unified",
   "icon_theme": "Catppuccin Mocha",
@@ -65,6 +69,7 @@
   "show_edit_predictions": true,
   "edit_predictions": {
     "provider": "zed",
+    "mode": "eager",
   },
 
   // Project panel settings
@@ -90,5 +95,28 @@
   // https://zed.dev/docs/reference/all-settings#collaboration-panel
   "collaboration_panel": {
     "dock": "right",
+  },
+  "languages": {
+    "TypeScript": {
+      "language_servers": [
+        "typescript-ls",
+        "!vtsls",
+        "!typescript-language-server",
+      ],
+    },
+    "TSX": {
+      "language_servers": [
+        "typescript-ls",
+        "!vtsls",
+        "!typescript-language-server",
+      ],
+    },
+    "JavaScript": {
+      "language_servers": [
+        "typescript-ls",
+        "!vtsls",
+        "!typescript-language-server",
+      ],
+    },
   },
 }

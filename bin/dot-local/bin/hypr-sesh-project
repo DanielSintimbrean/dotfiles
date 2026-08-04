@@ -57,7 +57,7 @@ window_address="$(
 )"
 
 if [[ -n "$window_address" ]]; then
-  exec hyprctl dispatch focuswindow "address:$window_address"
+  exec hyprctl dispatch "hl.dsp.focus({ window = \"address:$window_address\" })"
 fi
 
 exec env SESH_TARGET="$project_path" uwsm-app -- ghostty --title="$window_title" --working-directory="$project_path" -e fish -lc 's "$SESH_TARGET"'
