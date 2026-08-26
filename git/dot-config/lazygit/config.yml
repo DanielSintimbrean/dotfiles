@@ -1,7 +1,7 @@
 quitOnTopLevelReturn: true
 customCommands:
   - key: "C"
-    command: "git cz"
+    command: "git czg"
     description: "commit with commitizen"
     context: "files"
     loadingText: "opening commitizen commit tool"
@@ -16,7 +16,7 @@ customCommands:
     context: "localBranches"
     output: log
 git:
-  pagers:
-    - pager: diff-so-fancy
+  diffRenderers:
+    - command: diff-so-fancy
 gui:
   nerdFontsVersion: "3"
