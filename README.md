@@ -23,7 +23,7 @@ Install the configuration:
 ./install
 ```
 
-- `--dry-run` prints package, backup, Stow, Ghostty, mise, and reload actions without applying them.
+- `--dry-run` prints package, backup, Stow, Ghostty, mise installation, and reload actions without applying them.
 
 The real install may prompt for account or sudo authentication. Log out and back in if it changes the login shell to Fish.
 
@@ -36,7 +36,7 @@ The installer:
 - backs up exact conflicting files under `~/.local/state/dotfiles-backups/`;
 - Stows an explicit package allowlist without `--adopt`;
 - generates Ghostty from the installed Quattro template, changing only font size and cursor shape;
-- installs the development CLI set through mise, including Commitizen and `cz-git`;
+- installs the development CLI tools declared in the tracked mise configuration;
 - reloads Hyprland and reports configuration errors when a session is running.
 
 ## Configuration boundary
@@ -84,13 +84,13 @@ Add another entry to `monitor_profiles` for a new hostname and hardware model. T
 
 Fish contains aliases, abbreviations, paths, vi mode, Starship, native fzf initialization, and zoxide. Generated plugin code, legacy runtime managers, unsafe package aliases, and missing paths were removed.
 
-Quattro activates mise for Fish and graphical sessions. The installer declares these global tools through mise:
+Quattro activates mise for Fish and graphical sessions. The tracked [`config.toml`](system/dot-config/mise/config.toml) declares these global tools, and the installer runs `mise install`:
 
 ```text
 bun claude codex copilot gemini gh ghui node@26 pi playwright pnpm ni grok npm-check-updates commitizen cz-git opencode
 ```
 
-Downloaded mise installations under `~/.local/share/mise` are machine state and are not tracked.
+The mise configuration is Stowed at `~/.config/mise/config.toml`. Downloaded installations under `~/.local/share/mise` are machine state and are not tracked.
 
 ## Updating
 

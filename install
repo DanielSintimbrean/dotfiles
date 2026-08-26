@@ -114,25 +114,7 @@ else
   "$repo_root/bin/dot-local/bin/dotfiles-configure-ghostty"
 fi
 
-mise_tools=(
-  bun@latest
-  claude@latest
-  codex@latest
-  gh@latest
-  node@lts
-  npm:@antfu/ni@latest
-  npm:@earendil-works/pi-coding-agent@latest
-  npm:@github/copilot@latest
-  npm:@google/gemini-cli@latest
-  npm:@kitlangton/ghui@latest
-  npm:@xai-official/grok@latest
-  npm:czg@latest
-  npm:npm-check-updates@latest
-  npm:playwright@latest
-  opencode@latest
-  pnpm@latest
-)
-run mise use --global --yes "${mise_tools[@]}"
+run mise install --yes
 
 if ! $dry_run && [[ ! -x /usr/bin/fish ]]; then
   echo "Fish was not installed at /usr/bin/fish." >&2
