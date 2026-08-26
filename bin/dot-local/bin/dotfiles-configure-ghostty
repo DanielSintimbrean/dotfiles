@@ -12,6 +12,7 @@ fi
 omarchy_path=${OMARCHY_PATH:-/usr/share/omarchy}
 source_config="$omarchy_path/config/ghostty/config"
 target_config="${XDG_CONFIG_HOME:-$HOME/.config}/ghostty/config"
+backup_root=${DOTFILES_BACKUP_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles-backups/$(date +%Y%m%d-%H%M%S)}
 
 if [[ ! -f $source_config ]]; then
   echo "Missing Quattro Ghostty template: $source_config" >&2
@@ -32,20 +33,26 @@ awk '
   { print }
 ' "$source_config" > "$generated_config"
 
-if [[ -f $target_config ]] && cmp -s "$generated_config" "$target_config"; then
+if [[ ! -L $target_config && -f $target_config ]] && cmp -s "$generated_config" "$target_config"; then
   echo "Ghostty config is already current."
   exit 0
+fi
+
+if [[ -e $target_config || -L $target_config ]]; then
+  target_relative=${target_config#"$HOME/"}
+  backup_config="$backup_root/$target_relative"
+
+  if $dry_run; then
+    echo "Would back up: $target_config -> $backup_config"
+  else
+    mkdir -p -- "$(dirname -- "$backup_config")"
+    mv -- "$target_config" "$backup_config"
+  fi
 fi
 
 if $dry_run; then
   diff -u "$target_config" "$generated_config" 2>/dev/null || true
   exit 0
-fi
-
-if [[ -L $target_config ]]; then
-  echo "Refusing to overwrite the Stow symlink at $target_config." >&2
-  echo "Run the repository installer to migrate the old terminal package safely." >&2
-  exit 1
 fi
 
 install -d "$(dirname "$target_config")"

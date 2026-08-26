@@ -33,6 +33,7 @@ The installer:
 - changes the login shell to Fish when needed;
 - installs and enables the caps2esc udevmon mapping;
 - installs and selects Ghostty with `omarchy install terminal ghostty`;
+- enables the tracked pre-push safety hook for this repository;
 - backs up exact conflicting files under `~/.local/state/dotfiles-backups/`;
 - Stows an explicit package allowlist with safe directory folding and without `--adopt`;
 - generates Ghostty from the installed Quattro template, changing only font size and cursor shape;
@@ -55,7 +56,7 @@ The tracked `mimeapps.list` keeps Zen as the browser and Proton Mail handler, al
 
 Personal agent skills live under `~/.agents/skills`. The matching entries under `~/.claude/skills` are tracked as symlinks so Claude uses the same source files. Omarchy owns its `omarchy` and `diagnose-crash` skill links because GNU Stow does not install absolute source links.
 
-Ghostty is generated as a normal file rather than a Stow symlink. This lets Omarchy's font and migration commands edit it. Re-run the installer or `dotfiles-configure-ghostty` after a Quattro update if the packaged Ghostty template changes.
+Ghostty is generated as a normal file rather than a Stow symlink. This lets Omarchy's font and migration commands edit it. Regeneration backs up a changed file and migrates a legacy symlink once. Re-run the installer or `dotfiles-configure-ghostty` after a Quattro update if the packaged Ghostty template changes.
 
 ## Hyprland
 
@@ -129,6 +130,21 @@ There is no need to remove all links first or maintain a separate repair script.
 The command also verifies that every tracked target resolves to its repository
 source, whether it is linked directly or through a folded directory.
 
+Before changing links, `stow-all` refuses to continue when a managed package
+contains an untracked file. This prevents a new live configuration file from
+working through a folded directory without being included in Git and therefore
+missing on another machine.
+
+The installer configures Git to use the tracked `.githooks/pre-push` hook. Before
+a push, it rejects untracked repository files and staged-but-uncommitted changes,
+then extracts each ref tip being pushed into a temporary directory and validates
+Hyprland from that committed snapshot. This catches imports that work locally
+only because an uncommitted file exists. Run the same checks manually with:
+
+```bash
+./check-sync
+```
+
 Avoid `omarchy refresh hyprland` and other refresh commands for Stowed files. A refresh can write through a symlink into the repository. Check `git status` after any Omarchy migration that touches managed configuration.
 
 ## Validation
@@ -136,8 +152,10 @@ Avoid `omarchy refresh hyprland` and other refresh commands for Stowed files. A 
 Useful checks after changing configuration:
 
 ```bash
+bash -n install stow-all check-sync .githooks/pre-push
 fish -n fish/dot-config/fish/config.fish
 TERM=xterm-256color STARSHIP_CONFIG="$PWD/startship/dot-config/starship.toml" starship prompt >/dev/null
+./check-sync
 hyprctl reload
 hyprctl configerrors
 ```

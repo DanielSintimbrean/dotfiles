@@ -44,23 +44,12 @@ run() {
   fi
 }
 
-backup_target() {
-  local target_path=$1
-  local target_relative
-  local backup_path
+configure_git_hooks() {
+  local current_hooks_path
 
-  if [[ ! -e $target_path && ! -L $target_path ]]; then
-    return
-  fi
-
-  target_relative=${target_path#"$HOME/"}
-  backup_path="$backup_root/$target_relative"
-
-  if $dry_run; then
-    echo "Would back up: $target_path -> $backup_path"
-  else
-    mkdir -p -- "$(dirname -- "$backup_path")"
-    mv -- "$target_path" "$backup_path"
+  current_hooks_path=$(git -C "$repo_root" config --local --get core.hooksPath || true)
+  if [[ $current_hooks_path != .githooks ]]; then
+    run git -C "$repo_root" config --local core.hooksPath .githooks
   fi
 }
 
@@ -96,6 +85,7 @@ if ! command -v omarchy >/dev/null 2>&1; then
   exit 1
 fi
 
+configure_git_hooks
 run omarchy pkg add stow fish diff-so-fancy
 run omarchy install terminal ghostty
 
@@ -106,8 +96,6 @@ else
   "$repo_root/stow-all"
 fi
 
-ghostty_config=${XDG_CONFIG_HOME:-$HOME/.config}/ghostty/config
-backup_target "$ghostty_config"
 if $dry_run; then
   "$repo_root/bin/dot-local/bin/dotfiles-configure-ghostty" --dry-run
 else

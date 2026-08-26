@@ -61,7 +61,7 @@ link_points_into_repo() {
 list_package_files() {
   local pathspec=$1
 
-  git -C "$repo_root" ls-files --cached --others --exclude-standard -- "$pathspec"
+  git -C "$repo_root" ls-files --cached -- "$pathspec"
 }
 
 remove_legacy_link() {
@@ -287,6 +287,7 @@ if ! $dry_run; then
   mkdir -p -- "$HOME/.config"
 fi
 
+"$repo_root/check-sync" --managed-files
 cleanup_legacy_links
 
 for package in "${packages[@]}"; do
