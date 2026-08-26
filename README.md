@@ -51,6 +51,8 @@ apps bin editor fish git hyprland startship system terminal tmux
 
 The repository does not track the old Waybar-era desktop stack or copies of Quattro's current shell configuration. Btop, Foot, Alacritty, Waybar, Mako, Walker, Wofi, Wlogout, Fuzzel, lock, idle, browser flags, and font defaults remain owned by Omarchy.
 
+The tracked `mimeapps.list` keeps Zen as the browser, HEY for email links, and the T3 Code and Codex URL handlers across installations.
+
 Ghostty is generated as a normal file rather than a Stow symlink. This lets Omarchy's font and migration commands edit it. Re-run the installer or `dotfiles-configure-ghostty` after a Quattro update if the packaged Ghostty template changes.
 
 ## Hyprland
