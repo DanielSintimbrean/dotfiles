@@ -53,6 +53,8 @@ The repository does not track the old Waybar-era desktop stack or copies of Quat
 
 The tracked `mimeapps.list` keeps Zen as the browser and Proton Mail handler, along with the T3 Code and Codex URL handlers across installations.
 
+Personal agent skills live under `~/.agents/skills`. The matching entries under `~/.claude/skills` are tracked as symlinks so Claude uses the same source files. Omarchy owns its `omarchy` and `diagnose-crash` skill links because GNU Stow does not install absolute source links.
+
 Ghostty is generated as a normal file rather than a Stow symlink. This lets Omarchy's font and migration commands edit it. Re-run the installer or `dotfiles-configure-ghostty` after a Quattro update if the packaged Ghostty template changes.
 
 ## Hyprland
