@@ -1,0 +1,252 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+source_root="$repo_root/system/dot-agents/skills"
+state_root=${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles
+manifest="$state_root/agent-skills"
+backup_root=${DOTFILES_BACKUP_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles-backups/$(date +%Y%m%d-%H%M%S)}
+destinations=("$HOME/.agents/skills" "$HOME/.claude/skills")
+dry_run=false
+declare -a current_skills=()
+declare -a previous_skills=()
+declare -A current_skill_set=()
+declare -A dry_run_replaced_directories=()
+
+usage() {
+  echo "Usage: ./sync-agent-skills [--dry-run]"
+}
+
+case ${1:-} in
+  "") ;;
+  --dry-run) dry_run=true ;;
+  -h|--help)
+    usage
+    exit 0
+    ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac
+
+valid_skill_name() {
+  [[ $1 =~ ^[[:alnum:]][[:alnum:]._-]*$ ]]
+}
+
+path_exists() {
+  [[ -e $1 || -L $1 ]]
+}
+
+path_is_omarchy_owned() {
+  [[ -L $1 ]] || return 1
+  [[ $(realpath -m -- "$1") == /usr/share/omarchy/* ]]
+}
+
+next_backup_path() {
+  local target=$1
+  local relative=${target#"$HOME/"}
+  local candidate="$backup_root/$relative"
+  local suffix=1
+
+  while path_exists "$candidate"; do
+    candidate="$backup_root/$relative.$suffix"
+    ((suffix += 1))
+  done
+
+  printf '%s\n' "$candidate"
+}
+
+backup_target() {
+  local target=$1
+  local backup_path
+
+  path_exists "$target" || return 0
+  backup_path=$(next_backup_path "$target")
+
+  if $dry_run; then
+    echo "Would back up: $target -> $backup_path"
+  else
+    mkdir -p -- "$(dirname -- "$backup_path")"
+    mv -- "$target" "$backup_path"
+  fi
+}
+
+path_is_below_dry_run_replacement() {
+  local path=$1
+  local replaced
+
+  for replaced in "${!dry_run_replaced_directories[@]}"; do
+    if [[ $path == "$replaced" || $path == "$replaced/"* ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+ensure_real_directory() {
+  local directory=$1
+
+  if $dry_run && path_is_below_dry_run_replacement "$directory"; then
+    echo "Would create directory: $directory"
+    dry_run_replaced_directories["$directory"]=1
+    return
+  fi
+
+  if [[ -d $directory && ! -L $directory ]]; then
+    return
+  fi
+
+  if [[ -L $directory ]] && [[ $(realpath -m -- "$directory") != "$repo_root"/* ]]; then
+    echo "Refusing to replace a directory link not owned by this repository: $directory" >&2
+    return 1
+  fi
+
+  backup_target "$directory"
+  if $dry_run; then
+    echo "Would create directory: $directory"
+    dry_run_replaced_directories["$directory"]=1
+  else
+    mkdir -p -- "$directory"
+  fi
+}
+
+skill_matches_source() {
+  local source=$1
+  local target=$2
+
+  [[ -d $target && ! -L $target ]] || return 1
+  [[ -z $(find "$target" -type l -print -quit) ]] || return 1
+  diff --recursive --brief "$source" "$target" >/dev/null
+}
+
+copy_skill() {
+  local skill=$1
+  local destination=$2
+  local source="$source_root/$skill"
+  local target="$destination/$skill"
+  local staging
+
+  if $dry_run && path_is_below_dry_run_replacement "$target"; then
+    echo "Would copy: $source -> $target"
+    return
+  fi
+
+  if skill_matches_source "$source" "$target"; then
+    return
+  fi
+
+  if path_is_omarchy_owned "$target"; then
+    echo "Refusing to replace an Omarchy-owned skill: $target" >&2
+    return 1
+  fi
+
+  if $dry_run; then
+    backup_target "$target"
+    echo "Would copy: $source -> $target"
+    return
+  fi
+
+  staging=$(mktemp -d "$destination/.dotfiles-$skill.XXXXXX")
+  if ! cp -aL -- "$source/." "$staging/"; then
+    rm -r -- "$staging"
+    return 1
+  fi
+
+  backup_target "$target"
+  mv -- "$staging" "$target"
+  echo "Copied agent skill: $target"
+}
+
+remove_retired_skill() {
+  local skill=$1
+  local destination=$2
+  local target="$destination/$skill"
+
+  if $dry_run && path_is_below_dry_run_replacement "$target"; then
+    return
+  fi
+
+  path_exists "$target" || return
+  if path_is_omarchy_owned "$target"; then
+    echo "Preserving Omarchy-owned skill: $target"
+    return
+  fi
+
+  backup_target "$target"
+  if $dry_run; then
+    echo "Would retire managed skill: $target"
+  else
+    echo "Retired managed skill: $target"
+  fi
+}
+
+write_manifest() {
+  local temporary_manifest
+
+  mkdir -p -- "$state_root"
+  temporary_manifest=$(mktemp "$state_root/.agent-skills.XXXXXX")
+  if ! printf '%s\n' "${current_skills[@]}" > "$temporary_manifest"; then
+    rm -f -- "$temporary_manifest"
+    return 1
+  fi
+  mv -- "$temporary_manifest" "$manifest"
+}
+
+if [[ ! -d $source_root ]]; then
+  echo "Missing agent skill source: $source_root" >&2
+  exit 1
+fi
+
+"$repo_root/check-sync" --managed-files
+
+while IFS= read -r -d '' skill; do
+  if ! valid_skill_name "$skill"; then
+    echo "Invalid agent skill directory name: $skill" >&2
+    exit 1
+  fi
+  if [[ ! -f $source_root/$skill/SKILL.md ]]; then
+    echo "Agent skill is missing SKILL.md: $source_root/$skill" >&2
+    exit 1
+  fi
+  current_skills+=("$skill")
+  current_skill_set["$skill"]=1
+done < <(find "$source_root" -mindepth 1 -maxdepth 1 -type d -printf '%f\0' | LC_ALL=C sort -z)
+
+if (( ${#current_skills[@]} == 0 )); then
+  echo "No agent skills found under: $source_root" >&2
+  exit 1
+fi
+
+if [[ -f $manifest ]]; then
+  while IFS= read -r skill || [[ -n $skill ]]; do
+    [[ -n $skill ]] || continue
+    if ! valid_skill_name "$skill"; then
+      echo "Invalid skill name in $manifest: $skill" >&2
+      exit 1
+    fi
+    previous_skills+=("$skill")
+  done < "$manifest"
+fi
+
+for destination in "${destinations[@]}"; do
+  ensure_real_directory "${destination%/skills}"
+  ensure_real_directory "$destination"
+
+  for skill in "${current_skills[@]}"; do
+    copy_skill "$skill" "$destination"
+  done
+
+  for skill in "${previous_skills[@]}"; do
+    if [[ -z ${current_skill_set[$skill]+x} ]]; then
+      remove_retired_skill "$skill" "$destination"
+    fi
+  done
+done
+
+if ! $dry_run; then
+  write_manifest
+fi
+
+echo "Agent skills are in sync."
+echo "Backups, when needed: $backup_root"

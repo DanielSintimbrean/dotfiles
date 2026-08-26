@@ -33,6 +33,8 @@ Use the repository scripts from any working directory:
 
 Both scripts are fail-fast. `stow-all` uses an explicit allowlist, backs up exact conflicts under `~/.local/state/dotfiles-backups/`, safely folds fully managed configuration directories, and never uses `--adopt`.
 
+Personal skills have one canonical source under `system/dot-agents/skills`. `stow-all` must keep the agent and Claude skill trees out of Stow and use `sync-agent-skills` to install real copies in both destinations while preserving Omarchy-owned skills.
+
 `stow-all` must reject untracked files inside managed packages before changing links. The installer configures the tracked `.githooks/pre-push` hook, which rejects all untracked repository files and staged changes, then validates the committed Hyprland snapshot. Keep `check-sync` as the shared implementation for these guards.
 
 The installer always configures Fish as the login shell and installs the privileged caps2esc udevmon mapping. Keep `--dry-run` free of writes.
@@ -54,7 +56,7 @@ Avoid `omarchy refresh` for Stowed files. It may write through symlinks and dirt
 Run checks that match the changed domain:
 
 ```bash
-bash -n install stow-all check-sync .githooks/pre-push bin/dot-local/bin/dotfiles-configure-ghostty
+bash -n install stow-all sync-agent-skills check-sync .githooks/pre-push bin/dot-local/bin/dotfiles-configure-ghostty
 fish -n fish/dot-config/fish/config.fish fish/dot-config/fish/functions/pid-port.fish
 TERM=xterm-256color STARSHIP_CONFIG="$PWD/startship/dot-config/starship.toml" starship prompt >/dev/null
 ./check-sync

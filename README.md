@@ -23,7 +23,7 @@ Install the configuration:
 ./install
 ```
 
-- `--dry-run` prints package, backup, Stow, Ghostty, mise installation, and reload actions without applying them.
+- `--dry-run` prints package, backup, Stow, agent-skill copy, Ghostty, mise installation, and reload actions without applying them.
 
 The real install may prompt for account or sudo authentication. Log out and back in if it changes the login shell to Fish.
 
@@ -36,6 +36,7 @@ The installer:
 - enables the tracked pre-push safety hook for this repository;
 - backs up exact conflicting files under `~/.local/state/dotfiles-backups/`;
 - Stows an explicit package allowlist with safe directory folding and without `--adopt`;
+- copies personal agent skills into the agent and Claude skill directories;
 - generates Ghostty from the installed Quattro template, changing only font size and cursor shape;
 - installs the development CLI tools declared in the tracked mise configuration;
 - reloads Hyprland and reports configuration errors when a session is running.
@@ -54,7 +55,12 @@ The repository does not track the old Waybar-era desktop stack or copies of Quat
 
 The tracked `mimeapps.list` keeps Zen as the browser and Proton Mail handler, along with the T3 Code and Codex URL handlers across installations.
 
-Personal agent skills live under `~/.agents/skills`. The matching entries under `~/.claude/skills` are tracked as symlinks so Claude uses the same source files. Omarchy owns its `omarchy` and `diagnose-crash` skill links because GNU Stow does not install absolute source links.
+Personal agent skills have one tracked source under `system/dot-agents/skills`.
+`stow-all` copies each skill into both `~/.agents/skills` and
+`~/.claude/skills`; neither installed copy contains repository symlinks.
+Unrelated skills are left alone, including the `omarchy` and `diagnose-crash`
+links owned by Omarchy. Changed or retired managed copies are backed up before
+replacement or removal.
 
 Ghostty is generated as a normal file rather than a Stow symlink. This lets Omarchy's font and migration commands edit it. Regeneration backs up a changed file and migrates a legacy symlink once. Re-run the installer or `dotfiles-configure-ghostty` after a Quattro update if the packaged Ghostty template changes.
 
@@ -130,6 +136,12 @@ There is no need to remove all links first or maintain a separate repair script.
 The command also verifies that every tracked target resolves to its repository
 source, whether it is linked directly or through a folded directory.
 
+Agent skills are the exception to the Stow model. `stow-all` runs
+`sync-agent-skills` after relinking packages, copying the canonical tracked
+skills into both supported agent directories. The sync records the names it
+manages under `~/.local/state/dotfiles/` so a skill removed from the repository
+can be retired safely without touching skills owned by Omarchy or other tools.
+
 Before changing links, `stow-all` refuses to continue when a managed package
 contains an untracked file. This prevents a new live configuration file from
 working through a folded directory without being included in Git and therefore
@@ -152,7 +164,7 @@ Avoid `omarchy refresh hyprland` and other refresh commands for Stowed files. A 
 Useful checks after changing configuration:
 
 ```bash
-bash -n install stow-all check-sync .githooks/pre-push
+bash -n install stow-all sync-agent-skills check-sync .githooks/pre-push
 fish -n fish/dot-config/fish/config.fish
 TERM=xterm-256color STARSHIP_CONFIG="$PWD/startship/dot-config/starship.toml" starship prompt >/dev/null
 ./check-sync
