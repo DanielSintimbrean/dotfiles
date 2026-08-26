@@ -11,7 +11,6 @@ hl.config({
 -- Application bindings
 hl.bind("SUPER + RETURN",           hl.dsp.exec_cmd([[uwsm-app -- xdg-terminal-exec --dir="$(omarchy-cmd-terminal-cwd)"]]),                                                   { description = "Terminal" })
 hl.bind("SUPER + ALT + RETURN",     hl.dsp.exec_cmd([[uwsm-app -- xdg-terminal-exec --dir="$(omarchy-cmd-terminal-cwd)" bash -c "tmux attach || tmux new -s Work"]]),         { description = "Tmux" })
-hl.bind("SUPER + SHIFT + RETURN",   hl.dsp.exec_cmd("~/.local/bin/hypr-sesh-project"),                                                                                        { description = "Sesh project" })
 hl.bind("SUPER + SHIFT + F",        hl.dsp.exec_cmd("uwsm-app -- nautilus --new-window"),                                                                                     { description = "File manager" })
 hl.bind("SUPER + ALT + SHIFT + F",  hl.dsp.exec_cmd([[uwsm-app -- nautilus --new-window "$(omarchy-cmd-terminal-cwd)"]]),                                                     { description = "File manager (cwd)" })
 hl.bind("SUPER + B",                hl.dsp.exec_cmd("omarchy-launch-browser"),                                                                                                { description = "Browser" })
