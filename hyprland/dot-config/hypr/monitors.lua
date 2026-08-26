@@ -1,26 +1,32 @@
-local function machine_name()
-  local hostname_file = io.open("/etc/hostname", "r")
-  if not hostname_file then
+local function read_first_line(path)
+  local file = io.open(path, "r")
+  if not file then
     return ""
   end
 
-  local hostname = hostname_file:read("*l") or ""
-  hostname_file:close()
-  return hostname:match("^%s*(.-)%s*$")
+  local value = file:read("*l") or ""
+  file:close()
+  return value:match("^%s*(.-)%s*$")
 end
 
 local monitor_profiles = {
-  omarchy = function()
-    hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "0x0", scale = 1 })
-    hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@60", position = "auto", scale = 1 })
-    hl.monitor({ output = "DP-2", mode = "1920x1080@143.60", position = "0x-1080", scale = 1 })
-    hl.env("GDK_SCALE", "1")
-  end,
+  omarchy = {
+    product_name = "VivoBook_ASUSLaptop X421EAY_K413EA",
+    configure = function()
+      hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "0x0", scale = 1 })
+      hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@60", position = "auto", scale = 1 })
+      hl.monitor({ output = "DP-2", mode = "1920x1080@143.60", position = "0x-1080", scale = 1 })
+      hl.env("GDK_SCALE", "1")
+    end,
+  },
 }
 
-local configure_monitors = monitor_profiles[machine_name()]
-if configure_monitors then
-  configure_monitors()
+local hostname = read_first_line("/etc/hostname")
+local product_name = read_first_line("/sys/class/dmi/id/product_name")
+local profile = monitor_profiles[hostname]
+
+if profile and profile.product_name == product_name then
+  profile.configure()
 else
   -- Safe fallback for every machine without an explicit profile.
   hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
