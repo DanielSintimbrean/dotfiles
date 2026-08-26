@@ -1,40 +1,171 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# ~/.dotfiles/stowall: Stow all packages
+repo_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+backup_root=${DOTFILES_BACKUP_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles-backups/$(date +%Y%m%d-%H%M%S)}
+packages=(apps bin editor fish git hyprland startship system terminal tmux)
+dry_run=false
 
-SCRIPT_DEBUG=true
-#SCRIPT_DEBUG=false
+usage() {
+  echo "Usage: ./stow-all [--dry-run]"
+}
 
-# Pass -r/--refold to force directory folding: unstow then restow each package
-# so dirs that aren't already single symlinks get collapsed into one.
-# NOTE: a dir only folds if it contains nothing but repo files, and a running
-# app (e.g. Hyprland) can regenerate files mid-refold and block the fold.
-REFOLD=false
-case "$1" in
-  -r|--refold) REFOLD=true ;;
+case ${1:-} in
+  "") ;;
+  --dry-run) dry_run=true ;;
+  -h|--help)
+    usage
+    exit 0
+    ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
 esac
 
-clrstandout=$(tput smso) # Inverse - marks beginning end of this script
-clrcommand=$(tput bold) # bold - marks calling other functions or scripts
-clrunder=$(tput smul) # underline - marks comments
-clrwarning=$(tput setaf 3) # yellow - marks warnings
-clrerror=$(tput setaf 1) # red - marks errors
-clrreset=$(tput sgr0) #normal - resets all
+if ! $dry_run && ! command -v stow >/dev/null 2>&1; then
+  echo "GNU Stow is required. On Omarchy, run: omarchy pkg add stow" >&2
+  exit 1
+fi
 
-if $SCRIPT_DEBUG; then echo "${clrstandout}Stowing files in ${PWD}.${clrreset}"; fi
+translate_stow_path() {
+  local source_path=$1
+  local translated=""
+  local component
+  local -a components
 
-cd ~/dotfiles
-for files in ~/dotfiles/*; do
-  if [ -d ${files} ]; then
-    pkg=$(basename "$files")
-    if $REFOLD; then
-      # drop existing (possibly per-file) links so absent dirs refold on restow
-      stow -D "$pkg" --dotfiles
+  IFS='/' read -r -a components <<< "$source_path"
+  for component in "${components[@]}"; do
+    if [[ $component == dot-* ]]; then
+      component=".${component#dot-}"
     fi
-    stow "$pkg" --dotfiles --adopt
-    if $SCRIPT_DEBUG; then echo "$pkg stowed."; fi
+    translated+="${translated:+/}$component"
+  done
+
+  printf '%s\n' "$translated"
+}
+
+link_points_into_repo() {
+  local link_path=$1
+  local link_target
+  local resolved_target
+
+  [[ -L $link_path ]] || return 1
+  link_target=$(readlink -- "$link_path")
+  resolved_target=$(realpath -m -- "$(dirname -- "$link_path")/$link_target")
+  [[ $resolved_target == "$repo_root"/* ]]
+}
+
+remove_legacy_link() {
+  local link_path=$1
+
+  link_points_into_repo "$link_path" || return 0
+  if $dry_run; then
+    echo "Would remove obsolete link: $link_path"
+  else
+    unlink -- "$link_path"
+  fi
+}
+
+cleanup_legacy_links() {
+  local legacy_path
+  local link_path
+  local -a legacy_paths=(
+    "$HOME/.config/alacritty"
+    "$HOME/.config/btop"
+    "$HOME/.config/foot"
+    "$HOME/.config/fuzzel"
+    "$HOME/.config/ghostty"
+    "$HOME/.config/mako"
+    "$HOME/.config/sesh"
+    "$HOME/.config/walker"
+    "$HOME/.config/waybar"
+    "$HOME/.config/wlogout"
+    "$HOME/.config/wofi"
+    "$HOME/.config/hypr/apps"
+    "$HOME/.config/hypr/bindings"
+    "$HOME/.config/hypr/envs.lua"
+    "$HOME/.config/hypr/hypridle.conf"
+    "$HOME/.config/hypr/hyprlock.conf"
+    "$HOME/.config/hypr/windows.lua"
+    "$HOME/.config/hypr/scripts/idle_inhibitor.sh"
+    "$HOME/.config/hypr/scripts/lock.sh"
+    "$HOME/.config/hypr/scripts/monitor-handler.sh"
+    "$HOME/.config/hypr/scripts/screenshot_display.sh"
+    "$HOME/.config/hypr/scripts/screenshot_window.sh"
+    "$HOME/.config/tmux/scripts"
+    "$HOME/.local/bin/hypr-sesh-project"
+    "$HOME/.local/bin/notification-history"
+    "$HOME/.local/bin/waybar-reload"
+  )
+
+  for legacy_path in "${legacy_paths[@]}"; do
+    if [[ -L $legacy_path ]]; then
+      remove_legacy_link "$legacy_path"
+    elif [[ -d $legacy_path ]]; then
+      while IFS= read -r -d '' link_path; do
+        remove_legacy_link "$link_path"
+      done < <(find "$legacy_path" -type l -print0)
+    fi
+  done
+}
+
+backup_conflicts() {
+  local package=$1
+  local repo_relative
+  local package_relative
+  local target_relative
+  local source_path
+  local target_path
+  local backup_path
+  local resolved_target
+
+  while IFS= read -r repo_relative; do
+    package_relative=${repo_relative#"$package/"}
+
+    case $package_relative in
+      */.gitignore|*/.gitmodules|*/fish_variables|*/plugins/*) continue ;;
+    esac
+
+    target_relative=$(translate_stow_path "$package_relative")
+    source_path="$repo_root/$repo_relative"
+    target_path="$HOME/$target_relative"
+
+    if [[ -L $target_path ]]; then
+      resolved_target=$(realpath -m -- "$(dirname -- "$target_path")/$(readlink -- "$target_path")")
+      if [[ $resolved_target == "$source_path" ]]; then
+        continue
+      fi
+    elif [[ ! -e $target_path ]]; then
+      continue
+    fi
+
+    backup_path="$backup_root/$target_relative"
+    if $dry_run; then
+      echo "Would back up: $target_path -> $backup_path"
+    else
+      mkdir -p -- "$(dirname -- "$backup_path")"
+      mv -- "$target_path" "$backup_path"
+    fi
+  done < <(git -C "$repo_root" ls-files "$package")
+}
+
+cleanup_legacy_links
+
+for package in "${packages[@]}"; do
+  if [[ ! -d $repo_root/$package ]]; then
+    echo "Missing Stow package: $package" >&2
+    exit 1
+  fi
+
+  backup_conflicts "$package"
+
+  if $dry_run; then
+    echo "Would Stow package: $package"
+  else
+    stow --dir="$repo_root" --target="$HOME" --dotfiles --no-folding --restow "$package"
+    echo "Stowed: $package"
   fi
 done
-cd - > /dev/null
 
-if $SCRIPT_DEBUG; then echo "${clrstandout}All packages stowed or re-stowed.${clrreset}"; fi
+echo "Backups, when needed: $backup_root"
