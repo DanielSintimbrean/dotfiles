@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+dry_run=false
+if [[ ${1:-} == "--dry-run" ]]; then
+  dry_run=true
+elif [[ $# -gt 0 ]]; then
+  echo "Usage: $(basename "$0") [--dry-run]" >&2
+  exit 2
+fi
+
+omarchy_path=${OMARCHY_PATH:-/usr/share/omarchy}
+source_config="$omarchy_path/config/ghostty/config"
+target_config="${XDG_CONFIG_HOME:-$HOME/.config}/ghostty/config"
+
+if [[ ! -f $source_config ]]; then
+  echo "Missing Quattro Ghostty template: $source_config" >&2
+  exit 1
+fi
+
+if ! grep -q '^font-size = ' "$source_config" || ! grep -q '^cursor-style = ' "$source_config"; then
+  echo "Quattro's Ghostty template changed; refusing to apply an incomplete override." >&2
+  exit 1
+fi
+
+generated_config=$(mktemp)
+trap 'rm -f "$generated_config"' EXIT
+
+awk '
+  /^font-size = / { print "font-size = 12"; next }
+  /^cursor-style = / { print "cursor-style = \"bar\""; next }
+  { print }
+' "$source_config" > "$generated_config"
+
+if [[ -f $target_config ]] && cmp -s "$generated_config" "$target_config"; then
+  echo "Ghostty config is already current."
+  exit 0
+fi
+
+if $dry_run; then
+  diff -u "$target_config" "$generated_config" 2>/dev/null || true
+  exit 0
+fi
+
+if [[ -L $target_config ]]; then
+  echo "Refusing to overwrite the Stow symlink at $target_config." >&2
+  echo "Run the repository installer to migrate the old terminal package safely." >&2
+  exit 1
+fi
+
+install -d "$(dirname "$target_config")"
+install -m 0644 "$generated_config" "$target_config"
+echo "Configured Ghostty from the installed Quattro template."
