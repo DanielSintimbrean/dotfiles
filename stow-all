@@ -127,6 +127,7 @@ backup_conflicts() {
   local source_path
   local target_path
   local backup_path
+  local resolved_source
   local resolved_target
 
   while IFS= read -r repo_relative; do
@@ -142,7 +143,8 @@ backup_conflicts() {
 
     if [[ -L $target_path ]]; then
       resolved_target=$(realpath -m -- "$(dirname -- "$target_path")/$(readlink -- "$target_path")")
-      if [[ $resolved_target == "$source_path" ]]; then
+      resolved_source=$(realpath -m -- "$source_path")
+      if [[ $resolved_target == "$resolved_source" ]]; then
         continue
       fi
     elif [[ ! -e $target_path ]]; then
