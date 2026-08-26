@@ -4,8 +4,6 @@ set -euo pipefail
 repo_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 backup_root=${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles-backups/$(date +%Y%m%d-%H%M%S)
 dry_run=false
-set_shell=false
-with_caps2esc=false
 
 usage() {
   cat <<'USAGE'
@@ -13,8 +11,6 @@ Usage: ./install [options]
 
 Options:
   --dry-run          Print changes without applying them
-  --set-shell        Change the login shell to Fish
-  --with-caps2esc    Install and enable the Caps-to-Escape/Ctrl mapping
   -h, --help         Show this help
 USAGE
 }
@@ -22,8 +18,6 @@ USAGE
 while [[ $# -gt 0 ]]; do
   case $1 in
     --dry-run) dry_run=true ;;
-    --set-shell) set_shell=true ;;
-    --with-caps2esc) with_caps2esc=true ;;
     -h|--help)
       usage
       exit 0
@@ -141,17 +135,17 @@ mise_tools=(
 )
 run mise use --global --yes "${mise_tools[@]}"
 
-if $set_shell; then
-  if ! $dry_run && [[ ! -x /usr/bin/fish ]]; then
-    echo "Fish was not installed at /usr/bin/fish." >&2
-    exit 1
-  fi
+if ! $dry_run && [[ ! -x /usr/bin/fish ]]; then
+  echo "Fish was not installed at /usr/bin/fish." >&2
+  exit 1
+fi
+
+current_shell=$(getent passwd "$USER" | cut -d: -f7)
+if [[ $current_shell != /usr/bin/fish ]]; then
   run chsh -s /usr/bin/fish
 fi
 
-if $with_caps2esc; then
-  configure_caps2esc
-fi
+configure_caps2esc
 
 hyprland_instances=""
 if command -v hyprctl >/dev/null 2>&1; then
@@ -180,7 +174,5 @@ if $dry_run; then
 else
   echo "Omarchy Quattro dotfiles are installed."
 fi
-if ! $set_shell; then
-  echo "Fish is installed but the login shell was not changed. Re-run with --set-shell if wanted."
-fi
+echo "Fish is the login shell. Log out and back in if it changed during this run."
 echo "Backups, when needed: $backup_root"

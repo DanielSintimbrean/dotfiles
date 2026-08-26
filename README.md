@@ -17,25 +17,21 @@ Inspect the work before changing the machine:
 ./install --dry-run
 ```
 
-Install the normal configuration:
+Install the configuration:
 
 ```bash
 ./install
 ```
 
-The optional flags change account or system state:
-
-```bash
-./install --set-shell --with-caps2esc
-```
-
-- `--set-shell` changes the login shell to Fish. Log out and back in afterward.
-- `--with-caps2esc` installs interception-tools, writes the udevmon job, and enables the service.
 - `--dry-run` prints package, backup, Stow, Ghostty, mise, and reload actions without applying them.
+
+The real install may prompt for account or sudo authentication. Log out and back in if it changes the login shell to Fish.
 
 The installer:
 
 - installs GNU Stow, Fish, and diff-so-fancy with `omarchy pkg add`;
+- changes the login shell to Fish when needed;
+- installs and enables the caps2esc udevmon mapping;
 - installs and selects Ghostty with `omarchy install terminal ghostty`;
 - backs up exact conflicting files under `~/.local/state/dotfiles-backups/`;
 - Stows an explicit package allowlist without `--adopt`;

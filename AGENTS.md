@@ -33,7 +33,7 @@ Use the repository scripts from any working directory:
 
 Both scripts are fail-fast. `stow-all` uses an explicit allowlist, backs up exact conflicts under `~/.local/state/dotfiles-backups/`, uses `--no-folding`, and never uses `--adopt`.
 
-The optional installer flags are `--set-shell` and `--with-caps2esc`. Keep account and privileged changes behind explicit flags.
+The installer always configures Fish as the login shell and installs the privileged caps2esc udevmon mapping. Keep `--dry-run` free of writes.
 
 README.md is the source of truth for the fresh-machine workflow.
 
