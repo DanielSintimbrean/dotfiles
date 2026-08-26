@@ -34,7 +34,7 @@ The installer:
 - installs and enables the caps2esc udevmon mapping;
 - installs and selects Ghostty with `omarchy install terminal ghostty`;
 - backs up exact conflicting files under `~/.local/state/dotfiles-backups/`;
-- Stows an explicit package allowlist without `--adopt`;
+- Stows an explicit package allowlist with safe directory folding and without `--adopt`;
 - generates Ghostty from the installed Quattro template, changing only font size and cursor shape;
 - installs the development CLI tools declared in the tracked mise configuration;
 - reloads Hyprland and reports configuration errors when a session is running.
@@ -60,6 +60,11 @@ Ghostty is generated as a normal file rather than a Stow symlink. This lets Omar
 ## Hyprland
 
 [`hyprland.lua`](hyprland/dot-config/hypr/hyprland.lua) loads Quattro from `/usr/share/omarchy` first. The files beside it add only personal input, binding, workspace, monitor, and night-light behavior.
+
+The whole `~/.config/hypr` directory is folded to the repository. Its tracked
+`.luarc.json` configures Lua language-server support for Hyprland and Omarchy's
+`hl` and `o` globals; the actual Quattro defaults remain under
+`/usr/share/omarchy` and are only imported by `hyprland.lua`.
 
 Personal behavior includes:
 
@@ -111,6 +116,18 @@ To relink only the managed packages:
 ./stow-all --dry-run
 ./stow-all
 ```
+
+The relink command prefers directory symlinks such as
+`~/.config/fish -> ~/dotfiles/fish/dot-config/fish`. Before Stowing, it removes
+only empty directories that would prevent safe folding. A configuration folder
+is folded when it contains only content managed by its package; folders that
+also contain local or Omarchy-owned files remain real directories with links at
+the deepest safe level. Omarchy-owned application directories are explicitly
+excluded from Stow. Conflicts are backed up, never adopted.
+
+There is no need to remove all links first or maintain a separate repair script.
+The command also verifies that every tracked target resolves to its repository
+source, whether it is linked directly or through a folded directory.
 
 Avoid `omarchy refresh hyprland` and other refresh commands for Stowed files. A refresh can write through a symlink into the repository. Check `git status` after any Omarchy migration that touches managed configuration.
 

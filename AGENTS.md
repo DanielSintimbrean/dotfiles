@@ -31,7 +31,7 @@ Use the repository scripts from any working directory:
 ./stow-all
 ```
 
-Both scripts are fail-fast. `stow-all` uses an explicit allowlist, backs up exact conflicts under `~/.local/state/dotfiles-backups/`, uses `--no-folding`, and never uses `--adopt`.
+Both scripts are fail-fast. `stow-all` uses an explicit allowlist, backs up exact conflicts under `~/.local/state/dotfiles-backups/`, safely folds fully managed configuration directories, and never uses `--adopt`.
 
 The installer always configures Fish as the login shell and installs the privileged caps2esc udevmon mapping. Keep `--dry-run` free of writes.
 
