@@ -127,10 +127,15 @@ mise_tools=(
   gh@latest
   node@26
   npm:@antfu/ni@latest
+  npm:@earendil-works/pi-coding-agent@latest
+  npm:@github/copilot@latest
+  npm:@google/gemini-cli@latest
+  npm:@kitlangton/ghui@latest
   npm:@xai-official/grok@latest
   npm:commitizen@latest
   npm:cz-git@latest
   npm:npm-check-updates@latest
+  npm:playwright@latest
   opencode@latest
   pnpm@latest
 )
@@ -148,13 +153,24 @@ if $with_caps2esc; then
   configure_caps2esc
 fi
 
-if command -v hyprctl >/dev/null 2>&1 && hyprctl instances -j >/dev/null 2>&1; then
+hyprland_instances=""
+if command -v hyprctl >/dev/null 2>&1; then
+  hyprland_instances=$(hyprctl instances -j 2>/dev/null || true)
+fi
+
+if [[ -n $hyprland_instances && $hyprland_instances != "[]" ]]; then
   if $dry_run; then
     print_command hyprctl reload
     print_command hyprctl configerrors
+    print_command omarchy restart hyprsunset
   else
     hyprctl reload
-    hyprctl configerrors
+    hyprland_errors=$(hyprctl configerrors)
+    if [[ -n $hyprland_errors ]]; then
+      echo "$hyprland_errors" >&2
+      exit 1
+    fi
+    omarchy restart hyprsunset
   fi
 fi
 

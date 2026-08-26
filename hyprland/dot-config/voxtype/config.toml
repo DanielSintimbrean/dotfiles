@@ -64,7 +64,7 @@ gpu_device = 1
 # Initial prompt: gives Whisper context to better transcribe domain-specific
 # vocabulary (technical jargon, product names, proper nouns). Whisper truncates
 # to the last ~224 tokens, so keep it to high-value terms it tends to get wrong.
-initial_prompt = "Dictado técnico en español sobre desarrollo web con React y Linux. Términos: React, Next.js, TypeScript, JavaScript, Node.js, npm, pnpm, Vite, JSX, TSX, useState, useEffect, Zustand, Redux, Tailwind CSS, GraphQL, REST, JSON, ESLint, Prettier, Vitest, Playwright, PostgreSQL, MongoDB, Redis, Docker, Kubernetes, kubectl, Vercel. Linux: Arch Linux, Hyprland, Wayland, Waybar, systemd, GNU Stow, Neovim, tmux, Fish shell, pacman, yay, dotfiles, Voxtype."
+initial_prompt = "Dictado técnico en español sobre desarrollo web con React y Linux. Términos: React, Next.js, TypeScript, JavaScript, Node.js, npm, pnpm, Vite, JSX, TSX, useState, useEffect, Zustand, Redux, Tailwind CSS, GraphQL, REST, JSON, ESLint, Prettier, Vitest, Playwright, PostgreSQL, MongoDB, Redis, Docker, Kubernetes, kubectl, Vercel. Linux: Arch Linux, Hyprland, Wayland, Quickshell, Omarchy Shell, systemd, GNU Stow, Neovim, tmux, Fish shell, pacman, yay, dotfiles, Voxtype."
 
 [output]
 # Primary output mode: "type" or "clipboard"

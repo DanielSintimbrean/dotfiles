@@ -86,12 +86,12 @@ Add another entry to `monitor_profiles` for a new hostname and hardware model. T
 
 ## Fish and mise
 
-Fish contains aliases, abbreviations, paths, vi mode, Starship, native fzf initialization, and zoxide. Fisher, generated plugin code, `fnm`, Bob, Sesh, Yazi, unsafe package aliases, and missing paths were removed.
+Fish contains aliases, abbreviations, paths, vi mode, Starship, native fzf initialization, and zoxide. Generated plugin code, legacy runtime managers, unsafe package aliases, and missing paths were removed.
 
 Quattro activates mise for Fish and graphical sessions. The installer declares these global tools through mise:
 
 ```text
-bun claude codex gh node@26 pnpm ni grok npm-check-updates commitizen cz-git opencode
+bun claude codex copilot gemini gh ghui node@26 pi playwright pnpm ni grok npm-check-updates commitizen cz-git opencode
 ```
 
 Downloaded mise installations under `~/.local/share/mise` are machine state and are not tracked.

@@ -97,6 +97,15 @@ cleanup_legacy_links() {
     "$HOME/.local/bin/hypr-sesh-project"
     "$HOME/.local/bin/notification-history"
     "$HOME/.local/bin/waybar-reload"
+    "$HOME/.local/bin/agent"
+    "$HOME/.local/bin/copilot"
+    "$HOME/.local/bin/cursor"
+    "$HOME/.local/bin/cursor-agent"
+    "$HOME/.local/bin/gemini"
+    "$HOME/.local/bin/ghui"
+    "$HOME/.local/bin/opencode"
+    "$HOME/.local/bin/pi"
+    "$HOME/.local/bin/playwright-cli"
   )
 
   for legacy_path in "${legacy_paths[@]}"; do
