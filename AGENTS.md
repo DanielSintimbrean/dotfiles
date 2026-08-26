@@ -1,59 +1,39 @@
 # Repository instructions
 
-## Purpose
+## Scope
 
-These dotfiles are a personal overlay for Omarchy Quattro on Arch Linux. Omarchy owns its packaged desktop defaults. Keep this repository limited to deliberate personal overrides and development configuration.
+README.md defines the supported system, repository layout, and user workflow.
+Treat that scope as a hard boundary. Keep package and configuration inventories
+out of scripts and documentation.
 
-Never edit `/usr/share/omarchy/`. Read it to compare current defaults before changing user configuration.
+Omarchy owns its packaged defaults. Keep this repository limited to personal
+overrides and development configuration. Never edit `/usr/share/omarchy/`.
 
-## Stow layout
+## Layout
 
-The managed top-level Stow packages are `apps`, `bin`, `editor`, `fish`, `git`, `hyprland`, `startship`, `system`, `terminal`, and `tmux`.
+Preserve directory-driven Stow package discovery. GNU Stow runs with
+`--dotfiles`. `startship` is the historical package name for Starship and must
+keep that spelling.
 
-GNU Stow runs with `--dotfiles`, so:
+Keep installed agent skills out of Stow. `sync-agent-skills` must copy only the
+canonical `skills/` tree.
 
-- `<package>/dot-config/<app>/` maps to `~/.config/<app>/`.
-- `<package>/dot-local/` maps to `~/.local/`.
-- `git/dot-gitconfig` maps to `~/.gitconfig`.
+## Installation rules
 
-`startship` is the historical package name for Starship. Keep that spelling.
+Keep `install`, `stow-all`, and `sync-agent-skills` fail-fast. Dry runs must not
+write. Stow may back up an exact conflicting target, but it must never use
+`--adopt`.
 
-`setup/` contains installer assets and is not a Stow package. `better-bird/` is tracked reference data and is not Stowed.
+Use `check-sync` for the installer and pre-push guards. It must reject untracked
+files and staged changes before configuration is applied. The pre-push hook must
+also validate Hyprland from the committed snapshot.
 
-## Install and relink
-
-Use the repository scripts from any working directory:
-
-```bash
-./install --dry-run
-./install
-./stow-all --dry-run
-./stow-all
-```
-
-Both scripts are fail-fast. `stow-all` uses an explicit allowlist, backs up exact conflicts under `~/.local/state/dotfiles-backups/`, safely folds fully managed configuration directories, and never uses `--adopt`.
-
-Personal skills have one canonical source under `system/dot-agents/skills`. `stow-all` must keep the agent and Claude skill trees out of Stow and use `sync-agent-skills` to install real copies in both destinations while preserving Omarchy-owned skills.
-
-`stow-all` must reject untracked files inside managed packages before changing links. The installer configures the tracked `.githooks/pre-push` hook, which rejects all untracked repository files and staged changes, then validates the committed Hyprland snapshot. Keep `check-sync` as the shared implementation for these guards.
-
-The installer always configures Fish as the login shell and installs the privileged caps2esc udevmon mapping. Keep `--dry-run` free of writes.
-
-README.md is the source of truth for the fresh-machine workflow.
-
-## Omarchy ownership
-
-Hyprland user files load Quattro defaults from `/usr/share/omarchy` before personal modules. Keep bindings, workspaces, input, monitor profiles, and night light as small overrides. Leave appearance, shell, launcher, notifications, lock, idle, and stock application rules to Omarchy.
-
-Do not restore copied Waybar, Mako, Walker, Wofi, Wlogout, Fuzzel, Foot, Alacritty, btop, browser flag, fontconfig, hypridle, or hyprlock configurations.
-
-Ghostty is generated from the installed Quattro template by `bin/dot-local/bin/dotfiles-configure-ghostty`. Keep it as a normal user file so Omarchy migrations and font commands can edit it.
-
-Avoid `omarchy refresh` for Stowed files. It may write through symlinks and dirty the repository.
+Generate Ghostty from the installed Omarchy template as a regular file so
+Omarchy font commands can edit it.
 
 ## Validation
 
-Run checks that match the changed domain:
+Run checks that match the changed files:
 
 ```bash
 bash -n install stow-all sync-agent-skills check-sync .githooks/pre-push bin/dot-local/bin/dotfiles-configure-ghostty
@@ -62,20 +42,6 @@ TERM=xterm-256color STARSHIP_CONFIG="$PWD/startship/dot-config/starship.toml" st
 ./check-sync
 ```
 
-Validate repository Hyprland files with an isolated HOME so Lua imports resolve to this checkout:
-
-```bash
-validation_home=$(mktemp -d)
-mkdir -p "$validation_home/.config" "$validation_home/.local/state"
-ln -s "$PWD/hyprland/dot-config/hypr" "$validation_home/.config/hypr"
-HOME="$validation_home" XDG_CONFIG_HOME="$validation_home/.config" XDG_STATE_HOME="$validation_home/.local/state" \
-  Hyprland --verify-config --config "$PWD/hyprland/dot-config/hypr/hyprland.lua"
-rm -r "$validation_home"
-```
-
-After changing an active Stowed Hyprland config, finish with:
-
-```bash
-hyprctl reload
-hyprctl configerrors
-```
+Validate Hyprland with an isolated home that links
+`hyprland/dot-config/hypr` at `~/.config/hypr`. After changing the active
+Hyprland configuration, run `hyprctl reload` and `hyprctl configerrors`.

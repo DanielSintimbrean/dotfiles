@@ -3,10 +3,7 @@ set -euo pipefail
 
 repo_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 backup_root=${DOTFILES_BACKUP_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles-backups/$(date +%Y%m%d-%H%M%S)}
-packages=(apps bin editor fish git hyprland startship system terminal tmux)
-stow_ignore_pattern='(alacritty|apps|bindings|btop|dot-(agents|claude)|foot|fontconfig|fuzzel|ghostty|mako|sesh|walker|waybar|wlogout|wofi)'
 dry_run=false
-foldable_config_directories=()
 
 usage() {
   echo "Usage: ./stow-all [--dry-run]"
@@ -30,6 +27,17 @@ if ! $dry_run && ! command -v stow >/dev/null 2>&1; then
   exit 1
 fi
 
+mapfile -t packages < <(
+  git -C "$repo_root" ls-files |
+    sed -nE 's|^([^/]+)/dot-[^/]+(/.*)?$|\1|p' |
+    LC_ALL=C sort -u
+)
+
+if (( ${#packages[@]} == 0 )); then
+  echo "No Stow packages found." >&2
+  exit 1
+fi
+
 translate_stow_path() {
   local source_path=$1
   local translated=""
@@ -47,85 +55,10 @@ translate_stow_path() {
   printf '%s\n' "$translated"
 }
 
-link_points_into_repo() {
-  local link_path=$1
-  local link_target
-  local resolved_target
-
-  [[ -L $link_path ]] || return 1
-  link_target=$(readlink -- "$link_path")
-  resolved_target=$(realpath -m -- "$(dirname -- "$link_path")/$link_target")
-  [[ $resolved_target == "$repo_root"/* ]]
-}
-
 list_package_files() {
-  local pathspec=$1
-
-  git -C "$repo_root" ls-files --cached -- "$pathspec"
-}
-
-remove_legacy_link() {
-  local link_path=$1
-
-  link_points_into_repo "$link_path" || return 0
-  if $dry_run; then
-    echo "Would remove obsolete link: $link_path"
-  else
-    unlink -- "$link_path"
-  fi
-}
-
-cleanup_legacy_links() {
-  local legacy_path
-  local link_path
-  local -a legacy_paths=(
-    "$HOME/.config/alacritty"
-    "$HOME/.config/btop"
-    "$HOME/.config/foot"
-    "$HOME/.config/fontconfig"
-    "$HOME/.config/fuzzel"
-    "$HOME/.config/ghostty"
-    "$HOME/.config/mako"
-    "$HOME/.config/sesh"
-    "$HOME/.config/walker"
-    "$HOME/.config/waybar"
-    "$HOME/.config/wlogout"
-    "$HOME/.config/wofi"
-    "$HOME/.config/hypr/apps"
-    "$HOME/.config/hypr/bindings"
-    "$HOME/.config/hypr/envs.lua"
-    "$HOME/.config/hypr/hypridle.conf"
-    "$HOME/.config/hypr/hyprlock.conf"
-    "$HOME/.config/hypr/windows.lua"
-    "$HOME/.config/hypr/scripts/idle_inhibitor.sh"
-    "$HOME/.config/hypr/scripts/lock.sh"
-    "$HOME/.config/hypr/scripts/monitor-handler.sh"
-    "$HOME/.config/hypr/scripts/screenshot_display.sh"
-    "$HOME/.config/hypr/scripts/screenshot_window.sh"
-    "$HOME/.config/tmux/scripts"
-    "$HOME/.local/bin/hypr-sesh-project"
-    "$HOME/.local/bin/notification-history"
-    "$HOME/.local/bin/waybar-reload"
-    "$HOME/.local/bin/agent"
-    "$HOME/.local/bin/copilot"
-    "$HOME/.local/bin/cursor"
-    "$HOME/.local/bin/cursor-agent"
-    "$HOME/.local/bin/gemini"
-    "$HOME/.local/bin/ghui"
-    "$HOME/.local/bin/opencode"
-    "$HOME/.local/bin/pi"
-    "$HOME/.local/bin/playwright-cli"
-  )
-
-  for legacy_path in "${legacy_paths[@]}"; do
-    if [[ -L $legacy_path ]]; then
-      remove_legacy_link "$legacy_path"
-    elif [[ -d $legacy_path ]]; then
-      while IFS= read -r -d '' link_path; do
-        remove_legacy_link "$link_path"
-      done < <(find "$legacy_path" -type l -print0)
-    fi
-  done
+  git -C "$repo_root" ls-files --cached -- "$1" \
+    ':(exclude)**/.gitignore' \
+    ':(exclude)**/.gitmodules'
 }
 
 backup_conflicts() {
@@ -136,15 +69,9 @@ backup_conflicts() {
   local source_path
   local target_path
   local backup_path
-  local resolved_source
-  local resolved_target
 
   while IFS= read -r repo_relative; do
     package_relative=${repo_relative#"$package/"}
-
-    case $package_relative in
-      dot-agents/skills/*|dot-claude/skills/*|*/.gitignore|*/.gitmodules|*/fish_variables|*/plugins/*) continue ;;
-    esac
 
     target_relative=$(translate_stow_path "$package_relative")
     source_path="$repo_root/$repo_relative"
@@ -154,13 +81,7 @@ backup_conflicts() {
       continue
     fi
 
-    # Resolve the complete target path, not only its final component. Stow may
-    # have folded a parent directory into one repository symlink. Files reached
-    # through that link are already managed and must never be moved out of the
-    # repository as conflicts.
-    resolved_target=$(realpath -m -- "$target_path")
-    resolved_source=$(realpath -m -- "$source_path")
-    if [[ $resolved_target == "$resolved_source" ]]; then
+    if [[ $(realpath -m -- "$target_path") == $(realpath -m -- "$source_path") ]]; then
       continue
     fi
 
@@ -174,76 +95,6 @@ backup_conflicts() {
   done < <(list_package_files "$package")
 }
 
-source_directory_has_managed_file() {
-  local source_dir=$1
-  local tracked_path
-
-  while IFS= read -r tracked_path; do
-    case $tracked_path in
-      */.gitignore|*/.gitmodules) continue ;;
-    esac
-    return 0
-  done < <(list_package_files "${source_dir#"$repo_root/"}")
-
-  return 1
-}
-
-config_directory_is_fully_managed() {
-  local source_dir=$1
-  local target_dir=$2
-  local target_entry
-  local relative
-  local expected_source
-  local failed=false
-
-  if [[ -L $target_dir ]]; then
-    [[ $(realpath -m -- "$target_dir") == $(realpath -m -- "$source_dir") ]]
-    return
-  fi
-
-  [[ ! -e $target_dir ]] && return 0
-  [[ -d $target_dir ]] || return 1
-
-  while IFS= read -r -d '' target_entry; do
-    relative=${target_entry#"$target_dir/"}
-    expected_source="$source_dir/$relative"
-    if [[ $(realpath -m -- "$target_entry") != $(realpath -m -- "$expected_source") ]]; then
-      failed=true
-      break
-    fi
-  done < <(find "$target_dir" -mindepth 1 ! -type d -print0)
-
-  ! $failed
-}
-
-collect_foldable_config_directories() {
-  local package=$1
-  local source_config_root="$repo_root/$package/dot-config"
-  local source_dir
-  local target_dir
-
-  foldable_config_directories=()
-
-  [[ -d $source_config_root ]] || return 0
-
-  while IFS= read -r -d '' source_dir; do
-    source_directory_has_managed_file "$source_dir" || continue
-    target_dir="$HOME/.config/${source_dir#"$source_config_root/"}"
-    if config_directory_is_fully_managed "$source_dir" "$target_dir"; then
-      foldable_config_directories+=("$target_dir")
-    fi
-  done < <(find "$source_config_root" -mindepth 1 -maxdepth 1 -type d -print0)
-}
-
-prune_foldable_config_directories() {
-  local target_dir
-
-  for target_dir in "${foldable_config_directories[@]}"; do
-    [[ -d $target_dir && ! -L $target_dir ]] || continue
-    find "$target_dir" -depth -type d -empty -delete
-  done
-}
-
 verify_managed_links() {
   local package=$1
   local repo_relative
@@ -251,16 +102,10 @@ verify_managed_links() {
   local target_relative
   local source_path
   local target_path
-  local resolved_source
-  local resolved_target
   local failed=false
 
   while IFS= read -r repo_relative; do
     package_relative=${repo_relative#"$package/"}
-
-    case $package_relative in
-      dot-agents/skills/*|dot-claude/skills/*|*/.gitignore|*/.gitmodules) continue ;;
-    esac
 
     target_relative=$(translate_stow_path "$package_relative")
     source_path="$repo_root/$repo_relative"
@@ -272,9 +117,7 @@ verify_managed_links() {
       continue
     fi
 
-    resolved_target=$(realpath -m -- "$target_path")
-    resolved_source=$(realpath -m -- "$source_path")
-    if [[ $resolved_target != "$resolved_source" ]]; then
+    if [[ $(realpath -m -- "$target_path") != $(realpath -m -- "$source_path") ]]; then
       echo "Link does not resolve to its managed source: $target_path" >&2
       failed=true
     fi
@@ -283,42 +126,24 @@ verify_managed_links() {
   ! $failed
 }
 
-if ! $dry_run; then
-  mkdir -p -- "$HOME/.config"
-fi
-
-"$repo_root/check-sync" --managed-files
-cleanup_legacy_links
+"$repo_root/check-sync" --worktree
 
 for package in "${packages[@]}"; do
-  if [[ ! -d $repo_root/$package ]]; then
-    echo "Missing Stow package: $package" >&2
-    exit 1
-  fi
-
   backup_conflicts "$package"
-  collect_foldable_config_directories "$package"
 
   if $dry_run; then
-    for config_directory in "${foldable_config_directories[@]}"; do
-      echo "Would fold fully managed directory: $config_directory"
-    done
-    echo "Would Stow package with directory folding: $package"
+    echo "Would Stow package: $package"
   else
-    stow --dir="$repo_root" --target="$HOME" --dotfiles \
-      --ignore="$stow_ignore_pattern" --no-folding --delete "$package"
-    prune_foldable_config_directories
-    stow --dir="$repo_root" --target="$HOME" --dotfiles \
-      --ignore="$stow_ignore_pattern" "$package"
+    stow --dir="$repo_root" --target="$HOME" --dotfiles "$package"
     verify_managed_links "$package"
-    echo "Stowed with directory folding: $package"
+    echo "Stowed package: $package"
   fi
 done
 
 if $dry_run; then
-  DOTFILES_BACKUP_DIR="$backup_root" "$repo_root/sync-agent-skills" --dry-run
+  "$repo_root/sync-agent-skills" --dry-run
 else
-  DOTFILES_BACKUP_DIR="$backup_root" "$repo_root/sync-agent-skills"
+  "$repo_root/sync-agent-skills"
 fi
 
 echo "Backups, when needed: $backup_root"

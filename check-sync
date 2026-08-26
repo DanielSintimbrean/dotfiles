@@ -2,17 +2,15 @@
 set -euo pipefail
 
 repo_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-managed_paths=(apps bin editor fish git hyprland startship system terminal tmux)
 
 usage() {
   cat <<'USAGE'
-Usage: ./check-sync [--managed-files | --worktree | --commit <ref>]
+Usage: ./check-sync [--worktree | --commit <ref>]
 
 Without arguments, check the working tree and validate the Hyprland
 configuration committed at HEAD.
 
 Options:
-  --managed-files   Reject untracked files inside managed Stow packages
   --worktree        Reject untracked repository files and staged changes
   --commit <ref>    Validate Hyprland from the committed snapshot at <ref>
   -h, --help        Show this help
@@ -108,10 +106,6 @@ case ${1:-} in
     check_untracked_files "Untracked repository files must be added or ignored:"
     check_no_staged_changes
     validate_committed_hyprland HEAD
-    ;;
-  --managed-files)
-    [[ $# -eq 1 ]] || { usage >&2; exit 2; }
-    check_untracked_files "Untracked files exist inside managed Stow packages:" "${managed_paths[@]}"
     ;;
   --worktree)
     [[ $# -eq 1 ]] || { usage >&2; exit 2; }

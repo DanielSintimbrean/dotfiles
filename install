@@ -55,7 +55,6 @@ configure_git_hooks() {
 
 configure_caps2esc() {
   local target=/etc/interception/udevmon.yaml
-  local timestamp
   local source_config="$repo_root/setup/caps2esc/udevmon.yaml"
 
   if [[ ! -f $source_config ]]; then
@@ -71,11 +70,6 @@ configure_caps2esc() {
     return
   fi
 
-  timestamp=$(date +%Y%m%d-%H%M%S)
-  if [[ -f $target ]] && ! cmp -s "$source_config" "$target"; then
-    run sudo cp -- "$target" "$target.bak.$timestamp"
-  fi
-
   run sudo install -Dm0644 "$source_config" "$target"
   run sudo systemctl enable --now udevmon
 }
@@ -86,7 +80,7 @@ if ! command -v omarchy >/dev/null 2>&1; then
 fi
 
 configure_git_hooks
-run omarchy pkg add stow fish diff-so-fancy
+run omarchy pkg add stow fish diff-so-fancy rsync
 run omarchy install terminal ghostty
 
 export DOTFILES_BACKUP_DIR=$backup_root
