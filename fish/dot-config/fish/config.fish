@@ -8,14 +8,14 @@ if test -d "$HOME/.local/bin"
 end
 
 # Basic command aliases.
-alias ls 'eza -al --color=always --group-directories-first --icons'
-alias lsz 'eza -al --color=always --total-size --group-directories-first --icons'
-alias la 'eza -a --color=always --group-directories-first --icons'
-alias ll 'eza -l --color=always --group-directories-first --icons'
-alias lt 'eza -aT --color=always --group-directories-first --icons --git-ignore'
-alias lt2 'eza --level 2 -aT --color=always --group-directories-first --icons --git-ignore'
-alias lt3 'eza --level 4 -aT --color=always --group-directories-first --icons'
-alias l. 'eza -ald --color=always --group-directories-first --icons .*'
+alias ls 'eza -al --color=always --group-directories-first --icons=always'
+alias lsz 'eza -al --color=always --total-size --group-directories-first --icons=always'
+alias la 'eza -a --color=always --group-directories-first --icons=always'
+alias ll 'eza -l --color=always --group-directories-first --icons=always'
+alias lt 'eza -aT --color=always --group-directories-first --icons=always --git-ignore'
+alias lt2 'eza --level 2 -aT --color=always --group-directories-first --icons=always --git-ignore'
+alias lt3 'eza --level 4 -aT --color=always --group-directories-first --icons=always'
+alias l. 'eza -ald --color=always --group-directories-first --icons=always .*'
 alias cat 'bat --style=header,snip,changes'
 
 if not type -q yay; and type -q paru
