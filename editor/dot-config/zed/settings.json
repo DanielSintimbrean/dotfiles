@@ -96,6 +96,10 @@
   "collaboration_panel": {
     "dock": "right",
   },
+  "auto_install_extensions": {
+    "catppuccin-icons": true,
+    "catppuccin": true,
+  },
   "languages": {
     "TypeScript": {
       "language_servers": [
