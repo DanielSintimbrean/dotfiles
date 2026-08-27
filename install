@@ -8,7 +8,8 @@ omarchy install terminal ghostty
 
 # Omarchy defaults that this repository replaces.
 rm -rf ~/.config/hypr ~/.config/ghostty/config ~/.config/lazygit/config.yml \
-  ~/.config/starship.toml ~/.config/tmux/tmux.conf
+  ~/.config/starship.toml ~/.config/tmux/tmux.conf \
+  ~/.config/mimeapps.list ~/.config/mise/config.toml ~/.config/nvim/init.lua
 stow --dotfiles -t ~ home
 
 # Skills are linked per directory, so SKILL.md stays a regular file.
