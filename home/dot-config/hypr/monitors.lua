@@ -11,7 +11,6 @@ end
 
 local monitor_profiles = {
   omarchy = {
-    product_name = "VivoBook_ASUSLaptop X421EAY_K413EA",
     configure = function()
       hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "0x0", scale = 1 })
       hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@60", position = "auto", scale = 1 })
@@ -19,13 +18,18 @@ local monitor_profiles = {
       hl.env("GDK_SCALE", "1")
     end,
   },
+  slimbook = {
+    configure = function()
+      hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "0x0", scale = 1 })
+      hl.env("GDK_SCALE", "1")
+    end,
+  },
 }
 
 local hostname = read_first_line("/etc/hostname")
-local product_name = read_first_line("/sys/class/dmi/id/product_name")
 local profile = monitor_profiles[hostname]
 
-if profile and profile.product_name == product_name then
+if profile then
   profile.configure()
 else
   -- Safe fallback for every machine without an explicit profile.
