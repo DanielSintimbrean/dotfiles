@@ -1,3 +1,19 @@
 .tmp*
-fish_variables
-tmux/plugins
+
+# Runtime state written by apps through the Stow links
+home/dot-config/fish/fish_variables
+home/dot-config/fish/conf.d/key.fish
+home/dot-config/tmux/plugins/
+home/dot-config/lazygit/state.yml
+home/dot-config/nvim/spell/
+home/dot-config/nvim/.luarc.json
+home/dot-config/nvim/tags
+home/dot-config/nvim/test.sh
+home/dot-config/nvim/nvim
+
+# Cursor stores its whole profile next to the two tracked files
+home/dot-config/Cursor/*
+!home/dot-config/Cursor/User/
+home/dot-config/Cursor/User/*
+!home/dot-config/Cursor/User/keybindings.json
+!home/dot-config/Cursor/User/settings.json

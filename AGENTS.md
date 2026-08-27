@@ -1,47 +1,40 @@
 # Repository instructions
 
-## Scope
+Personal overrides on top of Omarchy Quattro. Omarchy owns the defaults in
+`/usr/share/omarchy/` and stays untouched; this repository holds only what
+differs. `install` is the whole setup and reads as its own documentation.
 
-README.md defines the supported system, repository layout, and user workflow.
-Treat that scope as a hard boundary. Keep package and configuration inventories
-out of scripts and documentation.
+## Adding a configuration file
 
-Omarchy owns its packaged defaults. Keep this repository limited to personal
-overrides and development configuration. Never edit `/usr/share/omarchy/`.
+`home/` is a single GNU Stow package linked into `~` with `--dotfiles`, so
+`home/dot-config/foo/bar` becomes `~/.config/foo/bar`.
 
-## Layout
+1. If the file already exists in `~` (Omarchy default or app-generated), move
+   it into the mirrored `home/dot-...` path; otherwise create it there.
+2. When it replaces a file Omarchy ships under `/usr/share/omarchy/config/`,
+   add its `~` path to the `rm -rf` list in `install`.
+3. Run `stow --dotfiles -t ~ home`.
+4. Add any state the app writes next to the link to `.gitignore` with its full
+   `home/...` path.
 
-Preserve directory-driven Stow package discovery. GNU Stow runs with
-`--dotfiles`. `startship` is the historical package name for Starship and must
-keep that spelling.
+Done when `readlink -f ~/<path>` resolves inside this repository and
+`git status` shows only the intended files.
 
-Keep installed agent skills out of Stow. `sync-agent-skills` must copy only the
-canonical `skills/` tree.
+## Adding an agent skill
 
-## Installation rules
+Create `skills/<name>/SKILL.md`, then run the skills loop from `install`.
+Stow links each skill as a directory symlink; agents fail to detect a skill
+whose `SKILL.md` is itself a symlink, so remove any real directory with the
+same name in the target before linking.
 
-Keep `install`, `stow-all`, and `sync-agent-skills` fail-fast. Dry runs must not
-write. Stow may back up an exact conflicting target, but it must never use
-`--adopt`.
+## Hyprland
 
-Use `check-sync` for the installer and pre-push guards. It must reject untracked
-files and staged changes before configuration is applied. The pre-push hook must
-also validate Hyprland from the committed snapshot.
+After editing `home/dot-config/hypr/`, run `hyprctl reload && hyprctl
+configerrors`. Empty output means valid. Machine-specific values live only in
+`monitors.lua`, keyed by hostname and product name.
 
-Generate Ghostty from the installed Omarchy template as a regular file so
-Omarchy font commands can edit it.
+## Ghostty
 
-## Validation
-
-Run checks that match the changed files:
-
-```bash
-bash -n install stow-all sync-agent-skills check-sync .githooks/pre-push bin/dot-local/bin/dotfiles-configure-ghostty
-fish -n fish/dot-config/fish/config.fish fish/dot-config/fish/functions/pid-port.fish
-TERM=xterm-256color STARSHIP_CONFIG="$PWD/startship/dot-config/starship.toml" starship prompt >/dev/null
-./check-sync
-```
-
-Validate Hyprland with an isolated home that links
-`hyprland/dot-config/hypr` at `~/.config/hypr`. After changing the active
-Hyprland configuration, run `hyprctl reload` and `hyprctl configerrors`.
+`omarchy font set` runs `sed -i` on `~/.config/ghostty/config`, which turns
+the link into a regular file. Restore it with `stow -R --dotfiles -t ~ home`
+after checking the diff.
