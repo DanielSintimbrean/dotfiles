@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Fresh Omarchy Quattro machine -> personal configuration. Read it top to bottom; that is the dry run.
+set -euo pipefail
+cd "$(dirname "$0")"
+
+omarchy pkg add stow fish diff-so-fancy
+omarchy install terminal ghostty
+
+# Omarchy defaults that this repository replaces.
+rm -rf ~/.config/hypr ~/.config/ghostty/config ~/.config/lazygit/config.yml \
+  ~/.config/starship.toml ~/.config/tmux/tmux.conf
+stow --dotfiles -t ~ home
+
+# Skills are linked per directory, so SKILL.md stays a regular file.
+for agent in ~/.agents ~/.claude ~/.codex; do
+  mkdir -p "$agent/skills"
+  stow -t "$agent/skills" skills
+done
+
+mise install --yes
+[[ $SHELL == */fish ]] || chsh -s /usr/bin/fish
+
+omarchy pkg add interception-tools interception-caps2esc
+sudo install -Dm0644 etc/interception/udevmon.yaml /etc/interception/udevmon.yaml
+sudo systemctl enable --now udevmon
+
+if pgrep -x Hyprland >/dev/null; then
+  hyprctl reload
+  hyprctl configerrors
+fi

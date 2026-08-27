@@ -1,143 +1,52 @@
-# Dotfiles
+# dotfiles
 
-## Prerequisites
+My Linux configuration, written as a thin layer on top of [Omarchy Quattro](https://omarchy.org).
 
-- Install stow
+Omarchy already ships good defaults for Hyprland, the terminal, themes and most of the desktop. Rather than fork all of that, this repo only holds the parts where I disagree with the defaults or need something Omarchy doesn't cover. Everything else stays as Omarchy installs it, so its updates keep working.
+
+## What's in here
+
+```
+home/     one GNU Stow package, mirrors ~ (dot-config -> .config, dot-local -> .local, ...)
+skills/   skills for Claude Code and Codex, linked into each agent's skills directory
+etc/      the caps2esc job for interception-tools (goes to /etc)
+extras/   Thunderbird filter rules
+install   the whole setup, 30 lines
+```
+
+The interesting bits inside `home/`:
+
+- `hypr/`. Hyprland in Lua, loaded after Omarchy's own config. Vim-style focus on `SUPER + hjkl`, workspaces 1-9 pinned to the current monitor, monitor focus that drags the pointer along, and a monitor profile that only applies on my laptop (it checks hostname and DMI product name, so it won't misconfigure your screens if you copy it).
+- `fish/`. Vi keybindings, `eza` and `bat` in place of `ls` and `cat`, starship, fzf, zoxide. No plugin manager.
+- `nvim/`. Started from kickstart.nvim and moved to the built-in `vim.pack`. One file per plugin under `lua/plugins/`.
+- `tmux/`, `starship.toml`, `zed/`, `Cursor/`, `lazygit/`, `mise/`. Small personal tweaks.
+- `dot-local/bin/`. Scripts I reach for daily: `killport`, `checkport`, `randpass`, `ai-commit`, `backup-home`.
+
+## How it's wired
+
+Stow links `home/` into `~` with `--dotfiles`, so `home/dot-config/hypr` becomes `~/.config/hypr`. Editing a file in `~/.config` edits the repo, and `git status` shows what changed. That's the whole sync story.
+
+Agent skills get the same treatment, one `stow` call per agent directory. Each skill ends up as a directory symlink, which matters because at least one agent stops detecting a skill when `SKILL.md` itself is a symlink.
+
+`install` does, in order: install `stow` and `fish`, install Ghostty through Omarchy, delete the five Omarchy defaults this repo replaces, stow, link skills, `mise install`, switch the login shell to fish, set up caps2esc, reload Hyprland. There is no dry-run flag. The script is short enough that reading it is the dry run.
+
+## Using it yourself
+
+Honest answer: don't run `install` as-is. It changes your login shell, installs a udev job that remaps Caps Lock, and deletes Omarchy's Hyprland config from `~/.config`. It's meant for a fresh Omarchy machine that I own.
+
+What does transfer well is the approach. If you're on Omarchy and tired of losing changes on updates, clone this, delete everything in `home/` you don't want, and keep the two ideas that carry the weight: one Stow package for all of `~`, and a Hyprland `hyprland.lua` that requires Omarchy's defaults first and your overrides after. Cherry-pick the Hyprland bindings or the fish aliases if that's all you came for.
+
+On my own machines the flow is:
 
 ```bash
-sudo pacman -S stow
+git clone https://github.com/DanielSintimbrean/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+cat install    # read it
+./install
 ```
 
-## Install
+## Notes
 
-Clone the repo:
-
-```bash
-git clone https://github.com/DanielSintimbrean/dotfiles.git ~/dotfiles/
-```
-
-## Configure stow
-
-```bash
-cd ~/dotfiles/ && stow apps bin editor fish git hyprland startship system terminal tmux --adopt --dotfiles
-```
-
-```bash
-git restore .
-```
-
-## Tmux
-
-### Install TPM 
-
-```bash
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-```
-
-```bash
-tmux-dev
-```
-
-`Ctrl + Space` + `I`: To install the plugins
-
-## Install applications that i use
-
-```bash
-sudo pacman -s zoxide fnm docker nerd-fonts syncthing diff-so-fancy
-```
-
-### From aur
-
-```bash
-yay -S bun sesh-bin
-```
-
-## Sesh
-
-Install fish completions after `sesh-bin` is available:
-
-```bash
-mkdir -p ~/.config/fish/completions
-sesh completion fish > ~/.config/fish/completions/sesh.fish
-```
-
-Re-stow after pulling the latest dotfiles:
-
-```bash
-./stow-all
-```
-
-Use either:
-
-- `s` from fish
-- `Ctrl + Space` then `T` inside tmux
-- `Super + Shift + Enter` in Hyprland for a Walker picker that opens the selected git project in `ghostty` via `sesh`
-
-Projects under `~/Dev`, `~/Projects`, `~/Work`, and `~/dotfiles` open with this layout:
-
-- left column: two terminal panes stacked top and bottom
-- right column: `lazygit`
-
-### Install npm dependencies with bun
-
-```bash
-bun add -g npm-check-updates cz-git @antfu/ni commitizen
-```
-
-## Enable docker
-
-```bash
-sudo systemctl enable docker.service
-sudo systemctl enable containerd.service
-
-sudo systemctl start docker.service
-sudo systemctl start containerd.service
-```
-
-```bash
-sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker
-```
-
-### Verify
-
-```bash
-docker run hello-world
-```
-
-### Install portainer
-
-[Official Docs](https://docs.portainer.io/start/install-ce/server/docker/linux#deployment)
-
-### Install neovim configuration
-
-#### Install needed dependencies
-
-```bash
-sudo pacman -S --noconfirm --needed gcc make git ripgrep fd unzip neovim xclip
-```
-
-## caps2esc 
-
-[link](https://gitlab.com/interception/linux/plugins/caps2esc)
-
-### Install packages
-```bash
-sudo pacman -S interception-tools interception-caps2esc
-```
-
-### Enable the `udevmon` service
-
-```
-sudo systemctl enable --now udevmon
-```
-
-### configure `udevmon`
-Edit (or create) `sudo nvim /etc/interception/udevmon.yaml`
-```yaml
-- JOB: "intercept -g $DEVNODE | caps2esc -m 1 | uinput -d $DEVNODE"
-  DEVICE:
-    EVENTS:
-      EV_KEY: [KEY_CAPSLOCK, KEY_ESC]
-```
+- `omarchy font set` runs `sed -i` on the Ghostty config, which turns the Stow link back into a plain file. `stow -R --dotfiles -t ~ home` fixes it. I decided to live with that rather than add a generator script.
+- `AGENTS.md` has the procedural rules for coding agents working in this repo. It's not written for people; this file is.
+- Earlier versions of this repo had about 600 lines of bash around Stow: conflict backups, a pre-push hook that validated Hyprland in an isolated home, an rsync step for skills. It all worked and none of it was worth maintaining. The history is there if you want it.

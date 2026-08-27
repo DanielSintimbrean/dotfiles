@@ -1,38 +1,40 @@
-# CLAUDE.md
+# Repository instructions
 
-## Overview
+Personal overrides on top of Omarchy Quattro. Omarchy owns the defaults in
+`/usr/share/omarchy/` and stays untouched; this repository holds only what
+differs. `install` is the whole setup and reads as its own documentation.
 
-Personal dotfiles managed with GNU Stow on Arch Linux + Hyprland. Each top-level directory is a **stow package** whose internal layout mirrors `$HOME` (using `--dotfiles`, so `dot-config/foo` becomes `~/.config/foo`).
+## Adding a configuration file
 
-## Stow layout
+`home/` is a single GNU Stow package linked into `~` with `--dotfiles`, so
+`home/dot-config/foo/bar` becomes `~/.config/foo/bar`.
 
-- Packages are the top-level dirs: `apps`, `bin`, `btop`, `editor`, `fish`, `git`, `hyprland`, `startship`, `system`, `terminal`, `tmux`, `walker`, `better-bird`.
-- The `--dotfiles` flag rewrites `dot-*` prefixes to `.*` on stow. So when adding/editing config:
-  - Files under `<pkg>/dot-config/<app>/` → symlinked to `~/.config/<app>/`
-  - Files under `<pkg>/dot-local/...` → symlinked to `~/.local/...`
-  - Single files like `git/dot-gitconfig`, `git/dot-czrc` → `~/.gitconfig`, `~/.czrc`
-- `.stow-local-ignore` excludes `README.*`, `betterbird/.*`, `fish_variables`, `tmux/plugins`, `.git*`, emacs backups, etc. — keep this in mind when adding files that stow should skip.
+1. If the file already exists in `~` (Omarchy default or app-generated), move
+   it into the mirrored `home/dot-...` path; otherwise create it there.
+2. When it replaces a file Omarchy ships under `/usr/share/omarchy/config/`,
+   add its `~` path to the `rm -rf` list in `install`.
+3. Run `stow --dotfiles -t ~ home`.
+4. Add any state the app writes next to the link to `.gitignore` with its full
+   `home/...` path.
 
-## Commands
+Done when `readlink -f ~/<path>` resolves inside this repository and
+`git status` shows only the intended files.
 
-Re-stow everything after adding/changing files:
+## Adding an agent skill
 
-```bash
-./stow-all          # iterates every top-level dir, runs `stow <pkg> --dotfiles --adopt`
-```
+Create `skills/<name>/SKILL.md`, then run the skills loop from `install`.
+Stow links each skill as a directory symlink; agents fail to detect a skill
+whose `SKILL.md` is itself a symlink, so remove any real directory with the
+same name in the target before linking.
 
-Stow a single package:
+## Hyprland
 
-```bash
-stow <pkg> --dotfiles --adopt    # --adopt pulls existing files in $HOME into the repo
-git restore .                    # revert if --adopt overwrote repo contents with worse $HOME versions
-```
+After editing `home/dot-config/hypr/`, run `hyprctl reload && hyprctl
+configerrors`. Empty output means valid. Machine-specific values live only in
+`monitors.lua`, keyed by hostname and product name.
 
-Unstow: `stow -D <pkg> --dotfiles`.
+## Ghostty
 
-## Notes
-
-- `--adopt` is used intentionally (see README install flow): it moves existing real files in `$HOME` into the package dir, replacing them with symlinks. After adopting, run `git restore .` to keep the committed versions and discard the adopted ones.
-- `better-bird/` is ignored by stow (see `.stow-local-ignore`) — it's tracked in git but not symlinked.
-- `startship` (sic) is the Starship prompt package; don't "fix" the spelling — the dir name is just the stow package name, not user-facing.
-- README.md contains the bootstrap recipe (pacman/yay packages, tmux TPM, docker group, caps2esc via interception-tools). Treat it as the source of truth for machine setup steps.
+`omarchy font set` runs `sed -i` on `~/.config/ghostty/config`, which turns
+the link into a regular file. Restore it with `stow -R --dotfiles -t ~ home`
+after checking the diff.
