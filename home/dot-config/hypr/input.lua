@@ -3,5 +3,6 @@ hl.config({
   input = {
     kb_layout = "us",
     kb_variant = "intl",
+    touchpad = { natural_scroll = true },
   },
 })
