@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Hyprland
 import qs.Commons
 import qs.Ui
@@ -45,7 +46,7 @@ BarWidget {
 
   function focusWorkspace(id) {
     if (!root.bar) return
-    root.bar.run("hyprctl dispatch " + Util.shellQuote("hl.dsp.focus({ workspace = \"" + id + "\" })"))
+    root.bar.run("hyprctl dispatch " + Util.shellQuote("hl.dsp.focus({ workspace = \"" + id + "\", on_current_monitor = true })"))
   }
 
   readonly property real trailingGap: root.vertical ? 0 : Style.spaceReal(1.5)

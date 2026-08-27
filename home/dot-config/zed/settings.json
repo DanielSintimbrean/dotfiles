@@ -99,6 +99,8 @@
   "auto_install_extensions": {
     "catppuccin-icons": true,
     "catppuccin": true,
+    "qml": true,
+    "lua": true
   },
   "languages": {
     "TypeScript": {

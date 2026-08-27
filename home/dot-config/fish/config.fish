@@ -12,13 +12,10 @@ alias ls 'eza -al --color=always --group-directories-first --icons=always'
 alias lsz 'eza -al --color=always --total-size --group-directories-first --icons=always'
 alias la 'eza -a --color=always --group-directories-first --icons=always'
 alias ll 'eza -l --color=always --group-directories-first --icons=always'
-alias lt 'eza -aT --color=always --group-directories-first --icons=always --git-ignore'
-alias lt2 'eza --level 2 -aT --color=always --group-directories-first --icons=always --git-ignore'
-alias lt3 'eza --level 4 -aT --color=always --group-directories-first --icons=always'
-alias ls2 'eza --level 2 -aT --color=always --group-directories-first --icons=always --git-ignore'
-alias ls3 'eza --level 3 -aT --color=always --group-directories-first --icons=always --git-ignore'
-alias ls4 'eza --level 4 -aT --color=always --group-directories-first --icons=always --git-ignore'
-alias ls-full 'eza -aT --color=always --group-directories-first --icons=always'
+alias ls2 'eza --level 2 -alT --color=always --group-directories-first --icons=always --git-ignore'
+alias ls3 'eza --level 3 -alT --color=always --group-directories-first --icons=always --git-ignore'
+alias ls4 'eza --level 4 -alT --color=always --group-directories-first --icons=always --git-ignore'
+alias ls-full 'eza -aT --color=always --group-directories-first --icons=always --git-ignore'
 alias l. 'eza -ald --color=always --group-directories-first --icons=always .*'
 alias cat 'bat --style=header,snip,changes'
 
@@ -40,6 +37,14 @@ alias clera clear
 alias claer clear
 alias ze 'zeditor .'
 alias clipboard wl-copy
+
+function pls
+    if test -z "$argv"
+        eval command sudo $history[1]
+    else
+        command sudo $argv
+    end
+end
 
 function history
   builtin history --show-time='%F %T '
