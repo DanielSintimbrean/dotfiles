@@ -106,6 +106,13 @@ o.bind("SUPER + B", "Browser", { omarchy = "browser" })
 hl.unbind("SUPER + SHIFT + B")
 o.bind("SUPER + SHIFT + B", "Chrome", { launch = "google-chrome-stable" })
 
+hl.unbind("SUPER + SHIFT + W")
+o.bind(
+  "SUPER + SHIFT + W",
+  "New raw Obsidian note",
+  "~/.local/bin/omawrite-raw-note"
+)
+
 -- Hardware and capture shortcuts.
 o.bind_toggle("SUPER + F3", "Toggle touchpad", "touchpad")
 o.bind("SUPER + XF86AudioMute", "Switch audio output", "omarchy-audio-output-switch", { locked = true })

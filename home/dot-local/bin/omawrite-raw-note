@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+set -u
+
+raw_dir="$HOME/Documents/Obsidian/Daniel-Vault/raw"
+mkdir -p "$raw_dir"
+
+timestamp=$(date +'%Y-%m-%d_%H-%M-%S')
+note="$raw_dir/$timestamp.md"
+touch "$note"
+
+# Wait for the writing window to close before generating a title.
+omawrite "$note"
+
+# Leave empty notes under their timestamped name.
+[[ -s "$note" ]] || exit 0
+
+title_output=$(mktemp)
+trap 'rm -f -- "$title_output"' EXIT
+
+{
+  printf '%s\n\n' \
+    'Create a concise title for the note below.' \
+    'Use the same language as the note.' \
+    'Use at most 8 words.' \
+    'Return only the title, without quotes, Markdown, or explanation.' \
+    'NOTE:'
+  head -c 20000 "$note"
+} | codex exec \
+  --model gpt-5.6-terra \
+  --config 'model_reasoning_effort="low"' \
+  --sandbox read-only \
+  --ephemeral \
+  --skip-git-repo-check \
+  --output-last-message "$title_output" \
+  - >/dev/null 2>&1
+
+title=$(
+  tr '\n' ' ' <"$title_output" |
+    sed -E \
+      -e 's/^["` ]+//' \
+      -e 's/["` ]+$//' \
+      -e 's#[/\\:*?"<>|]#-#g' \
+      -e 's/[[:space:]]+/ /g' |
+    cut -c 1-100
+)
+
+if [[ -n "$title" ]]; then
+  destination="$raw_dir/$title.md"
+
+  if [[ -e "$destination" ]]; then
+    destination="$raw_dir/$title - $timestamp.md"
+  fi
+
+  mv -- "$note" "$destination"
+  notify-send "Raw note saved" "$title"
+else
+  notify-send "Raw note saved" "$timestamp"
+fi
