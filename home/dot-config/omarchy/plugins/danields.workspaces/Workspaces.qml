@@ -18,7 +18,7 @@ BarWidget {
     "󰝚", // Player
     "󰊻", // Microsoft Teams
     "󰇩", // Microsoft Edge
-    "󰔶"  // Obsidian
+    ""  // Obsidian
   ]
 
   function workspaceById(id) {

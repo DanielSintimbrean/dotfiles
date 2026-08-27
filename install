@@ -5,6 +5,7 @@ cd "$(dirname "$0")"
 
 omarchy pkg add stow fish diff-so-fancy
 omarchy install terminal ghostty
+omarchy install editor zed
 
 # Omarchy defaults that this repository replaces.
 rm -rf ~/.config/hypr ~/.config/ghostty/config ~/.config/lazygit/config.yml \
