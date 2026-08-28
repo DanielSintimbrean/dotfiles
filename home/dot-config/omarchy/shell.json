@@ -6,7 +6,7 @@
   },
   "bar": {
     "position": "top",
-    "transparent": true,
+    "transparent": false,
     "centerAnchor": "omarchy.clock",
     "layout": {
       "left": [
@@ -46,6 +46,12 @@
       "right": [
         {
           "id": "omarchy.tray"
+        },
+        {
+          "id": "io.github.danielsintimbrean.audiobook"
+        },
+        {
+          "id": "io.github.grichard99.omaproton-vpn"
         },
         {
           "id": "omarchy.agents"

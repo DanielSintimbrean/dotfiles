@@ -97,10 +97,11 @@
     "dock": "right",
   },
   "auto_install_extensions": {
-    "catppuccin-icons": true,
+    "astro": true,
     "catppuccin": true,
+    "catppuccin-icons": true,
+    "lua": true,
     "qml": true,
-    "lua": true
   },
   "languages": {
     "TypeScript": {
