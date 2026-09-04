@@ -17,3 +17,5 @@ home/dot-config/Cursor/*
 home/dot-config/Cursor/User/*
 !home/dot-config/Cursor/User/keybindings.json
 !home/dot-config/Cursor/User/settings.json
+
+home/dot-config/mise/.config.toml.*
