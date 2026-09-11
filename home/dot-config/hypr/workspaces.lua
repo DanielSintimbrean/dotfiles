@@ -5,7 +5,7 @@ o.window({ tag = "chromium-based-browser" }, { workspace = "2 silent" })
 o.window({ tag = "terminal" }, { workspace = "3" })
 
 o.window("([cC]ode|[cC]ursor|.*[zZ]ed.*)", { workspace = "4 silent" })
-o.window("t3code", { workspace = "5 silent" })
+o.window(".*[tT]3[cC]ode.*", { workspace = "5 silent" })
 o.window(".*[oO]bsidian.*", { workspace = "9" })
 
 -- These rules follow the generic Chromium rule so the specific workspace wins.
