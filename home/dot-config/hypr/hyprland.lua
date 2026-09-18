@@ -11,3 +11,4 @@ require("hypr.looknfeel")
 require("hypr.autostart")
 
 require("default.hypr.toggles")
+pcall(require, "/home/danields/.config/hypr/openwhispr-binds.lua")

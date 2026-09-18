@@ -22,7 +22,7 @@
   "theme": "Catppuccin Macchiato - No Italics",
   // Hide variable values in private files (e.g., .env, .pem)
   // https://zed.dev/docs/reference/all-settings#redact-private-values
-  "redact_private_values": true,
+  "redact_private_values": false,
 
   "vim_mode": true,
   "vim": {},

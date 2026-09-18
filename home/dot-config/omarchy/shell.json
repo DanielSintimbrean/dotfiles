@@ -6,7 +6,7 @@
   },
   "bar": {
     "position": "top",
-    "transparent": false,
+    "transparent": true,
     "centerAnchor": "omarchy.clock",
     "layout": {
       "left": [
@@ -48,6 +48,9 @@
           "id": "omarchy.tray"
         },
         {
+          "id": "io.github.danielsintimbrean.focus-guard"
+        },
+        {
           "id": "io.github.danielsintimbrean.audiobook"
         },
         {
@@ -61,9 +64,6 @@
         },
         {
           "id": "omarchy.network"
-        },
-        {
-          "id": "omarchy.audio"
         },
         {
           "id": "omarchy.monitor"

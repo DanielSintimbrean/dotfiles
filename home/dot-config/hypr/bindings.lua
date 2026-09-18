@@ -144,3 +144,7 @@ o.bind(
   "omarchy-brightness-display 1%",
   { locked = true, repeating = true }
 )
+
+-- omalang:binds begin (managed by Omalang — do not edit)
+pcall(require, "hypr.omalang_binds")
+-- omalang:binds end
