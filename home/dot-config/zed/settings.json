@@ -103,6 +103,9 @@
     "lua": true,
     "qml": true,
   },
+  "file_types": {
+    "HTML": ["svg"]
+  },
   "languages": {
     "TypeScript": {
       "language_servers": [
