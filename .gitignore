@@ -25,3 +25,5 @@ home/dot-config/cliamp/cliamp.log
 home/dot-config/cliamp/favorites.toml
 home/dot-config/cliamp/favorites.toml.lock
 home/dot-config/cliamp/history.toml
+# Local Pi runtime state
+.atl/
