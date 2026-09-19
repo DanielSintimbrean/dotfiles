@@ -1,0 +1,5 @@
+theme = ""
+
+[ytmusic]
+enabled      = true
+cookies_from = "zen-browser"

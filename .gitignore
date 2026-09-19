@@ -19,3 +19,9 @@ home/dot-config/Cursor/User/*
 !home/dot-config/Cursor/User/settings.json
 
 home/dot-config/mise/.config.toml.*
+
+# cliamp writes runtime history, favorites, locks, and logs beside its config
+home/dot-config/cliamp/cliamp.log
+home/dot-config/cliamp/favorites.toml
+home/dot-config/cliamp/favorites.toml.lock
+home/dot-config/cliamp/history.toml
