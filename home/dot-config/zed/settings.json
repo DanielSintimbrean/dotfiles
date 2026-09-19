@@ -102,6 +102,7 @@
     "catppuccin-icons": true,
     "lua": true,
     "qml": true,
+    "toml": true,
   },
   "file_types": {
     "HTML": ["svg"]

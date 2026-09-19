@@ -1,5 +1,10 @@
 theme = ""
 
+eq_preset = "Custom"
+eq = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 [ytmusic]
 enabled      = true
-cookies_from = "zen-browser"
+cookies_from = "firefox:~/.config/zen"
+
+[radio]
+country = "ES"
