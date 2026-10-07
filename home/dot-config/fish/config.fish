@@ -82,3 +82,8 @@ if status is-interactive
     zoxide init fish | source
   end
 end
+
+# Load per-project environment variables.
+if type -q direnv
+  direnv hook fish | source
+end
