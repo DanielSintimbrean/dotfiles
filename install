@@ -3,7 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-omarchy pkg add stow fish diff-so-fancy
+omarchy pkg add stow fish diff-so-fancy base-devel unzip
 omarchy install terminal ghostty
 omarchy install editor zed
 
@@ -20,11 +20,22 @@ for agent in ~/.agents ~/.claude ~/.codex; do
 done
 
 mise install --yes
+
+# Android command-line tools and adb. Projects install their own SDK packages.
+mise exec -- sdkmanager --licenses < <(yes)
+mise exec -- sdkmanager --install "platform-tools"
+mise reshim
+
 [[ $SHELL == */fish ]] || chsh -s /usr/bin/fish
 
 omarchy pkg add interception-tools interception-caps2esc
 sudo install -Dm0644 etc/interception/udevmon.yaml /etc/interception/udevmon.yaml
 sudo systemctl enable --now udevmon
+
+# Bring up the CalDigit TS4 before the encrypted disk asks for its password.
+sudo install -Dm0644 etc/udev/rules.d/70-caldigit.rules /etc/udev/rules.d/70-caldigit.rules
+sudo install -Dm0644 etc/mkinitcpio.conf.d/caldigit.conf /etc/mkinitcpio.conf.d/caldigit.conf
+sudo limine-mkinitcpio
 
 if pgrep -x Hyprland >/dev/null; then
   hyprctl reload

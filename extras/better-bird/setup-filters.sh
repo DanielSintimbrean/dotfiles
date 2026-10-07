@@ -1,14 +1,24 @@
 #!/usr/bin/env bash
 # Symlink Thunderbird msgFilterRules.dat from dotfiles into the active profile.
-# If the profile already has filter rules, they are copied into dotfiles first
-# (so the working version is what gets git-persisted).
+# An existing profile rules file is imported only when the dotfiles copy does
+# not exist yet; this preserves the checked-in rules for a fresh account.
 
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 FILTER_FILE="msgFilterRules.dat"
 DOTFILES_FILTER="$DOTFILES_DIR/$FILTER_FILE"
-THUNDERBIRD_DIR="$HOME/.thunderbird"
+
+# Betterbird and recent Thunderbird builds use ~/.config/thunderbird on Linux;
+# older installs use ~/.thunderbird.  Allow an explicit override for unusual
+# profiles, then prefer the directory that actually exists.
+if [[ -z "${THUNDERBIRD_DIR:-}" ]]; then
+    if [[ -d "$HOME/.config/thunderbird" ]]; then
+        THUNDERBIRD_DIR="$HOME/.config/thunderbird"
+    else
+        THUNDERBIRD_DIR="$HOME/.thunderbird"
+    fi
+fi
 
 # --- helpers ----------------------------------------------------------------
 
@@ -69,7 +79,7 @@ find_default_profile() {
 # Find every msgFilterRules.dat inside the profile (Mail/ and ImapMail/ dirs).
 find_filter_files() {
     local profile="$1"
-    find "$profile" -maxdepth 3 -name "$FILTER_FILE" -not -type l 2>/dev/null
+    find "$profile" -maxdepth 3 -name "$FILTER_FILE" 2>/dev/null
 }
 
 link_filter() {
@@ -85,8 +95,15 @@ link_filter() {
         echo "  removing stale symlink: $target -> $current"
         rm "$target"
     elif [[ -f "$target" ]]; then
-        echo "  backing up profile filters into dotfiles (will be git-persisted)"
-        cp "$target" "$DOTFILES_FILTER"
+        # A freshly-created account has a 25-byte file containing only the
+        # version and logging header.  Keep the checked-in rules in that case;
+        # only import a profile file when there is no rules file yet.
+        if [[ ! -s "$DOTFILES_FILTER" ]]; then
+            echo "  backing up profile filters into dotfiles (will be git-persisted)"
+            cp "$target" "$DOTFILES_FILTER"
+        else
+            echo "  keeping existing dotfiles filters"
+        fi
         rm "$target"
     fi
 

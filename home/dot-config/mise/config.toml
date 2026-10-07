@@ -1,8 +1,10 @@
 [tools]
+android-sdk = "latest"
 bun = "latest"
 claude = "latest"
 codex = "latest"
 gh = "latest"
+java = "lts"
 node = "lts"
 "npm:@antfu/ni" = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
@@ -18,6 +20,7 @@ node = "lts"
 "npm:playwright" = "latest"
 opencode = "latest"
 pnpm = "latest"
+vp = "latest"
 
 [settings.upgrade]
 auto_prune = false

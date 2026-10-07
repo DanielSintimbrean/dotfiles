@@ -1,0 +1,2 @@
+# Authorize this TS4 during early boot, with the same IOMMU requirement as bolt.
+ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{unique_id}=="bbb38780-00ce-30e0-ffff-ffffffffffff", ATTRS{iommu_dma_protection}=="1", ATTR{authorized}=="0", ATTR{authorized}="1"
