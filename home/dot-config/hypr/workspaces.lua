@@ -11,5 +11,6 @@ o.window(".*[oO]bsidian.*", { workspace = "9" })
 -- These rules follow the generic Chromium rule so the specific workspace wins.
 o.window("[gG]oogle-chrome", { workspace = "2 silent" })
 o.window("teams-for-linux", { workspace = "7 silent" })
+o.window(".*[bB]etterbird.*", { workspace = "7 silent" })
 o.window("[mM]icrosoft-edge", { workspace = "8 silent" })
 o.window("audacious", { workspace = "6" })
