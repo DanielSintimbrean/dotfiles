@@ -2,8 +2,7 @@
 -- Omarchy's application tags are reused where possible.
 o.window({ tag = "firefox-based-browser" }, { workspace = "1 silent" })
 o.window({ tag = "chromium-based-browser" }, { workspace = "2 silent" })
-o.window({ tag = "terminal" }, { workspace = "3" })
--- cliamp is launched as a terminal TUI, but its lofi radio window belongs on 6.
+o.window({ tag = "terminal", initial_title = "negative:^cliamp$" }, { workspace = "3" })
 o.window({ initial_title = "^cliamp$" }, { workspace = "6" })
 
 o.window("([cC]ode|[cC]ursor|.*[zZ]ed.*)", { workspace = "4 silent" })
