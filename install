@@ -32,6 +32,10 @@ omarchy pkg add interception-tools interception-caps2esc
 sudo install -Dm0644 etc/interception/udevmon.yaml /etc/interception/udevmon.yaml
 sudo systemctl enable --now udevmon
 
+# Ignore lid-close events on battery, external power, and the dock.
+sudo install -Dm0644 etc/systemd/logind.conf.d/90-ignore-lid-switch.conf /etc/systemd/logind.conf.d/90-ignore-lid-switch.conf
+sudo systemctl reload systemd-logind
+
 # Bring up the CalDigit TS4 before the encrypted disk asks for its password.
 sudo install -Dm0644 etc/udev/rules.d/70-caldigit.rules /etc/udev/rules.d/70-caldigit.rules
 sudo install -Dm0644 etc/mkinitcpio.conf.d/caldigit.conf /etc/mkinitcpio.conf.d/caldigit.conf
