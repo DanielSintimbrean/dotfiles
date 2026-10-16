@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Lofi House Radio
+Comment=Lofi House Radio
+Exec=xdg-terminal-exec --app-id=TUI.float -e cliamp --auto-play https://www.youtube.com/watch?v=3PFJ9SETS4M
+Terminal=false
+Type=Application
+Icon=lofi-radio
+StartupNotify=true
