@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "danields.clock",
+  "name": "Calendario",
+  "version": "1.0.0",
+  "author": "Omarchy",
+  "description": "Fecha en español con acceso a Proton Calendar",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Calendario",
+    "description": "Fecha en español con acceso a Proton Calendar",
+    "category": "Time",
+    "allowMultiple": false
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.clock"
+  }
+}

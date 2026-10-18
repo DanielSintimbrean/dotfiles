@@ -33,6 +33,10 @@ for path in "${defaults[@]}"; do
 done
 stow --dotfiles -t ~ home
 
+# Apply Catppuccin and restore the wallpaper saved in this repository.
+OMARCHY_THEME_SKIP_BACKGROUND=1 omarchy theme set catppuccin
+omarchy theme bg set ~/.config/omarchy/backgrounds/catppuccin/winding-road.jpg
+
 # Bar widgets referenced by shell.json.
 while read -r id repository; do
   [[ -f ~/.config/omarchy/plugins/$id/manifest.json ]] || \

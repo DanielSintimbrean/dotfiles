@@ -7,7 +7,7 @@
   "bar": {
     "position": "top",
     "transparent": false,
-    "centerAnchor": "omarchy.clock",
+    "centerAnchor": "danields.clock",
     "layout": {
       "left": [
         {
@@ -22,9 +22,8 @@
           "id": "omarchy.indicators"
         },
         {
-          "id": "omarchy.clock",
-          "format": "ddd d MMM h:mm AP",
-          "formatAlt": "d MMMM 'W'ww yyyy",
+          "id": "danields.clock",
+          "format": "dddd d MMMM HH:mm",
           "verticalFormat": "HH\n—\nmm"
         },
         {
