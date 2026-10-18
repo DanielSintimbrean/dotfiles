@@ -25,5 +25,9 @@ home/dot-config/cliamp/cliamp.log
 home/dot-config/cliamp/favorites.toml
 home/dot-config/cliamp/favorites.toml.lock
 home/dot-config/cliamp/history.toml
+home/dot-config/cliamp/cliamp.sock.pid
+
+# Omarchy generates the Zed theme from this machine's active palette.
+home/dot-config/zed/themes/
 # Local Pi runtime state
 .atl/

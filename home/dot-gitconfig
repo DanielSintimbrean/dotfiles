@@ -1,7 +1,9 @@
 [credential "https://github.com"]
-	helper = !/usr/bin/gh auth git-credential
+	helper =
+	helper = !gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = !/usr/bin/gh auth git-credential
+	helper =
+	helper = !gh auth git-credential
 [user]
 	name = Daniel Sintimbrean
 	email = 102896754+DanielSintimbrean@users.noreply.github.com

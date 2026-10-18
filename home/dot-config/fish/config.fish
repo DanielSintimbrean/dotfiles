@@ -7,16 +7,21 @@ if test -d "$HOME/.local/bin"
   fish_add_path --global --prepend "$HOME/.local/bin"
 end
 
+# Listing aliases share ls's headers, colors, icons, and directory ordering.
+alias ls 'eza -lh --group-directories-first --icons=auto'
+alias ll ls
+alias la 'ls -a'
+alias lsa 'ls -a'
+alias lsz 'ls -a --total-size'
+alias lt 'ls --tree --level=2 --git'
+alias lta 'lt -a'
+alias ls2 'ls -aT --level=2 --git-ignore'
+alias ls3 'ls -aT --level=3 --git-ignore'
+alias ls4 'ls -aT --level=4 --git-ignore'
+alias ls-full 'ls -aT --git-ignore'
+alias l. 'ls -ad .*'
+
 # Basic command aliases.
-alias ls 'eza -al --color=always --group-directories-first --icons=always'
-alias lsz 'eza -al --color=always --total-size --group-directories-first --icons=always'
-alias la 'eza -a --color=always --group-directories-first --icons=always'
-alias ll 'eza -l --color=always --group-directories-first --icons=always'
-alias ls2 'eza --level 2 -alT --color=always --group-directories-first --icons=always --git-ignore'
-alias ls3 'eza --level 3 -alT --color=always --group-directories-first --icons=always --git-ignore'
-alias ls4 'eza --level 4 -alT --color=always --group-directories-first --icons=always --git-ignore'
-alias ls-full 'eza -aT --color=always --group-directories-first --icons=always --git-ignore'
-alias l. 'eza -ald --color=always --group-directories-first --icons=always .*'
 alias cat 'bat --style=header,snip,changes'
 
 if not type -q yay; and type -q paru

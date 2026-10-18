@@ -54,9 +54,7 @@ language = "es"
 # Translate non-English speech to English
 translate = false
 
-# GPU device index for multi-GPU systems (0 = first Vulkan device).
-# On this machine Vulkan0 = Intel iGPU, Vulkan1 = NVIDIA RTX 4060 (discrete).
-gpu_device = 1
+# Let the backend select an available GPU on each machine.
 
 # Number of CPU threads for inference (omit for auto-detection)
 # threads = 4

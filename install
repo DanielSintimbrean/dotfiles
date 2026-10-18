@@ -3,43 +3,87 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-omarchy pkg add stow fish diff-so-fancy base-devel unzip
+omarchy pkg add stow fish diff-so-fancy direnv base-devel unzip google-chrome proton-vpn-cli dnsmasq
+omarchy pkg aur add betterbird-bin
+
+# Keep the previous configuration before replacing Omarchy defaults.
+defaults=(
+  ~/.config/hypr ~/.config/ghostty/config ~/.config/lazygit/config.yml
+  ~/.config/starship.toml ~/.config/tmux/tmux.conf ~/.config/mimeapps.list
+  ~/.config/mise/config.toml ~/.config/nvim ~/.config/omarchy/shell.json
+  ~/.config/zed/settings.json ~/.config/zed/keymap.json
+)
+backup_dir="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/backups/$(date +%Y%m%d-%H%M%S-%N)"
+for path in "${defaults[@]}"; do
+  [[ $(readlink -f "$path") == "$PWD/home/"* ]] && continue
+  if [[ -e $path || -L $path ]]; then
+    relative=${path#"$HOME/"}
+    mkdir -p "$backup_dir/$(dirname "$relative")"
+    cp -a "$path" "$backup_dir/$relative"
+  fi
+done
+echo "Previous configuration: $backup_dir"
+
 omarchy install terminal ghostty
 omarchy install editor zed
 
 # Omarchy defaults that this repository replaces.
-rm -rf ~/.config/hypr ~/.config/ghostty/config ~/.config/lazygit/config.yml \
-  ~/.config/starship.toml ~/.config/tmux/tmux.conf \
-  ~/.config/mimeapps.list ~/.config/mise/config.toml ~/.config/nvim/init.lua
+for path in "${defaults[@]}"; do
+  [[ $(readlink -f "$path") == "$PWD/home/"* ]] || rm -rf "$path"
+done
 stow --dotfiles -t ~ home
+
+# Bar widgets referenced by shell.json.
+while read -r id repository; do
+  [[ -f ~/.config/omarchy/plugins/$id/manifest.json ]] || \
+    omarchy plugin add "https://github.com/$repository" --yes
+done <<'PLUGINS'
+io.github.danielsintimbrean.focus-guard DanielSintimbrean/omarchy-focus-guard
+io.github.danielsintimbrean.audiobook DanielSintimbrean/omarchy-audiobook
+io.github.grichard99.omaproton-vpn grichard99/omaproton-vpn
+PLUGINS
+
+# Install the system helper but keep website blocking off until enabled in the panel.
+sudo bash ~/.config/omarchy/plugins/io.github.danielsintimbrean.focus-guard/system/install.sh
+sudo focus-guardctl recover
 
 # Skills are linked per directory, so SKILL.md stays a regular file.
 for agent in ~/.agents ~/.claude ~/.codex; do
   mkdir -p "$agent/skills"
+  for skill in skills/*; do
+    target="$agent/skills/${skill##*/}"
+    if [[ -e $target && ! -L $target ]]; then
+      mkdir -p "$backup_dir/${agent#"$HOME/"}/skills"
+      mv "$target" "$backup_dir/${agent#"$HOME/"}/skills/"
+    fi
+  done
   stow -t "$agent/skills" skills
 done
 
 mise install --yes
 
 # Android command-line tools and adb. Projects install their own SDK packages.
-mise exec -- sdkmanager --licenses < <(yes)
-mise exec -- sdkmanager --install "platform-tools"
+mise exec -- android sdk install "platform-tools"
 mise reshim
 
-[[ $SHELL == */fish ]] || chsh -s /usr/bin/fish
+[[ $(getent passwd "$USER" | cut -d: -f7) == /usr/bin/fish ]] || chsh -s /usr/bin/fish
 
 omarchy pkg add interception-tools interception-caps2esc
 sudo install -Dm0644 etc/interception/udevmon.yaml /etc/interception/udevmon.yaml
 sudo systemctl enable --now udevmon
 
-# Ignore lid-close events on battery, external power, and the dock.
-sudo install -Dm0644 etc/systemd/logind.conf.d/90-ignore-lid-switch.conf /etc/systemd/logind.conf.d/90-ignore-lid-switch.conf
-sudo systemctl reload systemd-logind
+# Only laptops need the lid-sensor workaround.
+if [[ $(cat /sys/class/dmi/id/chassis_type) =~ ^(8|9|10|14|30|31|32)$ ]]; then
+  sudo install -Dm0644 etc/systemd/logind.conf.d/90-ignore-lid-switch.conf /etc/systemd/logind.conf.d/90-ignore-lid-switch.conf
+  sudo systemctl reload systemd-logind
+fi
 
-# Bring up the CalDigit TS4 before the encrypted disk asks for its password.
-sudo install -Dm0644 etc/udev/rules.d/70-caldigit.rules /etc/udev/rules.d/70-caldigit.rules
-sudo install -Dm0644 etc/mkinitcpio.conf.d/caldigit.conf /etc/mkinitcpio.conf.d/caldigit.conf
-sudo limine-mkinitcpio
+# Only machines connected to this TS4 need early-boot dock authorization.
+if rg -q --no-messages '^bbb38780-00ce-30e0-ffff-ffffffffffff$' /sys/bus/thunderbolt/devices/*/unique_id; then
+  sudo install -Dm0644 etc/udev/rules.d/70-caldigit.rules /etc/udev/rules.d/70-caldigit.rules
+  sudo install -Dm0644 etc/mkinitcpio.conf.d/caldigit.conf /etc/mkinitcpio.conf.d/caldigit.conf
+  sudo limine-mkinitcpio
+fi
 
 if pgrep -x Hyprland >/dev/null; then
   hyprctl reload

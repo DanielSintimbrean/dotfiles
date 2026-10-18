@@ -11,13 +11,13 @@ home/     one GNU Stow package, mirrors ~ (dot-config -> .config, dot-local -> .
 skills/   skills for Claude Code and Codex, linked into each agent's skills directory
 etc/      the caps2esc job for interception-tools (goes to /etc)
 extras/   Thunderbird filter rules
-install   the whole setup, 30 lines
+install   the whole setup
 ```
 
 The interesting bits inside `home/`:
 
 - `hypr/`. Hyprland in Lua, loaded after Omarchy's own config. Vim-style focus on `SUPER + hjkl`, workspaces 1-9 pinned to the current monitor, monitor focus that drags the pointer along, and a monitor profile that only applies on my laptop (it checks hostname and DMI product name, so it won't misconfigure your screens if you copy it).
-- `fish/`. Vi keybindings, `eza` and `bat` in place of `ls` and `cat`, starship, fzf, zoxide. No plugin manager.
+- `fish/`. Vi keybindings, Omarchy-style `ls` through `eza` (details, automatic icons, hidden files on request), `bat` in place of `cat`, starship, fzf, zoxide. No plugin manager.
 - `nvim/`. Started from kickstart.nvim and moved to the built-in `vim.pack`. One file per plugin under `lua/plugins/`.
 - `tmux/`, `starship.toml`, `zed/`, `Cursor/`, `lazygit/`, `mise/`. Small personal tweaks.
 - `dot-local/bin/`. Scripts I reach for daily: `killport`, `checkport`, `randpass`, `ai-commit`, `backup-home`.
@@ -28,7 +28,7 @@ Stow links `home/` into `~` with `--dotfiles`, so `home/dot-config/hypr` becomes
 
 Agent skills get the same treatment, one `stow` call per agent directory. Each skill ends up as a directory symlink, which matters because at least one agent stops detecting a skill when `SKILL.md` itself is a symlink.
 
-`install` does, in order: install `stow` and `fish`, install Ghostty through Omarchy, delete the five Omarchy defaults this repo replaces, stow, link skills, `mise install`, switch the login shell to fish, set up caps2esc, reload Hyprland. There is no dry-run flag. The script is short enough that reading it is the dry run.
+`install` installs the dependencies and apps, backs up existing configs under `~/.local/state/dotfiles/backups/`, installs Ghostty and Zed through Omarchy, replaces the configs with Stow links, installs the bar plugins, links skills, runs `mise install`, switches the login shell to fish, sets up caps2esc, and reloads Hyprland. Focus Guard is installed with blocking off; enable its schedule from the bar when wanted. The lid workaround only applies to laptops; early-boot dock authorization only applies when the matching CalDigit TS4 is connected. There is no dry-run flag; read the script before running it.
 
 ## Using it yourself
 
