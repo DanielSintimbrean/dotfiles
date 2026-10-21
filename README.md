@@ -19,7 +19,7 @@ The interesting bits inside `home/`:
 - `hypr/`. Hyprland in Lua, loaded after Omarchy's own config. Vim-style focus on `SUPER + hjkl`, workspaces 1-9 pinned to the current monitor, monitor focus that drags the pointer along, and a monitor profile that only applies on my laptop (it checks hostname and DMI product name, so it won't misconfigure your screens if you copy it).
 - `fish/`. Vi keybindings, Omarchy-style `ls` through `eza` (details, automatic icons, hidden files on request), `bat` in place of `cat`, starship, fzf, zoxide. No plugin manager.
 - `omarchy/backgrounds/catppuccin/winding-road.jpg`. The saved wallpaper; `install` applies Catppuccin and restores this image after linking the configuration.
-- `nvim/`. Started from kickstart.nvim and moved to the built-in `vim.pack`. One file per plugin under `lua/plugins/`.
+- `nvim/`. Started from kickstart.nvim and moved to the built-in `vim.pack`. One file per plugin under `lua/plugins/`. [Guía de COBOL](docs/neovim-cobol.md).
 - `tmux/`, `starship.toml`, `zed/`, `Cursor/`, `lazygit/`, `mise/`. Small personal tweaks.
 - `dot-local/bin/`. Scripts I reach for daily: `killport`, `checkport`, `randpass`, `ai-commit`, `backup-home`.
 

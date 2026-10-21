@@ -88,7 +88,7 @@ local servers = {
     },
   },
   others = {
-    -- dartls = {},
+    superbol = require('cobol').lsp,
   },
 }
 
@@ -110,6 +110,8 @@ require('mason-lspconfig').setup {
     exclude = {
       'rust_analyzer',
       'ts_ls',
+      -- Broadcom assumes IBM fixed format and needs VS Code-specific handlers.
+      'cobol_ls',
     },
   },
 }

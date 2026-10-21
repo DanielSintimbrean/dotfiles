@@ -3,7 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-omarchy pkg add stow fish diff-so-fancy direnv base-devel unzip google-chrome proton-vpn-cli dnsmasq
+omarchy pkg add stow fish diff-so-fancy direnv base-devel unzip google-chrome proton-vpn-cli dnsmasq gnucobol
 omarchy pkg aur add betterbird-bin
 
 # Keep the previous configuration before replacing Omarchy defaults.
@@ -65,6 +65,20 @@ for agent in ~/.agents ~/.claude ~/.codex; do
 done
 
 mise install --yes
+
+# SuperBOL 1.1.0 ships its Node LSP in the official VSIX, outside Mason's registry.
+superbol_dir="${XDG_DATA_HOME:-$HOME/.local/share}/superbol"
+if [[ ! -f $superbol_dir/1.1.0 ]]; then
+  superbol_archive=$(mktemp --suffix=.vsix)
+  curl -fL https://open-vsx.org/api/OCamlPro/SuperBOL/1.1.0/file/OCamlPro.SuperBOL-1.1.0.vsix -o "$superbol_archive"
+  echo "05671e4132074cf14ac9b1a7fca261fae15b29725425383a356995ff1325e23d  $superbol_archive" | sha256sum -c -
+  superbol_extract=$(mktemp -d)
+  unzip -q "$superbol_archive" 'extension/_dist/superbol.js' 'extension/gnucobol-config/*' -d "$superbol_extract"
+  mkdir -p "$superbol_dir"
+  cp -R "$superbol_extract/extension/"{_dist,gnucobol-config} "$superbol_dir/"
+  touch "$superbol_dir/1.1.0"
+  rm -rf "$superbol_archive" "$superbol_extract"
+fi
 
 # Android command-line tools and adb. Projects install their own SDK packages.
 mise exec -- android sdk install "platform-tools"

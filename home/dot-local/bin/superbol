@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+superbol_dir="${XDG_DATA_HOME:-$HOME/.local/share}/superbol"
+export COB_CONFIG_DIR_FALLBACK="$superbol_dir/gnucobol-config"
+exec node "$superbol_dir/_dist/superbol.js" "$@"

@@ -15,9 +15,8 @@ o.bind("SUPER + ALT + L", "Toggle workspace layout", "omarchy-hyprland-workspace
 
 o.bind("SUPER + H", "Focus left", hl.dsp.focus({ direction = "l" }))
 
--- Keep workspaces 1-9 local to the current monitor and move windows silently.
--- Workspace 10 keeps Omarchy's default behavior.
-for workspace = 1, 9 do
+-- Bring shared workspaces 1-10 to the current monitor and move windows silently.
+for workspace = 1, 10 do
   local key = "code:" .. tostring(workspace + 9)
 
   hl.unbind("SUPER + " .. key)

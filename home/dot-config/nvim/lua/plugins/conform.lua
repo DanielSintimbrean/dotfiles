@@ -5,7 +5,7 @@ vim.pack.add { 'https://github.com/stevearc/conform.nvim' }
 require('conform').setup {
   notify_on_error = false,
   format_on_save = function(bufnr)
-    local disable_filetypes = {}
+    local disable_filetypes = { cobol = true }
 
     if disable_filetypes[vim.bo[bufnr].filetype] then
       return nil

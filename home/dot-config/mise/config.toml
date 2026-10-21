@@ -23,4 +23,3 @@ pnpm = "latest"
 vp = "latest"
 
 [settings.upgrade]
-auto_prune = false
