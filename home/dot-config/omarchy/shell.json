@@ -6,8 +6,7 @@
   },
   "bar": {
     "position": "top",
-    "transparent": false,
-    "centerAnchor": "danields.clock",
+    "background": "opaque",
     "layout": {
       "left": [
         {
@@ -17,15 +16,19 @@
           "id": "danields.workspaces"
         }
       ],
-      "center": [
+      "centerBegin": [
         {
           "id": "omarchy.indicators"
-        },
+        }
+      ],
+      "center": [
         {
           "id": "danields.clock",
           "format": "dddd d MMMM HH:mm",
           "verticalFormat": "HH\n—\nmm"
-        },
+        }
+      ],
+      "centerEnd": [
         {
           "id": "omarchy.keyboard-layout"
         },
@@ -71,7 +74,8 @@
           "id": "omarchy.power",
           "showPercentage": true
         }
-      ]
+      ],
+      "tray": []
     }
   },
   "plugins": [
