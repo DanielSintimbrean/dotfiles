@@ -1,3 +1,6 @@
+[plugins]
+vite-plus = "https://github.com/markmals/mise-vite-plus"
+
 [tools]
 android-sdk = "latest"
 bun = "latest"
@@ -21,6 +24,6 @@ node = "lts"
 "npm:playwright" = "latest"
 opencode = "latest"
 pnpm = "latest"
-vp = "latest"
+vite-plus = "latest"
 
 [settings.upgrade]

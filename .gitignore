@@ -20,12 +20,10 @@ home/dot-config/Cursor/User/*
 
 home/dot-config/mise/.config.toml.*
 
-# cliamp writes runtime history, favorites, locks, and logs beside its config
-home/dot-config/cliamp/cliamp.log
-home/dot-config/cliamp/favorites.toml
-home/dot-config/cliamp/favorites.toml.lock
-home/dot-config/cliamp/history.toml
-home/dot-config/cliamp/cliamp.sock.pid
+home/dot-config/cliamp/*
+!home/dot-config/cliamp/config.toml
+!home/dot-config/cliamp/radios.toml
+!home/dot-config/cliamp/playlists/
 
 # Omarchy generates the Zed theme from this machine's active palette.
 home/dot-config/zed/themes/
